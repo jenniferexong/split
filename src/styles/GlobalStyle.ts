@@ -7,22 +7,23 @@ export const GlobalStyle = createGlobalStyle`
 
     ${({ theme }) => css`
       body {
-        font-family: ${theme.baseFont.font};
-        color: ${theme.baseFont.color};
-        margin: 0;
-        background-color: ${theme.background};
-        padding: 100px 300px;
-        display: flex;
-        justify-content: center;
-      }
+        width: 100vw;
+        height: 100vh;
 
-      p {
+        font-family: ${theme.baseFont.font};
         font-size: ${theme.baseFont.size};
         color: ${theme.baseFont.color};
         line-height: ${theme.baseFont.lineHeight};
+
+        margin: 0;
+        background-color: ${theme.background};
+        box-sizing: border-box;
+        padding: 100px 300px;
+        /* justify-content: center; */
       }
 
-      div {
+      div,
+      section {
         box-sizing: border-box;
       }
 
@@ -33,6 +34,7 @@ export const GlobalStyle = createGlobalStyle`
       h5 {
         font-weight: 400;
         color: ${theme.colors.accent};
+        margin-top: 0;
       }
     `}
 `;
