@@ -2,15 +2,17 @@ export interface Person {
   name: string;
 }
 
-export interface EntryType {
+export type Whose = "mine" | "theirs" | "split";
+
+export interface ItemType {
   title?: string;
   /** Should default to mine if not specified */
-  whose: "mine" | "theirs" | "split";
+  whose: Whose;
   price: number;
 }
 
 export interface ReceiptType {
   title: string;
-  entries: EntryType[];
+  items: ItemType[];
   subtotal: number;
 }

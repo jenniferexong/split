@@ -12,8 +12,12 @@ export const theme: Theme = {
 
   colors: {
     accent: "#31bad7",
-    button: "white",
   },
 
-  components: {},
+  components: {
+    button: {
+      background: "#071013",
+      textColor: "white",
+    },
+  },
 };

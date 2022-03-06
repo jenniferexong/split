@@ -9,12 +9,15 @@ interface ButtonProps {
 
 const StyledButton = styled.button`
   border: none;
-  background-color: ${(props) => props.theme.colors.button};
+  background-color: ${(props) => props.theme.components.button.background};
+  color: ${(props) => props.theme.components.button.textColor};
 
   // add hover effect
   &:hover {
-    background-color: #a4a4a4;
+    background-color: black;
   }
+  margin: 1em 0;
+  padding: 0.5em;
 `;
 
 export const Button: React.FC<ButtonProps> = ({ children, onClick }) => {

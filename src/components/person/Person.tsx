@@ -16,6 +16,10 @@ const Container = styled.div`
   border: solid grey 1px;
   gap: 1em;
   padding: 20px;
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 interface PersonProps {
@@ -24,23 +28,10 @@ interface PersonProps {
 }
 
 export const Person: React.FC<PersonProps> = ({ children }) => {
-  const [receipts, setReceipts] = useState<ReceiptType[]>([exampleReceipt]);
-  console.log(receipts);
-
-  const handleAddReceipt = () => {
-    setReceipts((oldReceipts) => {
-      oldReceipts.push({ title: "New World", entries: [], subtotal: 0 });
-      console.log("added receipt");
-      console.log(receipts);
-      return [...oldReceipts];
-    });
-  };
-
   return (
     <Container>
       <h1>{children}</h1>
-      <Button onClick={handleAddReceipt}>Add receipt</Button>
-      <Receipts receipts={receipts} />
+      <Receipts receipts={[exampleReceipt]} />
     </Container>
   );
 };

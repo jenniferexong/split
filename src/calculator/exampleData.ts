@@ -2,7 +2,7 @@ import { ReceiptType } from "./types";
 
 export const exampleReceipt: ReceiptType = {
   title: "Countdown",
-  entries: [
+  items: [
     { title: "Pork", whose: "split", price: 4.56 },
     {
       title: "Carrots",
