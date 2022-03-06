@@ -9,7 +9,8 @@ export type Theme = {
   };
 
   colors: {
-    accent: string;
+    ccent: string;
+    button: string;
   };
 
   components: {};

@@ -1,10 +1,16 @@
-function App() {
-  return (
-    <div>
-      <h1>This is my app!</h1>
-      <p>Here is some test text</p>
-    </div>
-  );
-}
+import { Person } from "components/person";
+import styled from "styled-components";
 
-export default App;
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+export const App: React.FC = () => {
+  return (
+    <Container>
+      <Person>Person 1</Person>
+      <Person>Person 2</Person>
+    </Container>
+  );
+};
