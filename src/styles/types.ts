@@ -9,9 +9,13 @@ export type Theme = {
   };
 
   colors: {
-    ccent: string;
-    button: string;
+    accent: string;
   };
 
-  components: {};
+  components: {
+    button: {
+      background: string;
+      textColor: string;
+    };
+  };
 };
