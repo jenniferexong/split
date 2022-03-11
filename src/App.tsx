@@ -1,5 +1,7 @@
 import { Person } from "components/person";
+import { useReducer } from "react";
 import styled from "styled-components";
+import { initialState, reducer } from "utils/reducer";
 
 const Container = styled.div`
   width: 100%;
@@ -7,10 +9,18 @@ const Container = styled.div`
 `;
 
 export const App: React.FC = () => {
+  const [appState, dispatch] = useReducer(reducer, initialState);
+
   return (
     <Container>
-      <Person>Person 1</Person>
-      <Person>Person 2</Person>
+      {appState.people.map((person, index) => (
+        <Person
+          key={person.name}
+          {...person}
+          personIndex={index}
+          dispatch={dispatch}
+        />
+      ))}
     </Container>
   );
 };

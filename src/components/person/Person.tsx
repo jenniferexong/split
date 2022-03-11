@@ -1,10 +1,10 @@
 import { exampleReceipt } from "calculator/exampleData";
-import { ReceiptType } from "calculator/types";
+import { PersonType, ReceiptType } from "calculator/types";
 import { Button } from "components/button";
 import { Receipt } from "components/receipt";
-import { Receipts } from "components/receipt/Receipts";
 import { ReactElement, ReactNode, useState } from "react";
 import styled from "styled-components";
+import { Action } from "utils/reducer";
 
 const Container = styled.div`
   width: 100%;
@@ -22,16 +22,42 @@ const Container = styled.div`
   }
 `;
 
-interface PersonProps {
-  /** Name of person */
-  children: ReactNode;
+interface PersonProps extends PersonType {
+  personIndex: number;
+  dispatch: React.Dispatch<Action>;
 }
 
-export const Person: React.FC<PersonProps> = ({ children }) => {
+export const Person: React.FC<PersonProps> = ({
+  name,
+  receipts,
+  personIndex,
+  dispatch,
+}) => {
+  const handleAddReceipt = () => {
+    dispatch({
+      type: "addReceipt",
+      personIndex,
+      receipt: {
+        title: "",
+        items: [],
+        subtotal: 0,
+      },
+    });
+  };
+
   return (
     <Container>
-      <h1>{children}</h1>
-      <Receipts receipts={[exampleReceipt]} />
+      <h1>{name}</h1>
+      {receipts.map((receipt, index) => (
+        <Receipt
+          key={`${receipt.title}${index}`}
+          personIndex={personIndex}
+          receiptIndex={index}
+          dispatch={dispatch}
+          {...receipt}
+        />
+      ))}
+      <Button onClick={handleAddReceipt}>Add receipt</Button>
     </Container>
   );
 };
