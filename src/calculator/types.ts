@@ -1,7 +1,3 @@
-export interface Person {
-  name: string;
-}
-
 export type Whose = "mine" | "theirs" | "split";
 
 export interface ItemType {
@@ -15,4 +11,12 @@ export interface ReceiptType {
   title: string;
   items: ItemType[];
   subtotal: number;
+}
+
+export interface PersonType {
+  name: string;
+  receipts: ReceiptType[];
+}
+export interface AppType {
+  people: PersonType[];
 }

@@ -18,7 +18,7 @@ export const GlobalStyle = createGlobalStyle`
         margin: 0;
         background-color: ${theme.background};
         box-sizing: border-box;
-        padding: 100px 300px;
+        padding: 100px;
         /* justify-content: center; */
       }
 

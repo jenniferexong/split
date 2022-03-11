@@ -1,9 +1,8 @@
-import { addItem } from "calculator/addItem";
 import { ReceiptType } from "calculator/types";
 import { Button } from "components/button";
 import { Entry as Item } from "components/item";
-import { useState } from "react";
 import styled from "styled-components";
+import { Action } from "utils/reducer";
 
 const Container = styled.section`
   width: 100%;
@@ -19,25 +18,41 @@ const SubTotal = styled.div`
   justify-content: space-between;
 `;
 
-export const Receipt: React.FC<ReceiptType> = (receipt) => {
-  const [useReceipt, setReceipt] = useState<ReceiptType>(receipt);
+interface ReceiptProps extends ReceiptType {
+  personIndex: number;
+  receiptIndex: number;
+  dispatch: React.Dispatch<Action>;
+}
 
-  const { title, items: entries, subtotal } = useReceipt;
-
+export const Receipt: React.FC<ReceiptProps> = ({
+  personIndex,
+  receiptIndex,
+  dispatch,
+  items,
+  subtotal,
+  title,
+}) => {
   const handleAddItem = () => {
-    setReceipt((oldReceipt) => {
-      return addItem(
-        { title: "New Item", whose: "mine", price: 5.5 },
-        oldReceipt
-      );
+    dispatch({
+      type: "addItem",
+      personIndex,
+      receiptIndex,
+      item: { whose: "mine", price: 5.5 },
     });
   };
 
   return (
     <Container>
       <h2>{title}</h2>
-      {entries.map((entry) => (
-        <Item key={`${entry.title}${entry.whose}${entry.price}`} {...entry} />
+      {items.map((item, index) => (
+        <Item
+          key={`${item.title}${item.whose}${item.price}`}
+          personIndex={personIndex}
+          receiptIndex={receiptIndex}
+          itemIndex={index}
+          dispatch={dispatch}
+          {...item}
+        />
       ))}
       <Button onClick={handleAddItem}>Add item</Button>
       <hr />

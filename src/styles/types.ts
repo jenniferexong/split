@@ -16,6 +16,7 @@ export type Theme = {
     button: {
       background: string;
       textColor: string;
+      disabledColor: string;
     };
   };
 };

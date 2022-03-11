@@ -18,6 +18,7 @@ export const theme: Theme = {
     button: {
       background: "#071013",
       textColor: "white",
+      disabledColor: "#383838",
     },
   },
 };
