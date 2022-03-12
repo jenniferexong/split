@@ -30,11 +30,11 @@ export const initialState: AppType = {
   people: [
     {
       name: "Jennifer",
-      receipts: [exampleReceipt],
+      receipts: [],
     },
     {
       name: "Pandy",
-      receipts: [exampleReceipt],
+      receipts: [],
     },
   ],
 };
