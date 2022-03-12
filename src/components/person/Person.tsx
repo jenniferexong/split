@@ -37,11 +37,6 @@ export const Person: React.FC<PersonProps> = ({
     dispatch({
       type: "addReceipt",
       personIndex,
-      receipt: {
-        title: "",
-        items: [],
-        subtotal: 0,
-      },
     });
   };
 

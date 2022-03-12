@@ -125,7 +125,7 @@ export const Item: React.FC<ItemProps> = ({
     <Container>
       <StyledInput
         type="text"
-        defaultValue={title ?? "---"}
+        defaultValue={title ?? "-"}
         onChange={handleTitleChange}
         onBlur={updateTitle}
         onKeyDown={blurOnEnter}

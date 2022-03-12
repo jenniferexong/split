@@ -1,4 +1,4 @@
-import { calculate } from "./calculate";
+import { calculateOwings } from "./calculate";
 import { exampleReceipt } from "./exampleData";
 import { AppType } from "./types";
 
@@ -44,7 +44,7 @@ describe("calculate", () => {
 
   describe("calculates the correct information", () => {
     test("case 1", () => {
-      const { ower, owee, amount } = calculate(data);
+      const { ower, owee, amount } = calculateOwings(data);
       expect(ower).toBe("Person 2");
       expect(owee).toBe("Person 1");
       expect(amount).toBe(497.46);
@@ -63,7 +63,7 @@ describe("calculate", () => {
           },
         ],
       };
-      expect(calculate(exampleData).amount).toBe(0);
+      expect(calculateOwings(exampleData).amount).toBe(0);
     });
   });
 });
