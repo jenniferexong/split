@@ -1,6 +1,7 @@
 import { ReceiptType } from "calculator/types";
 import { Button } from "components/button";
 import { Entry as Item } from "components/item";
+import { useState } from "react";
 import styled from "styled-components";
 import { Action } from "utils/reducer";
 
@@ -16,6 +17,19 @@ const SubTotal = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+`;
+
+const StyledInput = styled.input`
+  color: ${(props) => props.theme.baseFont.color};
+  font-weight: bold;
+  background: none;
+  border: none;
+  outline: none;
+  width: 100%;
+
+  :focus {
+    color: ${(props) => props.theme.colors.accent};
+  }
 `;
 
 interface ReceiptProps extends ReceiptType {
@@ -37,13 +51,43 @@ export const Receipt: React.FC<ReceiptProps> = ({
       type: "addItem",
       personIndex,
       receiptIndex,
-      item: { whose: "mine", price: 5.5 },
+    });
+  };
+
+  const [titleState, setTitleState] = useState(title);
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    const value = e.target.value;
+    setTitleState(value);
+  };
+
+  // todo move
+  const blurOnEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      (e.target as HTMLInputElement).blur();
+    }
+  };
+
+  const updateTitle = () => {
+    dispatch({
+      type: "updateReceipt",
+      personIndex,
+      receiptIndex,
+      receipt: { title: titleState, items, subtotal },
     });
   };
 
   return (
     <Container>
-      <h2>{title}</h2>
+      <StyledInput
+        type="text"
+        value={titleState}
+        onChange={handleTitleChange}
+        onBlur={updateTitle}
+        onKeyDown={blurOnEnter}
+      />
       {items.map((item, index) => (
         <Item
           key={`${item.title}${item.whose}${item.price}`}

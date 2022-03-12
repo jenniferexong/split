@@ -1,4 +1,5 @@
-import { calculate } from "calculator/calculate";
+import { calculateOwings, calculateSpendings } from "calculator";
+import { testData } from "calculator/exampleData";
 import { Person } from "components/person";
 import { useReducer } from "react";
 import styled from "styled-components";
@@ -12,8 +13,24 @@ const Container = styled.div`
 export const App: React.FC = () => {
   const [appState, dispatch] = useReducer(reducer, initialState);
 
-  const { ower, owee, amount } = calculate(appState);
-  const conclusion = `${ower} owes ${owee} $${amount.toFixed(2)}`;
+  const { ower, owee, amount } = calculateOwings(appState);
+
+  const total = appState.people.reduce((acc, person) => {
+    return (
+      acc +
+      person.receipts.reduce((acc, receipt) => {
+        return acc + receipt.subtotal;
+      }, 0)
+    );
+  }, 0);
+
+  const spendings = calculateSpendings(appState);
+
+  const conclusion = amount
+    ? `${ower} owes ${owee} $${amount.toFixed(2)}`
+    : "No one owes anyone!";
+
+  console.log(appState);
 
   return (
     <>
@@ -27,7 +44,13 @@ export const App: React.FC = () => {
           />
         ))}
       </Container>
-      <p>{conclusion}</p>
+      <p>Total: ${total.toFixed(2)}</p>
+      {spendings.map(({ name, spendings }) => (
+        <p key={name}>
+          {name} spent ${spendings.toFixed(2)}
+        </p>
+      ))}
+      <h4>{conclusion}</h4>
     </>
   );
 };

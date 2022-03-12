@@ -5,19 +5,19 @@ import { AppType, PersonType } from "./types";
  *
  * NOTE only works with two people
  */
-export const calculate = (
+export const calculateOwings = (
   data: AppType
 ): { ower: string; owee: string; amount: number } => {
   if (data.people.length !== 2) throw new Error("Two people required");
 
   const person1 = {
     name: data.people[0].name,
-    owings: calculateOwings(data.people[1]),
+    owings: calculateOwing(data.people[1]),
   };
 
   const person2 = {
     name: data.people[1].name,
-    owings: calculateOwings(data.people[0]),
+    owings: calculateOwing(data.people[0]),
   };
 
   let ower;
@@ -40,7 +40,7 @@ export const calculate = (
 /**
  * Calculates the amount the other person owes to this person
  */
-const calculateOwings = (person: PersonType): number => {
+const calculateOwing = (person: PersonType): number => {
   let owings = 0;
   for (let receipt of person.receipts) {
     for (let item of receipt.items) {
@@ -52,4 +52,46 @@ const calculateOwings = (person: PersonType): number => {
     }
   }
   return owings;
+};
+
+export const calculateSpendings = ({
+  people,
+}: AppType): { name: string; spendings: number }[] => {
+  const spendings1 = calculateSpending(people[0]);
+  const spendings2 = calculateSpending(people[1]);
+
+  return [
+    {
+      name: people[0].name,
+      spendings: spendings1.mySpendings + spendings2.theirSpendings,
+    },
+    {
+      name: people[1].name,
+      spendings: spendings2.mySpendings + spendings1.theirSpendings,
+    },
+  ];
+};
+
+/**
+ * Calculates the total spendings made by each person,
+ * for receipts paid by a given person
+ */
+const calculateSpending = (
+  person: PersonType
+): { mySpendings: number; theirSpendings: number } => {
+  let mySpendings = 0;
+  let theirSpendings = 0;
+  for (let receipt of person.receipts) {
+    for (let { whose, price } of receipt.items) {
+      if (whose === "mine") {
+        mySpendings += price;
+      } else if (whose === "split") {
+        mySpendings += price / 2;
+        theirSpendings += price / 2;
+      } else {
+        theirSpendings += price;
+      }
+    }
+  }
+  return { mySpendings, theirSpendings };
 };

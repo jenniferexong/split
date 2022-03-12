@@ -1,1 +1,1 @@
-export { calculate } from "./calculate";
+export * from "./calculate";

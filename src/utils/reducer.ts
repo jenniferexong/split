@@ -1,13 +1,19 @@
-import { exampleReceipt } from "calculator/exampleData";
+import { isEqual } from "lodash";
 import { AppType, ItemType, ReceiptType } from "calculator/types";
 import produce from "immer";
 import { Reducer } from "react";
 
-export type Action = AddReceipt | AddItem | UpdateItem;
+export type Action = AddReceipt | UpdateReceipt | AddItem | UpdateItem;
 
 interface AddReceipt {
   type: "addReceipt";
   personIndex: number;
+}
+
+interface UpdateReceipt {
+  type: "updateReceipt";
+  personIndex: number;
+  receiptIndex: number;
   receipt: ReceiptType;
 }
 
@@ -15,7 +21,6 @@ interface AddItem {
   type: "addItem";
   personIndex: number;
   receiptIndex: number;
-  item: ItemType;
 }
 
 interface UpdateItem {
@@ -33,27 +38,43 @@ export const initialState: AppType = {
       receipts: [],
     },
     {
-      name: "Pandy",
+      name: "Andy",
       receipts: [],
     },
   ],
+};
+
+const emptyItem: ItemType = {
+  whose: "mine",
+  price: 0,
 };
 
 export const reducer: Reducer<AppType, Action> = (state, action) =>
   produce(state, (draft) => {
     switch (action.type) {
       case "addReceipt": {
-        const { personIndex, receipt } = action;
-        draft.people[personIndex].receipts.push(receipt);
+        const { personIndex } = action;
+        draft.people[personIndex].receipts.push({
+          title: "Untitled",
+          items: [],
+          subtotal: 0,
+        });
+        break;
+      }
+      case "updateReceipt": {
+        const { personIndex, receiptIndex, receipt } = action;
+        draft.people[personIndex].receipts[receiptIndex] = receipt;
         break;
       }
       case "addItem": {
-        const { personIndex, receiptIndex, item } = action;
+        const { personIndex, receiptIndex } = action;
+
+        // only add a new item if the previous one has been updated
+        const items = draft.people[personIndex].receipts[receiptIndex].items;
+        if (isEqual(items[items.length - 1], emptyItem)) break;
+
         const receipt = draft.people[personIndex].receipts[receiptIndex];
-
-        receipt.items.push(item);
-        receipt.subtotal += item.price;
-
+        receipt.items.push(emptyItem);
         break;
       }
       case "updateItem": {
