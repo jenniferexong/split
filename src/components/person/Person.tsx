@@ -45,7 +45,7 @@ export const Person: React.FC<PersonProps> = ({
       <h1>{name}</h1>
       {receipts.map((receipt, index) => (
         <Receipt
-          key={`${receipt.title}${index}`}
+          key={`${personIndex}-${index}`}
           personIndex={personIndex}
           receiptIndex={index}
           dispatch={dispatch}
