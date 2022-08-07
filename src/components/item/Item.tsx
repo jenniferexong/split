@@ -68,7 +68,7 @@ export const Item: React.FC<ItemProps> = ({
 
   return (
     <tr>
-      <TableCell contentEditable onBlur={updateTitle}>
+      <TableCell contentEditable onBlur={updateTitle} width="55%">
         {title}
       </TableCell>
 
@@ -80,7 +80,7 @@ export const Item: React.FC<ItemProps> = ({
         </IconsContainer>
       </TableCell>
 
-      <TableCell contentEditable onBlur={updatePrice}>
+      <TableCell contentEditable onBlur={updatePrice} width="25%" dir="rtl">
         {price.toFixed(2)}
       </TableCell>
     </tr>
