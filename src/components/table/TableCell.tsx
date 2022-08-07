@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { handleCellKeyDown, onCellFocus } from "utils/utils";
+import { handleCellKeyDown, onCellFocus } from "components/table";
 
-interface CellProps {
+interface TableCellProps {
   children?: ReactNode;
   colSpan?: number;
   as?: "th";
@@ -9,7 +9,7 @@ interface CellProps {
   onBlur?: React.FocusEventHandler<HTMLTableCellElement>;
 }
 
-export const Cell = (props: CellProps) => {
+export const TableCell = (props: TableCellProps) => {
   const { children, onBlur, contentEditable, as, colSpan } = props;
 
   const setBlur = (e: React.FocusEvent<HTMLTableCellElement, Element>) => {
