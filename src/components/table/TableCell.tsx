@@ -3,14 +3,17 @@ import { handleCellKeyDown, onCellFocus } from "components/table";
 
 interface TableCellProps {
   children?: ReactNode;
-  colSpan?: number;
   as?: "th";
-  contentEditable?: boolean;
   onBlur?: React.FocusEventHandler<HTMLTableCellElement>;
+
+  contentEditable?: boolean;
+  colSpan?: number;
+  width?: string;
+  dir?: string;
 }
 
 export const TableCell = (props: TableCellProps) => {
-  const { children, onBlur, contentEditable, as, colSpan } = props;
+  const { children, onBlur, as, ...rest } = props;
 
   const setBlur = (e: React.FocusEvent<HTMLTableCellElement, Element>) => {
     onBlur?.(e);
@@ -20,11 +23,10 @@ export const TableCell = (props: TableCellProps) => {
 
   return (
     <Wrapper
-      colSpan={colSpan}
-      contentEditable={contentEditable}
       onFocus={onCellFocus}
       onBlur={setBlur}
       onKeyDown={handleCellKeyDown}
+      {...rest}
     >
       {children}
     </Wrapper>
