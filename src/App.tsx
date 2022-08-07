@@ -30,14 +30,12 @@ export const App: React.FC = () => {
     ? `${ower} owes ${owee} $${amount.toFixed(2)}`
     : "No one owes anyone!";
 
-  console.log(appState);
-
   return (
     <>
       <Container>
         {appState.people.map((person, index) => (
           <Person
-            key={person.name}
+            key={index}
             {...person}
             personIndex={index}
             dispatch={dispatch}

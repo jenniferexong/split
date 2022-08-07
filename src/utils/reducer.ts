@@ -45,6 +45,7 @@ export const initialState: AppType = {
 };
 
 const emptyItem: ItemType = {
+  title: "",
   whose: "mine",
   price: 0,
 };
