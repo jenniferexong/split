@@ -1,7 +1,7 @@
 export type Whose = "mine" | "theirs" | "split";
 
 export interface ItemType {
-  title?: string;
+  title: string;
   /** Should default to mine if not specified */
   whose: Whose;
   price: number;

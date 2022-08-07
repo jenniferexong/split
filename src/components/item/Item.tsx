@@ -1,8 +1,9 @@
 import { ItemType, Whose } from "calculator/types";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { Action } from "utils/reducer";
-import { useState } from "react";
+import React from "react";
 import { Icon } from "components/icon";
+import { Cell } from "components/Cell";
 
 interface ItemProps extends ItemType {
   personIndex: number;
@@ -11,43 +12,12 @@ interface ItemProps extends ItemType {
   dispatch: React.Dispatch<Action>;
 }
 
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-`;
-
-const Info = styled.div`
-  width: 11em;
-  display: flex;
-  margin-left: auto;
-  gap: 1em;
-
-  justify-content: space-between;
-`;
-
 const IconsContainer = styled.div`
   width: 5em;
   display: flex;
   gap: 0.5em;
   align-items: center;
   justify-content: center;
-`;
-
-const StyledInput = styled.input`
-  color: ${(props) => props.theme.baseFont.color};
-  background: none;
-  border: none;
-  outline: none;
-  width: 100%;
-
-  :focus {
-    color: ${(props) => props.theme.colors.accent};
-  }
-`;
-
-const Price = styled.div`
-  display: flex;
-  width: 3em;
 `;
 
 export const Item: React.FC<ItemProps> = ({
@@ -59,20 +29,13 @@ export const Item: React.FC<ItemProps> = ({
   itemIndex,
   dispatch,
 }) => {
-  const [titleState, setTitleState] = useState(title);
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setTitleState(e.target.value);
-  };
-
-  const updateTitle = () => {
+  const updateTitle = (e: React.FocusEvent<HTMLTableCellElement>) => {
     dispatch({
       type: "updateItem",
       personIndex,
       receiptIndex,
       itemIndex,
-      item: { title: titleState, whose, price },
+      item: { title: e.target.innerText, whose, price },
     });
   };
 
@@ -86,29 +49,11 @@ export const Item: React.FC<ItemProps> = ({
     });
   };
 
-  const [priceTextState, setPriceTextState] = useState(price.toFixed(2));
-  const [priceState, setPriceState] = useState(price);
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-
-    const value = e.target.value;
-    setPriceTextState(value);
-
-    // check if it is a valid number
-    if (value.match(/^\d*\.?\d*$/)) {
-      setPriceState(parseFloat(value));
-    }
-  };
-
-  const blurOnEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      (e.target as HTMLInputElement).blur();
-    }
-  };
-
-  const updatePrice = () => {
-    if (!priceTextState.match(/^\d*\.?\d*$/)) {
-      setPriceTextState(priceState.toFixed(2));
+  const updatePrice = (e: React.FocusEvent<HTMLTableCellElement>) => {
+    const priceText = e.target.innerText;
+    // If invalid number, reset value to previous price
+    if (!priceText.match(/^\d*\.?\d*$/)) {
+      e.target.innerText = price.toFixed(2);
       return;
     }
 
@@ -117,34 +62,27 @@ export const Item: React.FC<ItemProps> = ({
       personIndex,
       receiptIndex,
       itemIndex,
-      item: { title, whose, price: priceState },
+      item: { title, whose, price: parseFloat(priceText) },
     });
   };
 
   return (
-    <Container>
-      <StyledInput
-        type="text"
-        defaultValue={title ?? "-"}
-        onChange={handleTitleChange}
-        onBlur={updateTitle}
-        onKeyDown={blurOnEnter}
-      />
-      <Info>
+    <tr>
+      <Cell contentEditable onBlur={updateTitle}>
+        {title}
+      </Cell>
+
+      <Cell>
         <IconsContainer>
           <Icon whose="theirs" selected={whose} onClick={updateWhose} />
           <Icon whose="split" selected={whose} onClick={updateWhose} />
           <Icon whose="mine" selected={whose} onClick={updateWhose} />
         </IconsContainer>
-        <StyledInput
-          type="text"
-          value={priceTextState}
-          dir="rtl"
-          onChange={handlePriceChange}
-          onBlur={updatePrice}
-          onKeyDown={blurOnEnter}
-        />
-      </Info>
-    </Container>
+      </Cell>
+
+      <Cell contentEditable onBlur={updatePrice}>
+        {price.toFixed(2)}
+      </Cell>
+    </tr>
   );
 };
