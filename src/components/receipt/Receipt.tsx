@@ -3,9 +3,9 @@ import { Button } from "components/button";
 import { Entry as Item } from "components/item";
 import { useRef, useState } from "react";
 import styled from "styled-components";
-import { getLastAddedCell } from "utils/utils";
+import { getLastAddedCell } from "components/table";
 import { Action } from "utils/reducer";
-import { Cell } from "components/Cell";
+import { TableCell } from "components/table";
 
 const Container = styled.section`
   width: 100%;
@@ -67,9 +67,9 @@ export const Receipt: React.FC<ReceiptProps> = ({
       <table>
         <thead>
           <tr>
-            <Cell contentEditable onBlur={updateTitle} colSpan={3} as="th">
+            <TableCell contentEditable onBlur={updateTitle} colSpan={3} as="th">
               {title}
-            </Cell>
+            </TableCell>
           </tr>
         </thead>
         <tbody>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Action } from "utils/reducer";
 import React from "react";
 import { Icon } from "components/icon";
-import { Cell } from "components/Cell";
+import { TableCell } from "components/table";
 
 interface ItemProps extends ItemType {
   personIndex: number;
@@ -68,21 +68,21 @@ export const Item: React.FC<ItemProps> = ({
 
   return (
     <tr>
-      <Cell contentEditable onBlur={updateTitle}>
+      <TableCell contentEditable onBlur={updateTitle}>
         {title}
-      </Cell>
+      </TableCell>
 
-      <Cell>
+      <TableCell>
         <IconsContainer>
           <Icon whose="theirs" selected={whose} onClick={updateWhose} />
           <Icon whose="split" selected={whose} onClick={updateWhose} />
           <Icon whose="mine" selected={whose} onClick={updateWhose} />
         </IconsContainer>
-      </Cell>
+      </TableCell>
 
-      <Cell contentEditable onBlur={updatePrice}>
+      <TableCell contentEditable onBlur={updatePrice}>
         {price.toFixed(2)}
-      </Cell>
+      </TableCell>
     </tr>
   );
 };
