@@ -1,12 +1,16 @@
 import { calculateOwings, calculateSpendings } from 'calculator';
-import { Person } from 'components/person';
+import { Board } from 'components/board/Board';
 import { useReducer } from 'react';
 import styled from 'styled-components';
 import { initialState, reducer } from 'utils/reducer';
 
 const Container = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
+  // TODO
+  padding: 40px;
+  gap: 40px;
 `;
 
 export const App = () => {
@@ -33,9 +37,9 @@ export const App = () => {
     <>
       <Container>
         {appState.people.map((person, index) => (
-          <Person
+          <Board
             key={index}
-            {...person}
+            person={person}
             personIndex={index}
             dispatch={dispatch}
           />

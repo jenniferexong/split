@@ -1,9 +1,11 @@
 import React, { ReactNode } from 'react';
 import { handleCellKeyDown, onCellFocus } from 'components/table';
+import styled, { css } from 'styled-components';
+import { fontMixin } from 'styles/mixins';
 
 interface TableCellProps {
   children?: ReactNode;
-  as?: 'th';
+  as?: 'td' | 'th';
   onBlur?: React.FocusEventHandler<HTMLTableCellElement>;
 
   contentEditable?: boolean;
@@ -12,24 +14,33 @@ interface TableCellProps {
   dir?: string;
 }
 
-export const TableCell = (props: TableCellProps) => {
-  const { children, onBlur, as, ...rest } = props;
+const StyledTableCell = styled.td`
+  ${({ theme }) => css`
+    ${fontMixin(theme.fonts.receipt)}
+
+    h3 {
+      letter-spacing: 0.2em;
+    }
+  `}
+`;
+
+export const TableCell = ({ as = 'td', ...props }: TableCellProps) => {
+  const { children, onBlur, ...rest } = props;
 
   const setBlur = (e: React.FocusEvent<HTMLTableCellElement, Element>) => {
     onBlur?.(e);
   };
 
-  const Wrapper = as ? 'th' : 'td';
-
   return (
-    <Wrapper
+    <StyledTableCell
       onFocus={onCellFocus}
       onBlur={setBlur}
       onKeyDown={handleCellKeyDown}
+      as={as}
       {...rest}
     >
       {children}
-    </Wrapper>
+    </StyledTableCell>
   );
 };
 TableCell.displayName = 'TableCell';

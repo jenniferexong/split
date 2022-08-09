@@ -7,12 +7,14 @@ import { Action } from 'utils/reducer';
 
 const Container = styled.div`
   width: 100%;
+  height: 100%;
 
   // todo
   display: flex;
   flex-direction: column;
+  align-items: center;
 
-  border: solid grey 1px;
+  background: ${props => props.theme.colors.caramel};
   gap: 1em;
   padding: 20px;
 
@@ -21,13 +23,18 @@ const Container = styled.div`
   }
 `;
 
-interface PersonProps extends PersonType {
+interface BoardProps {
   personIndex: number;
+  person: PersonType;
   dispatch: Dispatch<Action>;
 }
 
-export const Person = (props: PersonProps) => {
-  const { name, receipts, personIndex, dispatch } = props;
+export const Board = (props: BoardProps) => {
+  const {
+    person: { name, receipts },
+    personIndex,
+    dispatch,
+  } = props;
 
   const handleAddReceipt = () => {
     dispatch({
@@ -44,12 +51,12 @@ export const Person = (props: PersonProps) => {
           key={`${personIndex}-${index}`}
           personIndex={personIndex}
           receiptIndex={index}
+          receipt={receipt}
           dispatch={dispatch}
-          {...receipt}
         />
       ))}
       <Button onClick={handleAddReceipt}>Add receipt</Button>
     </Container>
   );
 };
-Person.displayName = 'Person';
+Board.displayName = 'Person';

@@ -1,4 +1,4 @@
-export type Whose = "mine" | "theirs" | "split";
+export type Whose = 'mine' | 'theirs' | 'split';
 
 export interface ItemType {
   title: string;
@@ -17,6 +17,7 @@ export interface PersonType {
   name: string;
   receipts: ReceiptType[];
 }
+
 export interface AppType {
   people: PersonType[];
 }

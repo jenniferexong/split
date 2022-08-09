@@ -7,7 +7,7 @@ export const fontMixin = (font: Font): FlattenSimpleInterpolation => {
   return css`
     font-family: ${family};
     font-size: ${baseSize};
-    font-weight: ${baseWeight}
+    font-weight: ${baseWeight};
     color: ${color};
     line-height: ${lineHeight};
   `;

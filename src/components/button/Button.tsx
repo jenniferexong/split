@@ -12,19 +12,17 @@ const StyledButton = styled.button`
   border: none;
   background-color: ${props => props.theme.colors.white};
   color: ${props => props.theme.colors.black};
+  text-align: left;
 
   // add hover effect
   &:hover {
-    background-color: black;
+    background-color: lightGray;
   }
 
   // add focus effect
   &:focus {
     color: ${props => props.theme.colors.red};
   }
-
-  margin: 1em 0;
-  padding: 0.5em;
 `;
 
 export const Button = React.forwardRef(

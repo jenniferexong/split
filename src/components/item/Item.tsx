@@ -4,6 +4,7 @@ import { Action } from 'utils/reducer';
 import React from 'react';
 import { Icon } from 'components/icon';
 import { TableCell } from 'components/table';
+import { TableRow } from 'components/table/TableRow';
 
 interface ItemProps extends ItemType {
   personIndex: number;
@@ -69,7 +70,7 @@ export const Item = (props: ItemProps) => {
   };
 
   return (
-    <tr>
+    <TableRow borderTop={itemIndex === 0}>
       <TableCell contentEditable onBlur={updateTitle} width="55%">
         {title}
       </TableCell>
@@ -85,7 +86,7 @@ export const Item = (props: ItemProps) => {
       <TableCell contentEditable onBlur={updatePrice} width="25%" dir="rtl">
         {price.toFixed(2)}
       </TableCell>
-    </tr>
+    </TableRow>
   );
 };
 Item.displayName = 'Item';

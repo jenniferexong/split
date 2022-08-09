@@ -14,8 +14,11 @@ export const GlobalStyle = createGlobalStyle`
 
         margin: 0;
         background-color: ${theme.colors.beige};
-        box-sizing: border-box;
-        padding: 100px;
+      }
+
+      #root {
+        width: 100%;
+        height: 100%;
       }
 
       div,
@@ -29,7 +32,8 @@ export const GlobalStyle = createGlobalStyle`
       h4,
       h5 {
         font-weight: 700;
-        margin-top: 0;
+        margin: 0;
+        line-height: 1;
       }
 
       h3 {
