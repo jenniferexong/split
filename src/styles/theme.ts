@@ -1,24 +1,61 @@
 import type { Theme } from './types';
 
 export const theme: Theme = {
-  background: '#191b1c',
-
-  baseFont: {
-    font: 'Consolas',
-    size: '1.5rem',
-    color: '#cdd9df',
-    lineHeight: '1.5',
+  colors: {
+    beige: '#EBE1CA',
+    white: '#fff',
+    black: '#000',
+    charcoal: '#423F3D',
+    caramel: '#C6A26E',
+    green: '#00FF94',
+    red: '#FF0000',
+    yellow: '#FFD600',
+    disabled: '#E7E7E7',
   },
 
-  colors: {
-    accent: '#31bad7',
+  fonts: {
+    receipt: {
+      family: 'Consolas',
+      baseSize: '14px',
+      lineHeight: '1.5',
+      baseWeight: 'normal',
+      color: 'black',
+    },
+    nameTag: {
+      family: 'Consolas',
+      baseSize: '24px',
+      lineHeight: '1',
+      baseWeight: 'normal',
+      color: 'black',
+    },
+    boardLetter: {
+      family: 'Consolas',
+      baseSize: '32px',
+      lineHeight: '1',
+      baseWeight: '600',
+      color: 'black',
+    },
   },
 
   components: {
-    button: {
-      background: '#071013',
-      textColor: 'white',
-      disabledColor: '#383838',
+    receipt: {
+      background: 'white',
+      width: '350px',
+    },
+    invoice: {
+      background: 'white',
+      width: '230px',
+    },
+    nameTag: {
+      background: 'white',
+      width: '155px',
+      height: '180px',
+      frameWidth: '14px',
+    },
+    buttons: {
+      mine: 'green',
+      theirs: 'red',
+      split: 'yellow',
     },
   },
 };

@@ -10,8 +10,8 @@ interface ButtonProps {
 const StyledButton = styled.button`
   width: 100%;
   border: none;
-  background-color: ${props => props.theme.components.button.background};
-  color: ${props => props.theme.components.button.textColor};
+  background-color: ${props => props.theme.colors.white};
+  color: ${props => props.theme.colors.black};
 
   // add hover effect
   &:hover {
@@ -20,7 +20,7 @@ const StyledButton = styled.button`
 
   // add focus effect
   &:focus {
-    color: ${props => props.theme.colors.accent};
+    color: ${props => props.theme.colors.red};
   }
 
   margin: 1em 0;

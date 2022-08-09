@@ -1,5 +1,6 @@
 import { createGlobalStyle, css } from 'styled-components';
 import normalize from 'styled-normalize';
+import { fontMixin } from './mixins/fontMixin';
 
 export const GlobalStyle = createGlobalStyle`
     ${normalize}
@@ -9,16 +10,12 @@ export const GlobalStyle = createGlobalStyle`
         width: 100vw;
         height: 100vh;
 
-        font-family: ${theme.baseFont.font};
-        font-size: ${theme.baseFont.size};
-        color: ${theme.baseFont.color};
-        line-height: ${theme.baseFont.lineHeight};
+        ${fontMixin(theme.fonts.receipt)}
 
         margin: 0;
-        background-color: ${theme.background};
+        background-color: ${theme.colors.beige};
         box-sizing: border-box;
         padding: 100px;
-        /* justify-content: center; */
       }
 
       div,
@@ -31,9 +28,16 @@ export const GlobalStyle = createGlobalStyle`
       h3,
       h4,
       h5 {
-        font-weight: 400;
-        color: ${theme.colors.accent};
+        font-weight: 700;
         margin-top: 0;
+      }
+
+      h3 {
+        font-size: 20px;
+      }
+
+      h4 {
+        font-size: 16px;
       }
     `}
 `;

@@ -26,14 +26,12 @@ const icons = {
 const IconContainer = styled.div<{ whose: Whose; selected: Whose }>`
   ${({ whose, selected, theme }) =>
     css`
-      color: ${whose === selected
-        ? icons[whose].color
-        : theme.components.button.disabledColor};
+      color: ${whose === selected ? icons[whose].color : theme.colors.disabled};
 
       :hover {
         ${whose !== selected &&
         css`
-          color: ${lighten(0.3, theme.components.button.disabledColor)};
+          color: ${lighten(0.3, theme.colors.disabled)};
         `}
       }
     `}
