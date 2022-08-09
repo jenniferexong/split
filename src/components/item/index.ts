@@ -1,1 +1,1 @@
-export { Item as Entry } from "./Item";
+export { Item as Entry } from './Item';

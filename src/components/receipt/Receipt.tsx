@@ -1,11 +1,10 @@
-import { ReceiptType } from "calculator/types";
-import { Button } from "components/button";
-import { Entry as Item } from "components/item";
-import { useRef, useState } from "react";
-import styled from "styled-components";
-import { getLastAddedCell } from "components/table";
-import { Action } from "utils/reducer";
-import { TableCell } from "components/table";
+import { ReceiptType } from 'calculator/types';
+import { Button } from 'components/button';
+import { Entry as Item } from 'components/item';
+import React, { Dispatch, useRef } from 'react';
+import styled from 'styled-components';
+import { getLastAddedCell, TableCell } from 'components/table';
+import { Action } from 'utils/reducer';
 
 const Container = styled.section`
   width: 100%;
@@ -24,24 +23,17 @@ const SubTotal = styled.div`
 interface ReceiptProps extends ReceiptType {
   personIndex: number;
   receiptIndex: number;
-  dispatch: React.Dispatch<Action>;
+  dispatch: Dispatch<Action>;
 }
 
-export const Receipt: React.FC<ReceiptProps> = ({
-  personIndex,
-  receiptIndex,
-  dispatch,
-  items,
-  subtotal,
-  title,
-}) => {
-  // TODO
-  const [titleState, setTitleState] = useState(title);
+export const Receipt = (props: ReceiptProps) => {
+  const { personIndex, receiptIndex, dispatch, items, subtotal, title } = props;
+
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const handleAddItem = () => {
     dispatch({
-      type: "addItem",
+      type: 'addItem',
       personIndex,
       receiptIndex,
     });
@@ -55,7 +47,7 @@ export const Receipt: React.FC<ReceiptProps> = ({
     const text = e.target.innerText;
 
     dispatch({
-      type: "updateReceipt",
+      type: 'updateReceipt',
       personIndex,
       receiptIndex,
       receipt: { title: text, items, subtotal },
@@ -99,3 +91,4 @@ export const Receipt: React.FC<ReceiptProps> = ({
     </Container>
   );
 };
+Receipt.displayText = 'Receipt';

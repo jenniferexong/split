@@ -1,10 +1,9 @@
-import { exampleReceipt } from "calculator/exampleData";
-import { PersonType, ReceiptType } from "calculator/types";
-import { Button } from "components/button";
-import { Receipt } from "components/receipt";
-import { ReactElement, ReactNode, useState } from "react";
-import styled from "styled-components";
-import { Action } from "utils/reducer";
+import { PersonType } from 'calculator/types';
+import { Button } from 'components/button';
+import { Receipt } from 'components/receipt';
+import { Dispatch } from 'react';
+import styled from 'styled-components';
+import { Action } from 'utils/reducer';
 
 const Container = styled.div`
   width: 100%;
@@ -24,18 +23,15 @@ const Container = styled.div`
 
 interface PersonProps extends PersonType {
   personIndex: number;
-  dispatch: React.Dispatch<Action>;
+  dispatch: Dispatch<Action>;
 }
 
-export const Person: React.FC<PersonProps> = ({
-  name,
-  receipts,
-  personIndex,
-  dispatch,
-}) => {
+export const Person = (props: PersonProps) => {
+  const { name, receipts, personIndex, dispatch } = props;
+
   const handleAddReceipt = () => {
     dispatch({
-      type: "addReceipt",
+      type: 'addReceipt',
       personIndex,
     });
   };
@@ -56,3 +52,4 @@ export const Person: React.FC<PersonProps> = ({
     </Container>
   );
 };
+Person.displayName = 'Person';

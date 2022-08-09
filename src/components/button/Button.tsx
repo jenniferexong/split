@@ -1,7 +1,5 @@
-import { ReactNode } from "react";
-import React from "react";
-import styled from "styled-components";
-import { Props } from "@fortawesome/react-fontawesome";
+import React, { ReactNode } from 'react';
+import styled from 'styled-components';
 
 interface ButtonProps {
   /** Button text */
@@ -12,8 +10,8 @@ interface ButtonProps {
 const StyledButton = styled.button`
   width: 100%;
   border: none;
-  background-color: ${(props) => props.theme.components.button.background};
-  color: ${(props) => props.theme.components.button.textColor};
+  background-color: ${props => props.theme.components.button.background};
+  color: ${props => props.theme.components.button.textColor};
 
   // add hover effect
   &:hover {
@@ -22,7 +20,7 @@ const StyledButton = styled.button`
 
   // add focus effect
   &:focus {
-    color: ${(props) => props.theme.colors.accent};
+    color: ${props => props.theme.colors.accent};
   }
 
   margin: 1em 0;
@@ -30,11 +28,14 @@ const StyledButton = styled.button`
 `;
 
 export const Button = React.forwardRef(
-  ({ children, onClick }: ButtonProps, ref?: React.Ref<HTMLButtonElement>) => {
+  (props: ButtonProps, ref?: React.Ref<HTMLButtonElement>) => {
+    const { children, onClick } = props;
+
     return (
       <StyledButton ref={ref} onClick={onClick}>
         {children}
       </StyledButton>
     );
-  }
+  },
 );
+Button.displayName = 'Button';

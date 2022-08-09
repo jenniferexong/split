@@ -1,9 +1,9 @@
-import { ItemType, Whose } from "calculator/types";
-import styled from "styled-components";
-import { Action } from "utils/reducer";
-import React from "react";
-import { Icon } from "components/icon";
-import { TableCell } from "components/table";
+import { ItemType, Whose } from 'calculator/types';
+import styled from 'styled-components';
+import { Action } from 'utils/reducer';
+import React from 'react';
+import { Icon } from 'components/icon';
+import { TableCell } from 'components/table';
 
 interface ItemProps extends ItemType {
   personIndex: number;
@@ -20,18 +20,20 @@ const IconsContainer = styled.div`
   justify-content: center;
 `;
 
-export const Item: React.FC<ItemProps> = ({
-  title,
-  whose,
-  price,
-  personIndex,
-  receiptIndex,
-  itemIndex,
-  dispatch,
-}) => {
+export const Item = (props: ItemProps) => {
+  const {
+    title,
+    whose,
+    price,
+    personIndex,
+    receiptIndex,
+    itemIndex,
+    dispatch,
+  } = props;
+
   const updateTitle = (e: React.FocusEvent<HTMLTableCellElement>) => {
     dispatch({
-      type: "updateItem",
+      type: 'updateItem',
       personIndex,
       receiptIndex,
       itemIndex,
@@ -41,7 +43,7 @@ export const Item: React.FC<ItemProps> = ({
 
   const updateWhose = (newWhose: Whose) => {
     dispatch({
-      type: "updateItem",
+      type: 'updateItem',
       personIndex,
       receiptIndex,
       itemIndex,
@@ -58,7 +60,7 @@ export const Item: React.FC<ItemProps> = ({
     }
 
     dispatch({
-      type: "updateItem",
+      type: 'updateItem',
       personIndex,
       receiptIndex,
       itemIndex,
@@ -86,3 +88,4 @@ export const Item: React.FC<ItemProps> = ({
     </tr>
   );
 };
+Item.displayName = 'Item';

@@ -1,6 +1,5 @@
-import { ReactNode } from "react";
-import { createGlobalStyle, css } from "styled-components";
-import normalize from "styled-normalize";
+import { createGlobalStyle, css } from 'styled-components';
+import normalize from 'styled-normalize';
 
 export const GlobalStyle = createGlobalStyle`
     ${normalize}

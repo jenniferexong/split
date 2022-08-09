@@ -1,4 +1,4 @@
-import { AppType, PersonType } from "./types";
+import { AppType, PersonType } from './types';
 
 /**
  * Calculates who owes who, and how much is owed.
@@ -6,9 +6,9 @@ import { AppType, PersonType } from "./types";
  * NOTE only works with two people
  */
 export const calculateOwings = (
-  data: AppType
+  data: AppType,
 ): { ower: string; owee: string; amount: number } => {
-  if (data.people.length !== 2) throw new Error("Two people required");
+  if (data.people.length !== 2) throw new Error('Two people required');
 
   const person1 = {
     name: data.people[0].name,
@@ -42,11 +42,11 @@ export const calculateOwings = (
  */
 const calculateOwing = (person: PersonType): number => {
   let owings = 0;
-  for (let receipt of person.receipts) {
-    for (let item of receipt.items) {
-      if (item.whose === "split") {
+  for (const receipt of person.receipts) {
+    for (const item of receipt.items) {
+      if (item.whose === 'split') {
         owings += item.price / 2;
-      } else if (item.whose === "theirs") {
+      } else if (item.whose === 'theirs') {
         owings += item.price;
       }
     }
@@ -77,15 +77,15 @@ export const calculateSpendings = ({
  * for receipts paid by a given person
  */
 const calculateSpending = (
-  person: PersonType
+  person: PersonType,
 ): { mySpendings: number; theirSpendings: number } => {
   let mySpendings = 0;
   let theirSpendings = 0;
-  for (let receipt of person.receipts) {
-    for (let { whose, price } of receipt.items) {
-      if (whose === "mine") {
+  for (const receipt of person.receipts) {
+    for (const { whose, price } of receipt.items) {
+      if (whose === 'mine') {
         mySpendings += price;
-      } else if (whose === "split") {
+      } else if (whose === 'split') {
         mySpendings += price / 2;
         theirSpendings += price / 2;
       } else {

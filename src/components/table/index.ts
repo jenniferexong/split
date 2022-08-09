@@ -1,2 +1,2 @@
-export { TableCell } from "./TableCell";
-export * from "./utils";
+export { TableCell } from './TableCell';
+export * from './utils';
