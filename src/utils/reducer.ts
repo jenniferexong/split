@@ -1,73 +1,73 @@
-import { isEqual } from "lodash";
-import { AppType, ItemType, ReceiptType } from "calculator/types";
-import produce from "immer";
-import { Reducer } from "react";
-
-export type Action = AddReceipt | UpdateReceipt | AddItem | UpdateItem;
+import { isEqual } from 'lodash';
+import { AppType, ItemType, ReceiptType } from 'calculator/types';
+import produce from 'immer';
+import { Reducer } from 'react';
 
 interface AddReceipt {
-  type: "addReceipt";
+  type: 'addReceipt';
   personIndex: number;
 }
 
 interface UpdateReceipt {
-  type: "updateReceipt";
+  type: 'updateReceipt';
   personIndex: number;
   receiptIndex: number;
   receipt: ReceiptType;
 }
 
 interface AddItem {
-  type: "addItem";
+  type: 'addItem';
   personIndex: number;
   receiptIndex: number;
 }
 
 interface UpdateItem {
-  type: "updateItem";
+  type: 'updateItem';
   personIndex: number;
   receiptIndex: number;
   itemIndex: number;
   item: ItemType;
 }
 
+export type Action = AddReceipt | UpdateReceipt | AddItem | UpdateItem;
+
 export const initialState: AppType = {
   people: [
     {
-      name: "Jennifer",
+      name: 'Jennifer',
       receipts: [],
     },
     {
-      name: "Andy",
+      name: 'Andy',
       receipts: [],
     },
   ],
 };
 
 const emptyItem: ItemType = {
-  title: "",
-  whose: "mine",
+  title: '',
+  whose: 'mine',
   price: 0,
 };
 
 export const reducer: Reducer<AppType, Action> = (state, action) =>
-  produce(state, (draft) => {
+  produce(state, draft => {
     switch (action.type) {
-      case "addReceipt": {
+      case 'addReceipt': {
         const { personIndex } = action;
         draft.people[personIndex].receipts.push({
-          title: "Untitled",
+          title: 'Untitled',
           items: [],
           subtotal: 0,
         });
         break;
       }
-      case "updateReceipt": {
+      case 'updateReceipt': {
         const { personIndex, receiptIndex, receipt } = action;
         draft.people[personIndex].receipts[receiptIndex] = receipt;
         break;
       }
-      case "addItem": {
+      case 'addItem': {
         const { personIndex, receiptIndex } = action;
 
         // only add a new item if the previous one has been updated
@@ -78,7 +78,7 @@ export const reducer: Reducer<AppType, Action> = (state, action) =>
         receipt.items.push(emptyItem);
         break;
       }
-      case "updateItem": {
+      case 'updateItem': {
         const { personIndex, receiptIndex, itemIndex, item } = action;
         const receipt = draft.people[personIndex].receipts[receiptIndex];
 
@@ -89,6 +89,7 @@ export const reducer: Reducer<AppType, Action> = (state, action) =>
         break;
       }
       default: {
+        // eslint-disable-next-line no-unused-vars
         const _: never = action;
       }
     }

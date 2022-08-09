@@ -1,9 +1,9 @@
-import { ReactNode } from "react";
-import { handleCellKeyDown, onCellFocus } from "components/table";
+import React, { ReactNode } from 'react';
+import { handleCellKeyDown, onCellFocus } from 'components/table';
 
 interface TableCellProps {
   children?: ReactNode;
-  as?: "th";
+  as?: 'th';
   onBlur?: React.FocusEventHandler<HTMLTableCellElement>;
 
   contentEditable?: boolean;
@@ -19,7 +19,7 @@ export const TableCell = (props: TableCellProps) => {
     onBlur?.(e);
   };
 
-  const Wrapper = as ? "th" : "td";
+  const Wrapper = as ? 'th' : 'td';
 
   return (
     <Wrapper
@@ -32,3 +32,4 @@ export const TableCell = (props: TableCellProps) => {
     </Wrapper>
   );
 };
+TableCell.displayName = 'TableCell';

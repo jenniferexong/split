@@ -1,16 +1,15 @@
-import { calculateOwings, calculateSpendings } from "calculator";
-import { testData } from "calculator/exampleData";
-import { Person } from "components/person";
-import { useReducer } from "react";
-import styled from "styled-components";
-import { initialState, reducer } from "utils/reducer";
+import { calculateOwings, calculateSpendings } from 'calculator';
+import { Person } from 'components/person';
+import { useReducer } from 'react';
+import styled from 'styled-components';
+import { initialState, reducer } from 'utils/reducer';
 
 const Container = styled.div`
   width: 100%;
   display: flex;
 `;
 
-export const App: React.FC = () => {
+export const App = () => {
   const [appState, dispatch] = useReducer(reducer, initialState);
 
   const { ower, owee, amount } = calculateOwings(appState);
@@ -28,7 +27,7 @@ export const App: React.FC = () => {
 
   const conclusion = amount
     ? `${ower} owes ${owee} $${amount.toFixed(2)}`
-    : "No one owes anyone!";
+    : 'No one owes anyone!';
 
   return (
     <>
@@ -52,3 +51,4 @@ export const App: React.FC = () => {
     </>
   );
 };
+App.displayName = 'App';

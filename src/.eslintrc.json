@@ -1,0 +1,28 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true
+  },
+  "extends": ["plugin:react/recommended", "standard"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "globals": { "JSX": "readonly" },
+  "plugins": ["react", "@typescript-eslint", "prettier", "jest"],
+  "rules": {
+    "no-duplicate-imports": "error",
+    "no-unused-vars": "error",
+    "semi": "off",
+    "no-extra-semi": "off",
+    "quotes": ["error", "single"],
+    "comma-dangle": ["error", "always-multiline"],
+    "react/react-in-jsx-scope": "off",
+    "multiline-ternary": "off"
+  }
+}

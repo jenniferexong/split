@@ -1,25 +1,25 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { lighten } from "polished";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { lighten } from 'polished';
 import {
   faCheck,
   faXmark,
   faGripLinesVertical,
-} from "@fortawesome/free-solid-svg-icons";
-import styled, { css } from "styled-components";
-import { Whose } from "calculator/types";
+} from '@fortawesome/free-solid-svg-icons';
+import styled, { css } from 'styled-components';
+import { Whose } from 'calculator/types';
 
 const icons = {
   mine: {
     icon: faCheck,
-    color: "lime",
+    color: 'lime',
   },
   theirs: {
     icon: faXmark,
-    color: "red",
+    color: 'red',
   },
   split: {
     icon: faGripLinesVertical,
-    color: "orange",
+    color: 'orange',
   },
 };
 
@@ -39,11 +39,15 @@ const IconContainer = styled.div<{ whose: Whose; selected: Whose }>`
     `}
 `;
 
-export const Icon: React.FC<{
+interface IconProps {
   whose: Whose;
   selected: Whose;
   onClick: (whose: Whose) => void;
-}> = ({ whose, selected, onClick }) => {
+}
+
+export const Icon = (props: IconProps) => {
+  const { whose, selected, onClick } = props;
+
   return (
     <IconContainer
       selected={selected}
@@ -54,3 +58,4 @@ export const Icon: React.FC<{
     </IconContainer>
   );
 };
+Icon.displayName = 'Icon';
