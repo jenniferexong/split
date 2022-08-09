@@ -2,32 +2,46 @@ import { ReceiptType } from 'calculator/types';
 import { Button } from 'components/button';
 import { Entry as Item } from 'components/item';
 import React, { Dispatch, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { getLastAddedCell, TableCell } from 'components/table';
 import { Action } from 'utils/reducer';
+import { TableRow } from 'components/table/TableRow';
+import { Barcode } from './Barcode';
 
 const Container = styled.section`
-  width: 100%;
-  border: solid gray 1px;
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
+  ${({ theme }) => css`
+    width: ${theme.components.receipt.width};
+    background: ${theme.components.receipt.background};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // spacing
+    padding: 20px 10px 10px;
+    gap: 20px;
+  `}
 `;
 
-const SubTotal = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-`;
-
-interface ReceiptProps extends ReceiptType {
+interface ReceiptProps {
   personIndex: number;
   receiptIndex: number;
+  receipt: ReceiptType;
   dispatch: Dispatch<Action>;
 }
 
+const Table = styled.table`
+  border-collapse: collapse;
+  text-transform: uppercase;
+  width: 100%;
+`;
+
 export const Receipt = (props: ReceiptProps) => {
-  const { personIndex, receiptIndex, dispatch, items, subtotal, title } = props;
+  const {
+    personIndex,
+    receiptIndex,
+    dispatch,
+    receipt: { items, subtotal, title },
+  } = props;
 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -56,13 +70,13 @@ export const Receipt = (props: ReceiptProps) => {
 
   return (
     <Container>
-      <table>
+      <Table>
         <thead>
-          <tr>
+          <TableRow borderBottom>
             <TableCell contentEditable onBlur={updateTitle} colSpan={3} as="th">
-              {title}
+              <h3>{title}</h3>
             </TableCell>
-          </tr>
+          </TableRow>
         </thead>
         <tbody>
           {items.map((item, index) => (
@@ -75,19 +89,28 @@ export const Receipt = (props: ReceiptProps) => {
               {...item}
             />
           ))}
-          <tr>
+          <TableRow borderBottom borderTop={items.length === 0}>
             <td colSpan={3}>
               <Button ref={buttonRef} onClick={handleAddItem}>
-                Add item
+                +
               </Button>
             </td>
-          </tr>
+          </TableRow>
+          <TableRow borderTop>
+            <TableCell colSpan={2}>Item count:</TableCell>
+            <TableCell dir="rtl">{items.length}</TableCell>
+          </TableRow>
+          <TableRow borderBottom>
+            <TableCell colSpan={2}>
+              <b>Total:</b>
+            </TableCell>
+            <TableCell dir="rtl">
+              <b>${subtotal.toFixed(2)}</b>
+            </TableCell>
+          </TableRow>
         </tbody>
-      </table>
-      <SubTotal>
-        <strong>Subtotal</strong>
-        <strong>${subtotal.toFixed(2)}</strong>
-      </SubTotal>
+      </Table>
+      <Barcode />
     </Container>
   );
 };

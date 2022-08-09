@@ -17,7 +17,7 @@ export const theme: Theme = {
     receipt: {
       family: 'Consolas',
       baseSize: '14px',
-      lineHeight: '1.5',
+      lineHeight: '1',
       baseWeight: 'normal',
       color: 'black',
     },
