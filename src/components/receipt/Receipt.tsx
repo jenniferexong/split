@@ -2,25 +2,14 @@ import { ReceiptType } from 'calculator/types';
 import { Button } from 'components/button';
 import { Entry as Item } from 'components/item';
 import React, { Dispatch, useRef } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { getLastAddedCell, TableCell } from 'components/table';
 import { Action } from 'utils/reducer';
 import { TableRow } from 'components/table/TableRow';
 import { Barcode } from './Barcode';
+import { Paper } from 'components/board';
 
-const Container = styled.div`
-  ${({ theme }) => css`
-    width: ${theme.components.receipt.width};
-    background: ${theme.components.receipt.background};
-    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  `}
-`;
-
-const InnerContainer = styled.section`
+const Container = styled.section`
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -44,16 +33,6 @@ const Table = styled.table`
   width: 100%;
 `;
 
-const Pin = styled.div`
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  transform: translateY(-50%);
-  border-radius: 50%;
-  background: ${({ theme }) => theme.colors.charcoal};
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
-`;
-
 export const Receipt = (props: ReceiptProps) => {
   const {
     personIndex,
@@ -63,6 +42,7 @@ export const Receipt = (props: ReceiptProps) => {
   } = props;
 
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const theme = useTheme();
 
   const handleAddItem = () => {
     dispatch({
@@ -88,9 +68,8 @@ export const Receipt = (props: ReceiptProps) => {
   };
 
   return (
-    <Container>
-      <Pin />
-      <InnerContainer>
+    <Paper width={theme.components.receipt.width}>
+      <Container>
         <Table>
           <thead>
             <TableRow borderBottom>
@@ -137,8 +116,8 @@ export const Receipt = (props: ReceiptProps) => {
           </tbody>
         </Table>
         <Barcode />
-      </InnerContainer>
-    </Container>
+      </Container>
+    </Paper>
   );
 };
 Receipt.displayText = 'Receipt';
