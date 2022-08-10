@@ -1,6 +1,6 @@
 import { PersonType } from 'calculator/types';
 import { Button } from 'components/button';
-import { Receipt } from 'components/receipt';
+import { Invoice, Receipt } from 'components/receipt';
 import { Dispatch } from 'react';
 import styled from 'styled-components';
 import { Action } from 'utils/reducer';
@@ -45,6 +45,8 @@ export const Board = (props: BoardProps) => {
   return (
     <Container>
       <h1>{name}</h1>
+      {/* TODO */}
+      <Invoice totalSpendings={0} actualSpendings={0} oweings={0} />
       {receipts.map((receipt, index) => (
         <Receipt
           key={`${personIndex}-${index}`}

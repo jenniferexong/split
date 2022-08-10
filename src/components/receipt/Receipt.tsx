@@ -2,23 +2,12 @@ import { ReceiptType } from 'calculator/types';
 import { Button } from 'components/button';
 import { Entry as Item } from 'components/item';
 import React, { Dispatch, useRef } from 'react';
-import styled, { useTheme } from 'styled-components';
-import { getLastAddedCell, TableCell } from 'components/table';
+import { useTheme } from 'styled-components';
+import { getLastAddedCell, Table, TableCell, TableRow } from 'components/table';
 import { Action } from 'utils/reducer';
-import { TableRow } from 'components/table/TableRow';
 import { Barcode } from './Barcode';
 import { Paper } from 'components/board';
-
-const Container = styled.section`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-
-  // spacing
-  padding: 20px 10px 10px;
-  gap: 20px;
-`;
+import { Container } from './Container';
 
 interface ReceiptProps {
   personIndex: number;
@@ -26,12 +15,6 @@ interface ReceiptProps {
   receipt: ReceiptType;
   dispatch: Dispatch<Action>;
 }
-
-const Table = styled.table`
-  border-collapse: collapse;
-  text-transform: uppercase;
-  width: 100%;
-`;
 
 export const Receipt = (props: ReceiptProps) => {
   const {
@@ -79,7 +62,7 @@ export const Receipt = (props: ReceiptProps) => {
                 colSpan={3}
                 as="th"
               >
-                <h3>{title}</h3>
+                {title}
               </TableCell>
             </TableRow>
           </thead>
