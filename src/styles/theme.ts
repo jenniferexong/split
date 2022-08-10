@@ -44,7 +44,7 @@ export const theme: Theme = {
     },
     invoice: {
       background: 'white',
-      width: '230px',
+      width: '240px',
     },
     nameTag: {
       background: 'white',
