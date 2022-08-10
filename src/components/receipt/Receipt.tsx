@@ -8,18 +8,27 @@ import { Action } from 'utils/reducer';
 import { TableRow } from 'components/table/TableRow';
 import { Barcode } from './Barcode';
 
-const Container = styled.section`
+const Container = styled.div`
   ${({ theme }) => css`
     width: ${theme.components.receipt.width};
     background: ${theme.components.receipt.background};
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
+
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    // spacing
-    padding: 20px 10px 10px;
-    gap: 20px;
   `}
+`;
+
+const InnerContainer = styled.section`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+
+  // spacing
+  padding: 20px 10px 10px;
+  gap: 20px;
 `;
 
 interface ReceiptProps {
@@ -33,6 +42,16 @@ const Table = styled.table`
   border-collapse: collapse;
   text-transform: uppercase;
   width: 100%;
+`;
+
+const Pin = styled.div`
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: ${({ theme }) => theme.colors.charcoal};
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 `;
 
 export const Receipt = (props: ReceiptProps) => {
@@ -70,47 +89,55 @@ export const Receipt = (props: ReceiptProps) => {
 
   return (
     <Container>
-      <Table>
-        <thead>
-          <TableRow borderBottom>
-            <TableCell contentEditable onBlur={updateTitle} colSpan={3} as="th">
-              <h3>{title}</h3>
-            </TableCell>
-          </TableRow>
-        </thead>
-        <tbody>
-          {items.map((item, index) => (
-            <Item
-              key={`${personIndex}-${receiptIndex}-${index}`}
-              personIndex={personIndex}
-              receiptIndex={receiptIndex}
-              itemIndex={index}
-              dispatch={dispatch}
-              {...item}
-            />
-          ))}
-          <TableRow borderBottom borderTop={items.length === 0}>
-            <td colSpan={3}>
-              <Button ref={buttonRef} onClick={handleAddItem}>
-                +
-              </Button>
-            </td>
-          </TableRow>
-          <TableRow borderTop>
-            <TableCell colSpan={2}>Item count:</TableCell>
-            <TableCell dir="rtl">{items.length}</TableCell>
-          </TableRow>
-          <TableRow borderBottom>
-            <TableCell colSpan={2}>
-              <b>Total:</b>
-            </TableCell>
-            <TableCell dir="rtl">
-              <b>${subtotal.toFixed(2)}</b>
-            </TableCell>
-          </TableRow>
-        </tbody>
-      </Table>
-      <Barcode />
+      <Pin />
+      <InnerContainer>
+        <Table>
+          <thead>
+            <TableRow borderBottom>
+              <TableCell
+                contentEditable
+                onBlur={updateTitle}
+                colSpan={3}
+                as="th"
+              >
+                <h3>{title}</h3>
+              </TableCell>
+            </TableRow>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <Item
+                key={`${personIndex}-${receiptIndex}-${index}`}
+                personIndex={personIndex}
+                receiptIndex={receiptIndex}
+                itemIndex={index}
+                dispatch={dispatch}
+                {...item}
+              />
+            ))}
+            <TableRow borderBottom borderTop={items.length === 0}>
+              <td colSpan={3}>
+                <Button ref={buttonRef} onClick={handleAddItem}>
+                  +
+                </Button>
+              </td>
+            </TableRow>
+            <TableRow borderTop>
+              <TableCell colSpan={2}>Item count:</TableCell>
+              <TableCell dir="rtl">{items.length}</TableCell>
+            </TableRow>
+            <TableRow borderBottom>
+              <TableCell colSpan={2}>
+                <b>Total:</b>
+              </TableCell>
+              <TableCell dir="rtl">
+                <b>${subtotal.toFixed(2)}</b>
+              </TableCell>
+            </TableRow>
+          </tbody>
+        </Table>
+        <Barcode />
+      </InnerContainer>
     </Container>
   );
 };

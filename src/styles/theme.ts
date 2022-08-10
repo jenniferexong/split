@@ -15,7 +15,7 @@ export const theme: Theme = {
 
   fonts: {
     receipt: {
-      family: 'Consolas',
+      family: 'CodeNewRoman Nerd Font Mono',
       baseSize: '14px',
       lineHeight: '1',
       baseWeight: 'normal',

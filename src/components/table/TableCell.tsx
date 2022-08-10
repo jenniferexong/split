@@ -14,13 +14,16 @@ interface TableCellProps {
   dir?: string;
 }
 
-const StyledTableCell = styled.td`
-  ${({ theme }) => css`
+const StyledTableCell = styled.td<{ as: string }>`
+  ${({ theme, as }) => css`
     ${fontMixin(theme.fonts.receipt)}
 
-    h3 {
+    ${as === 'th' &&
+    css`
+      font-size: 20px;
+      font-weight: 700;
       letter-spacing: 0.2em;
-    }
+    `}
   `}
 `;
 
