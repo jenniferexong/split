@@ -5,6 +5,14 @@ export const TableRow = styled.tr<{
   borderBottom?: boolean;
 }>`
   ${({ theme, borderTop, borderBottom }) => css`
+    > *:first-child {
+      padding-left: 12px;
+    }
+
+    > *:last-child {
+      padding-right: 12px;
+    }
+
     ${borderTop &&
     css`
       & > * {

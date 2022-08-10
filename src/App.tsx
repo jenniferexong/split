@@ -1,8 +1,9 @@
 import { calculateOwings, calculateSpendings } from 'calculator';
+import { testData } from 'calculator/exampleData';
 import { Board } from 'components/board/Board';
 import { useReducer } from 'react';
 import styled from 'styled-components';
-import { initialState, reducer } from 'utils/reducer';
+import { reducer } from 'utils/reducer';
 
 const Container = styled.div`
   width: 100%;
@@ -14,7 +15,7 @@ const Container = styled.div`
 `;
 
 export const App = () => {
-  const [appState, dispatch] = useReducer(reducer, initialState);
+  const [appState, dispatch] = useReducer(reducer, testData);
 
   const { ower, owee, amount } = calculateOwings(appState);
 

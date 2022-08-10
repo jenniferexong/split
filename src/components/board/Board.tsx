@@ -7,7 +7,6 @@ import { Action } from 'utils/reducer';
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
 
   // todo
   display: flex;
@@ -15,7 +14,7 @@ const Container = styled.div`
   align-items: center;
 
   background: ${props => props.theme.colors.caramel};
-  gap: 1em;
+  gap: 50px;
   padding: 20px;
 
   & > *:last-child {
