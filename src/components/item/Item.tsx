@@ -14,11 +14,9 @@ interface ItemProps extends ItemType {
 }
 
 const IconsContainer = styled.div`
-  width: 5em;
   display: flex;
-  gap: 0.5em;
   align-items: center;
-  justify-content: center;
+  justify-content: right;
 `;
 
 export const Item = (props: ItemProps) => {
@@ -83,7 +81,7 @@ export const Item = (props: ItemProps) => {
         </IconsContainer>
       </TableCell>
 
-      <TableCell contentEditable onBlur={updatePrice} width="25%" dir="rtl">
+      <TableCell contentEditable onBlur={updatePrice} width="23%" dir="rtl">
         {price.toFixed(2)}
       </TableCell>
     </TableRow>

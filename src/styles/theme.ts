@@ -53,7 +53,7 @@ export const theme: Theme = {
       height: '180px',
       frameWidth: '14px',
     },
-    buttons: {
+    whose: {
       mine: 'green',
       theirs: 'red',
       split: 'yellow',
