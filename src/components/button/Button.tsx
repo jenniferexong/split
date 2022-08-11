@@ -1,11 +1,6 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-
-interface ButtonProps {
-  /** Button text */
-  children: ReactNode;
-  onClick(): void;
-}
+import { ButtonProps } from './types';
 
 const StyledButton = styled.button`
   width: 100%;

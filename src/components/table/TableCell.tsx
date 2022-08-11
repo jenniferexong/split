@@ -40,6 +40,7 @@ export const TableCell = ({ as = 'td', ...props }: TableCellProps) => {
       onBlur={setBlur}
       onKeyDown={handleCellKeyDown}
       as={as}
+      spellCheck={false}
       {...rest}
     >
       {children}

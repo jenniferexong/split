@@ -15,6 +15,7 @@ export interface Font {
   baseWeight: string;
   lineHeight: string;
   color: Color;
+  spacing?: string;
 }
 
 export interface Theme {
