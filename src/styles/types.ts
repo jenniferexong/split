@@ -1,3 +1,5 @@
+import { Whose } from 'calculator/types';
+
 export type Color =
   | 'white'
   | 'black'
@@ -42,10 +44,6 @@ export interface Theme {
       height: string;
       frameWidth: string;
     };
-    buttons: {
-      mine: Color;
-      theirs: Color;
-      split: Color;
-    };
+    whose: Record<Whose, Color>;
   };
 }
