@@ -15,11 +15,12 @@ export const theme: Theme = {
 
   fonts: {
     receipt: {
-      family: 'CodeNewRoman Nerd Font Mono',
+      family: 'Code New Roman',
       baseSize: '14px',
       lineHeight: '1',
       baseWeight: 'normal',
       color: 'black',
+      spacing: '0.02em',
     },
     nameTag: {
       family: 'Consolas',
@@ -29,7 +30,7 @@ export const theme: Theme = {
       color: 'black',
     },
     boardLetter: {
-      family: 'Consolas',
+      family: 'Azeret Mono',
       baseSize: '32px',
       lineHeight: '1',
       baseWeight: '600',

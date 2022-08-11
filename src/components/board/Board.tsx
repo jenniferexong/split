@@ -1,9 +1,9 @@
 import { PersonType } from 'calculator/types';
-import { Button } from 'components/button';
 import { Invoice, Receipt } from 'components/receipt';
 import { Dispatch } from 'react';
 import styled from 'styled-components';
 import { Action } from 'utils/reducer';
+import { BoardLetters } from './BoardLetters';
 
 const Container = styled.div`
   width: 100%;
@@ -56,7 +56,7 @@ export const Board = (props: BoardProps) => {
           dispatch={dispatch}
         />
       ))}
-      <Button onClick={handleAddReceipt}>Add receipt</Button>
+      <BoardLetters onClick={handleAddReceipt}>Add receipt</BoardLetters>
     </Container>
   );
 };

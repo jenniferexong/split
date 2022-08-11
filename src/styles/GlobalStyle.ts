@@ -1,6 +1,7 @@
 import { createGlobalStyle, css } from 'styled-components';
 import normalize from 'styled-normalize';
 import { fontMixin } from './mixins/fontMixin';
+import './fonts.scss';
 
 export const GlobalStyle = createGlobalStyle`
     ${normalize}
