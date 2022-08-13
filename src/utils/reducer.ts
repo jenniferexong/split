@@ -3,6 +3,8 @@ import { AppType, ItemType, ReceiptType } from 'calculator/types';
 import produce from 'immer';
 import { Reducer } from 'react';
 import { unreachable } from './unreachable';
+import nibbles from 'images/nibbles.jpg';
+import pandy from 'images/pandy.jpg';
 
 interface AddReceipt {
   type: 'addReceipt';
@@ -36,10 +38,12 @@ export const initialState: AppType = {
   people: [
     {
       name: 'Jennifer',
+      image: nibbles,
       receipts: [],
     },
     {
       name: 'Andy',
+      image: pandy,
       receipts: [],
     },
   ],

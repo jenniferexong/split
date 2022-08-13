@@ -32,7 +32,7 @@ interface BoardProps {
 
 export const Board = (props: BoardProps) => {
   const {
-    person: { name, receipts },
+    person: { name, image, receipts },
     personIndex,
     invoice: { totalSpendings, actualSpendings, oweings },
     dispatch,
@@ -47,7 +47,7 @@ export const Board = (props: BoardProps) => {
 
   return (
     <Container>
-      <Person name={name} />
+      <Person name={name} image={image} />
       <Invoice
         totalSpendings={totalSpendings}
         actualSpendings={actualSpendings}

@@ -1,13 +1,10 @@
+import { InvoiceData } from 'calculator/types';
 import { Paper } from 'components/board';
 import { Table, TableCell, TableRow } from 'components/table';
 import { useTheme } from 'styled-components';
 import { Container } from './Container';
 
-interface InvoiceProps {
-  totalSpendings: number;
-  actualSpendings: number;
-  oweings: number;
-}
+type InvoiceProps = InvoiceData;
 
 export const Invoice = (props: InvoiceProps) => {
   const { totalSpendings, actualSpendings, oweings } = props;

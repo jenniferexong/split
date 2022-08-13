@@ -23,7 +23,7 @@ export const theme: Theme = {
       spacing: '0.02em',
     },
     nameTag: {
-      family: 'Consolas',
+      family: 'Nanum Brush Script',
       baseSize: '24px',
       lineHeight: '1',
       baseWeight: 'normal',
