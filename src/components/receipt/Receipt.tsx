@@ -2,7 +2,7 @@ import { ReceiptType } from 'calculator/types';
 import { Button } from 'components/button';
 import { Entry as Item } from 'components/item';
 import React, { Dispatch, useRef } from 'react';
-import { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { getLastAddedCell, Table, TableCell, TableRow } from 'components/table';
 import { Action } from 'utils/reducer';
 import { Barcode } from './Barcode';
@@ -15,6 +15,10 @@ interface ReceiptProps {
   receipt: ReceiptType;
   dispatch: Dispatch<Action>;
 }
+
+const StyledReceipt = styled(Paper)`
+  grid-column: span 2;
+`;
 
 export const Receipt = (props: ReceiptProps) => {
   const {
@@ -51,7 +55,7 @@ export const Receipt = (props: ReceiptProps) => {
   };
 
   return (
-    <Paper width={theme.components.receipt.width}>
+    <StyledReceipt width={theme.components.receipt.width}>
       <Container>
         <Table>
           <thead>
@@ -100,7 +104,7 @@ export const Receipt = (props: ReceiptProps) => {
         </Table>
         <Barcode />
       </Container>
-    </Paper>
+    </StyledReceipt>
   );
 };
 Receipt.displayText = 'Receipt';
