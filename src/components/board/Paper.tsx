@@ -4,6 +4,7 @@ import { Color } from 'styles/types';
 
 interface PaperProps {
   width: string;
+  className?: string;
   height?: string;
   background?: Color;
   children: ReactNode | ReactNode[];
@@ -17,10 +18,13 @@ const Container = styled.div<{
   ${({ theme, width, height, background }) => css`
     width: ${width};
 
-    ${height &&
-    css`
-      height: ${height};
-    `}
+    ${height
+      ? css`
+          height: ${height};
+        `
+      : css`
+          height: max-content;
+        `}
 
     background: ${background
       ? theme.colors[background]
@@ -45,10 +49,15 @@ const Pin = styled.div`
 `;
 
 export const Paper = (props: PaperProps) => {
-  const { width, height, children, background } = props;
+  const { width, height, children, background, className } = props;
 
   return (
-    <Container width={width} height={height} background={background}>
+    <Container
+      width={width}
+      height={height}
+      background={background}
+      className={className}
+    >
       <Pin />
       {children}
     </Container>

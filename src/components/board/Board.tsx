@@ -9,14 +9,15 @@ import { Person } from './Person';
 const Container = styled.div`
   width: 100%;
 
-  // todo
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: min-content;
+  justify-items: center;
   align-items: center;
+  grid-gap: 50px;
 
   background: ${props => props.theme.colors.caramel};
-  gap: 50px;
-  padding: 20px;
+  padding: 50px;
 
   box-shadow: inset 0px 0px 8px 3px rgba(0, 0, 0, 0.25);
 

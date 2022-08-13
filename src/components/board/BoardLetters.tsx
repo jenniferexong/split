@@ -13,6 +13,7 @@ const StyledButton = styled.button`
 
     background: none;
     border: none;
+    grid-column: span 2;
 
     // add hover effect
     &:hover {
