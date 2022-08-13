@@ -2,6 +2,7 @@ import { isEqual } from 'lodash';
 import { AppType, ItemType, ReceiptType } from 'calculator/types';
 import produce from 'immer';
 import { Reducer } from 'react';
+import { unreachable } from './unreachable';
 
 interface AddReceipt {
   type: 'addReceipt';
@@ -89,8 +90,7 @@ export const reducer: Reducer<AppType, Action> = (state, action) =>
         break;
       }
       default: {
-        // eslint-disable-next-line no-unused-vars
-        const _: never = action;
+        unreachable(action);
       }
     }
   });

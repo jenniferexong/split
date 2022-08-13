@@ -1,4 +1,4 @@
-import { calculateOwings } from './calculate';
+import { calculate } from './calculate';
 import { exampleReceipt } from './exampleData';
 import { AppType } from './types';
 
@@ -44,10 +44,17 @@ describe('calculate', () => {
 
   describe('calculates the correct information', () => {
     test('case 1', () => {
-      const { ower, owee, amount } = calculateOwings(data);
-      expect(ower).toBe('Person 2');
-      expect(owee).toBe('Person 1');
-      expect(amount).toBe(497.46);
+      const result = calculate(data);
+      expect(result.globalTotal).toBeCloseTo(1083.35);
+
+      expect(result.invoices[0].totalSpendings).toBeCloseTo(534.84);
+      expect(result.invoices[0].actualSpendings).toBeCloseTo(1032.3);
+      expect(result.invoices[0].oweings).toBe(0);
+
+      expect(result.invoices[1].totalSpendings).toBeCloseTo(548.51);
+      expect(result.invoices[1].actualSpendings).toBeCloseTo(51.05);
+      expect(result.invoices[1].oweings).toBeCloseTo(497.46);
+      expect(result).toMatchSnapshot();
     });
 
     test('case 2', () => {
@@ -63,7 +70,18 @@ describe('calculate', () => {
           },
         ],
       };
-      expect(calculateOwings(exampleData).amount).toBe(0);
+      const result = calculate(exampleData);
+
+      expect(result.globalTotal).toBeCloseTo(38.3);
+      expect(result.invoices[0].totalSpendings).toBeCloseTo(19.15);
+      expect(result.invoices[0].actualSpendings).toBeCloseTo(19.15);
+      expect(result.invoices[0].oweings).toBe(0);
+
+      expect(result.invoices[1].totalSpendings).toBeCloseTo(19.15);
+      expect(result.invoices[1].actualSpendings).toBeCloseTo(19.15);
+      expect(result.invoices[1].oweings).toBe(0);
+
+      expect(result).toMatchSnapshot();
     });
   });
 });

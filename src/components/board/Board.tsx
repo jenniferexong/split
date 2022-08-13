@@ -1,9 +1,10 @@
-import { PersonType } from 'calculator/types';
+import { InvoiceData, PersonType } from 'calculator/types';
 import { Invoice, Receipt } from 'components/receipt';
 import { Dispatch } from 'react';
 import styled from 'styled-components';
 import { Action } from 'utils/reducer';
 import { BoardLetters } from './BoardLetters';
+import { Person } from './Person';
 
 const Container = styled.div`
   width: 100%;
@@ -25,6 +26,7 @@ const Container = styled.div`
 interface BoardProps {
   personIndex: number;
   person: PersonType;
+  invoice: InvoiceData;
   dispatch: Dispatch<Action>;
 }
 
@@ -32,6 +34,7 @@ export const Board = (props: BoardProps) => {
   const {
     person: { name, receipts },
     personIndex,
+    invoice: { totalSpendings, actualSpendings, oweings },
     dispatch,
   } = props;
 
@@ -44,9 +47,12 @@ export const Board = (props: BoardProps) => {
 
   return (
     <Container>
-      <h1>{name}</h1>
-      {/* TODO */}
-      <Invoice totalSpendings={0} actualSpendings={0} oweings={0} />
+      <Person name={name} />
+      <Invoice
+        totalSpendings={totalSpendings}
+        actualSpendings={actualSpendings}
+        oweings={oweings}
+      />
       {receipts.map((receipt, index) => (
         <Receipt
           key={`${personIndex}-${index}`}
