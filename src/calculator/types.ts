@@ -16,8 +16,15 @@ export interface ReceiptType {
 export interface PersonType {
   name: string;
   receipts: ReceiptType[];
+  image?: string;
 }
 
 export interface AppType {
   people: PersonType[];
+}
+
+export interface InvoiceData {
+  totalSpendings: number;
+  actualSpendings: number;
+  oweings: number;
 }
