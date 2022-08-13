@@ -18,6 +18,8 @@ const Container = styled.div`
   gap: 50px;
   padding: 20px;
 
+  box-shadow: inset 0px 0px 8px 3px rgba(0, 0, 0, 0.25);
+
   & > *:last-child {
     margin-bottom: 0;
   }
