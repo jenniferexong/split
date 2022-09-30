@@ -65,6 +65,7 @@ export const Receipt = (props: ReceiptProps) => {
                 onBlur={updateTitle}
                 colSpan={3}
                 as="th"
+                textAlign="center"
               >
                 {title}
               </TableCell>
@@ -90,13 +91,13 @@ export const Receipt = (props: ReceiptProps) => {
             </TableRow>
             <TableRow borderTop>
               <TableCell colSpan={2}>Item count:</TableCell>
-              <TableCell dir="rtl">{items.length}</TableCell>
+              <TableCell textAlign="right">{items.length}</TableCell>
             </TableRow>
             <TableRow borderBottom>
               <TableCell colSpan={2}>
                 <b>Total:</b>
               </TableCell>
-              <TableCell dir="rtl">
+              <TableCell textAlign="right">
                 <b>${subtotal.toFixed(2)}</b>
               </TableCell>
             </TableRow>

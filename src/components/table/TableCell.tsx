@@ -11,12 +11,14 @@ interface TableCellProps {
   contentEditable?: boolean;
   colSpan?: number;
   width?: string;
-  dir?: string;
+  textAlign?: 'left' | 'center' | 'right';
 }
 
-const StyledTableCell = styled.td<{ as: string }>`
-  ${({ theme, as }) => css`
+const StyledTableCell = styled.td<{ as: string; textAlign: string }>`
+  ${({ theme, as, textAlign }) => css`
     ${fontMixin(theme.fonts.receipt)}
+
+    text-align: ${textAlign};
 
     ${as === 'th' &&
     css`
@@ -27,7 +29,11 @@ const StyledTableCell = styled.td<{ as: string }>`
   `}
 `;
 
-export const TableCell = ({ as = 'td', ...props }: TableCellProps) => {
+export const TableCell = ({
+  as = 'td',
+  textAlign = 'left',
+  ...props
+}: TableCellProps) => {
   const { children, onBlur, ...rest } = props;
 
   const setBlur = (e: React.FocusEvent<HTMLTableCellElement, Element>) => {
@@ -40,6 +46,7 @@ export const TableCell = ({ as = 'td', ...props }: TableCellProps) => {
       onBlur={setBlur}
       onKeyDown={handleCellKeyDown}
       as={as}
+      textAlign={textAlign}
       spellCheck={false}
       {...rest}
     >
