@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Split.Models;
 
+[Index(nameof(Name), IsUnique = true)]
 public class Store
 {
     public Store(int id, string name)
