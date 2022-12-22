@@ -13,4 +13,6 @@ class SplitDb : DbContext
     public DbSet<ReceiptLine> ReceiptLines => Set<ReceiptLine>();
 
     public DbSet<Store> Stores => Set<Store>();
+
+    public DbSet<Person> People => Set<Person>();
 }

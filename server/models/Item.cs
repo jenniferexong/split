@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Split.Models;
@@ -13,5 +14,7 @@ public class Item
 
     public int Id { get; init; }
 
+    [Required]
+    [MaxLength(100)]
     public string Name { get; init; }
 }

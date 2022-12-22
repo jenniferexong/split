@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Split.Models;
 
 public class Receipt
@@ -10,7 +12,12 @@ public class Receipt
 
     public int Id { get; init; }
 
-    public DateTime Date { get; init; }
+    public int StoreId { get; init; }
 
     public Store Store { get; init; }
+
+    public List<ReceiptLine> ReceiptLines { get; set; }
+
+    [Required]
+    public DateTime Date { get; init; }
 }
