@@ -53,7 +53,7 @@ export const Item = (props: ItemProps) => {
   const updatePrice = (e: React.FocusEvent<HTMLTableCellElement>) => {
     const priceText = e.target.innerText;
     // If invalid number, reset value to previous price
-    if (!priceText.match(/^\d*\.?\d*$/)) {
+    if (!priceText.match(/^-?\d*\.?\d*$/)) {
       e.target.innerText = price.toFixed(2);
       return;
     }
@@ -81,7 +81,12 @@ export const Item = (props: ItemProps) => {
         </IconsContainer>
       </TableCell>
 
-      <TableCell contentEditable onBlur={updatePrice} width="23%" dir="rtl">
+      <TableCell
+        contentEditable
+        onBlur={updatePrice}
+        width="23%"
+        textAlign="right"
+      >
         {price.toFixed(2)}
       </TableCell>
     </TableRow>

@@ -17,7 +17,7 @@ export const Invoice = (props: InvoiceProps) => {
         <Table>
           <thead>
             <TableRow borderBottom>
-              <TableCell as="th" colSpan={2}>
+              <TableCell as="th" textAlign="center" colSpan={2}>
                 Invoice
               </TableCell>
             </TableRow>
@@ -25,19 +25,21 @@ export const Invoice = (props: InvoiceProps) => {
           <tbody>
             <TableRow borderTop>
               <TableCell>Total</TableCell>
-              <TableCell dir="rtl">${totalSpendings.toFixed(2)}</TableCell>
+              <TableCell textAlign="right">
+                ${totalSpendings.toFixed(2)}
+              </TableCell>
             </TableRow>
             <TableRow borderBottom>
               <TableCell>
                 <h4>Actual</h4>
               </TableCell>
-              <TableCell dir="rtl">
+              <TableCell textAlign="right">
                 <h4>${actualSpendings.toFixed(2)}</h4>
               </TableCell>
             </TableRow>
             <TableRow borderTop>
               <TableCell>Oweings</TableCell>
-              <TableCell dir="rtl">${oweings.toFixed(2)}</TableCell>
+              <TableCell textAlign="right">${oweings.toFixed(2)}</TableCell>
             </TableRow>
           </tbody>
         </Table>
