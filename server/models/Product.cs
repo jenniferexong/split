@@ -1,10 +1,8 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Split.Models;
 
-public class Store
+public class Product
 {
-    public Store(int id, string name)
+    public Product(int id, string name)
     {
         Id = id;
         Name = name;
@@ -12,7 +10,5 @@ public class Store
 
     public int Id { get; init; }
 
-    [Required]
-    [MaxLength(100)]
     public string Name { get; init; }
 }

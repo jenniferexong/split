@@ -22,7 +22,7 @@ public class ReceiptLine
 
     public int ItemId { get; init; }
 
-    public Item Item { get; init; }
+    public Product Item { get; init; }
 
     [Required]
     public float Price { get; init; }
