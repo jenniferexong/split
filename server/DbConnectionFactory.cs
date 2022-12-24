@@ -1,19 +1,18 @@
-using System.Data;
 using Npgsql;
 
-namespace Split;
+namespace Split.DbConnections;
 
 public class DbConnectionFactory
 {
-    private readonly string _connectionString;
+    private readonly NpgsqlDataSource _src;
 
     public DbConnectionFactory(string connectionString)
     {
-        _connectionString = connectionString;
+        _src = NpgsqlDataSource.Create(connectionString);
     }
 
-    public IDbConnection Connect()
+    public async Task<NpgsqlConnection> ConnectAsync(CancellationToken cancellationToken = default)
     {
-        return new NpgsqlConnection(_connectionString);
+        return await _src.OpenConnectionAsync(cancellationToken);
     }
 }
