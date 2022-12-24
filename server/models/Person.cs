@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Split.Models;
 
 public class Person
@@ -13,10 +11,7 @@ public class Person
 
     public int Id { get; init; }
 
-    [Required]
-    [MaxLength(100)]
     public string GivenName { get; init; }
 
-    [MaxLength(100)]
     public string FamilyName { get; init; }
 }

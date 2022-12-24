@@ -12,11 +12,11 @@ public class Receipt
 
     public int Id { get; init; }
 
-    public int StoreId { get; init; }
-
     public Store Store { get; init; }
 
     public List<ReceiptLine> ReceiptLines { get; set; }
+
+    public Person PaidBy { get; init; }
 
     [Required]
     public DateTime Date { get; init; }
