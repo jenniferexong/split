@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Split.DbConnections;
+using Split.Services;
+using Split.Services.Interfaces;
 
 namespace Split.Extensions;
 
@@ -24,6 +27,6 @@ public static class WebApplicationBuilderExtensions
 
         // Repositories
         builder.Services
-            .AddSingleton<ProductsRepository>();
+            .AddSingleton<IProductsRepository>(services => new ProductsRepository(services.GetRequiredService<DbConnectionFactory>()));
     }
 }

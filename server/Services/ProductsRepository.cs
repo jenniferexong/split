@@ -2,8 +2,11 @@ using System.Data;
 using Dapper;
 using Split.DbConnections;
 using Split.Models;
+using Split.Services.Interfaces;
 
-public class ProductsRepository
+namespace Split.Services;
+
+public class ProductsRepository : IProductsRepository
 {
     private readonly DbConnectionFactory _db;
 

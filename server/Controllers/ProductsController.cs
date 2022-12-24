@@ -2,19 +2,21 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Split.Models;
 using Split.Models.Requests.Product;
+using Split.Services.Interfaces;
 
 [ApiController]
 [Route("[controller]")]
 public class ProductsController : ControllerBase
 {
-    private readonly ProductsRepository _productsRepository;
+    private readonly IProductsRepository _productsRepository;
 
-    public ProductsController(ProductsRepository productsRepository)
+    public ProductsController(IProductsRepository productsRepository)
     {
         _productsRepository = productsRepository;
     }
 
-    [HttpGet(Name = nameof(GetAll))]
+    [HttpGet]
+    [Route("")] // /products
     public async Task<ActionResult<IEnumerable<Product>>> GetAll()
     {
         var products = await _productsRepository.GetAll();
@@ -22,8 +24,8 @@ public class ProductsController : ControllerBase
         return Ok(products);
     }
 
-    [HttpGet(Name = nameof(GetById))]
-    [Route("{id}")]
+    [HttpGet]
+    [Route("{id}")] // /products/:id
     public async Task<ActionResult<Product>> GetById([Required] int id)
     {
         var product = await _productsRepository.GetById(id);
@@ -35,7 +37,8 @@ public class ProductsController : ControllerBase
         return Ok(product);
     }
 
-    [HttpPost(Name = nameof(Add))]
+    [HttpPost]
+    [Route("")] // /products
     public async Task<ActionResult<Product>> Add([FromBody] AddProductRequest request)
     {
         var addedProduct = await _productsRepository.Add(request.Name);
