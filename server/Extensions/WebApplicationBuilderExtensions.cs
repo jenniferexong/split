@@ -27,7 +27,8 @@ public static class WebApplicationBuilderExtensions
 
         // Repositories
         builder.Services
-            .AddSingleton<IProductsRepository>(services => new ProductsRepository(services.GetRequiredService<DbConnectionFactory>()))
-            .AddSingleton<IStoresRepository>(services => new StoresRepository(services.GetRequiredService<DbConnectionFactory>()));
+            .AddSingleton<IProductsRepository, ProductsRepository>()
+            .AddSingleton<IStoresRepository, StoresRepository>()
+            .AddSingleton<IPeopleRepository, PeopleRepository>();
     }
 }

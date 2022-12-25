@@ -2,16 +2,19 @@ namespace Split.Models;
 
 public class Person
 {
-    public Person(int id, string givenName, string familyName)
+    public Person(int id, string firstName, string lastName, string email)
     {
         Id = id;
-        GivenName = givenName;
-        FamilyName = familyName;
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email;
     }
 
     public int Id { get; init; }
 
-    public string GivenName { get; init; }
+    public string FirstName { get; init; }
 
-    public string FamilyName { get; init; }
+    public string LastName { get; init; }
+
+    public string Email { get; init; }
 }
