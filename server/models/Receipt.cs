@@ -18,6 +18,5 @@ public class Receipt
 
     public Person PaidBy { get; init; }
 
-    [Required]
     public DateTime Date { get; init; }
 }

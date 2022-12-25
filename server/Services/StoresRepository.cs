@@ -1,4 +1,3 @@
-using System.Data;
 using Dapper;
 using Split.DbConnections;
 using Split.Models;
@@ -22,21 +21,22 @@ public class StoresRepository : IStoresRepository
             FROM store
         ";
 
-        using IDbConnection conn = await _db.ConnectAsync();
+        await using var conn = await _db.ConnectAsync();
 
         var stores = await conn.QueryAsync<Store>(QUERY);
         return stores;
     }
 
-    public async Task<Store> GetById(int id)
+    public async Task<Store?> GetById(int id)
     {
         const string QUERY = @"
-            SELECT * FROM store
+            SELECT id, name
+            FROM store
             WHERE id=@id
         ";
 
         await using var conn = await _db.ConnectAsync();
-        var store = await conn.QueryFirstOrDefaultAsync<Store>(QUERY, new { id });
+        var store = await conn.QueryFirstOrDefaultAsync<Store?>(QUERY, new { id });
 
         return store;
     }
@@ -44,7 +44,8 @@ public class StoresRepository : IStoresRepository
     public async Task<Store> Add(string name)
     {
         const string QUERY = @"
-            INSERT INTO store(name) values(@name)
+            INSERT INTO store(name) 
+            VALUES (@name)
             RETURNING id, name
         ";
 

@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Split.Models;
-using Split.Models.Requests.Store;
 using Split.Services.Interfaces;
 
 [ApiController]
@@ -45,4 +44,15 @@ public class StoresController : ControllerBase
 
         return CreatedAtAction(nameof(GetById), new { id = addedStore.Id }, addedStore);
     }
+}
+
+public class AddStoreRequest
+{
+    public AddStoreRequest(string name)
+    {
+        Name = name;
+    }
+
+    [Required]
+    public string Name { get; set; }
 }

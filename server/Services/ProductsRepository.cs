@@ -1,4 +1,3 @@
-using System.Data;
 using Dapper;
 using Split.DbConnections;
 using Split.Models;
@@ -22,21 +21,22 @@ public class ProductsRepository : IProductsRepository
             FROM product
         ";
 
-        using IDbConnection conn = await _db.ConnectAsync();
+        await using var conn = await _db.ConnectAsync();
 
         var products = await conn.QueryAsync<Product>(QUERY);
         return products;
     }
 
-    public async Task<Product> GetById(int id)
+    public async Task<Product?> GetById(int id)
     {
         const string QUERY = @"
-            SELECT * FROM product
+            SELECT id, name
+            FROM product
             WHERE id=@id
         ";
 
         await using var conn = await _db.ConnectAsync();
-        var product = await conn.QueryFirstOrDefaultAsync<Product>(QUERY, new { id });
+        var product = await conn.QueryFirstOrDefaultAsync<Product?>(QUERY, new { id });
 
         return product;
     }
@@ -44,7 +44,8 @@ public class ProductsRepository : IProductsRepository
     public async Task<Product> Add(string name)
     {
         const string QUERY = @"
-            INSERT INTO product(name) values(@name)
+            INSERT INTO product(name) 
+            VALUES (@name)
             RETURNING id, name
         ";
 

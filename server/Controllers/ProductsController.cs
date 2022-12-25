@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Split.Models;
-using Split.Models.Requests.Product;
 using Split.Services.Interfaces;
 
 [ApiController]
@@ -45,4 +44,15 @@ public class ProductsController : ControllerBase
 
         return CreatedAtAction(nameof(GetById), new { id = addedProduct.Id }, addedProduct);
     }
+}
+
+public class AddProductRequest
+{
+    public AddProductRequest(string name)
+    {
+        Name = name;
+    }
+
+    [Required]
+    public string Name { get; set; }
 }
