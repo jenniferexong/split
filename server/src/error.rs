@@ -2,6 +2,7 @@ use axum::{
     http::StatusCode,
     response::{IntoResponse, Response},
 };
+use std::fmt;
 use validator::ValidationErrors;
 
 #[derive(Debug)]
@@ -17,11 +18,11 @@ impl IntoResponse for Error {
         match self {
             Error::AlreadyExists(resource_kind) => (
                 StatusCode::CONFLICT,
-                format!("{resource_kind:?} already exists"),
+                format!("{resource_kind} already exists"),
             ),
             Error::NotFound(resource_kind) => (
                 StatusCode::NOT_FOUND,
-                format!("{resource_kind:?} not found"),
+                format!("{resource_kind} could not be found"),
             ),
             Error::Invalid(err) => (
                 StatusCode::UNPROCESSABLE_ENTITY,
@@ -58,4 +59,23 @@ pub enum ResourceIdentifier {
     ProductName(String),
     StoreName(String),
     PersonEmail(String),
+}
+
+impl fmt::Display for ResourceIdentifier {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            ResourceIdentifier::ProductId(id) => {
+                write!(f, "Product with id={}", id)
+            }
+            ResourceIdentifier::ProductName(name) => {
+                write!(f, "Product with name=\"{}\"", name)
+            }
+            ResourceIdentifier::StoreName(name) => {
+                write!(f, "Store with id=\"{}\"", name)
+            }
+            ResourceIdentifier::PersonEmail(email) => {
+                write!(f, "Person with email=\"{}\"", email)
+            }
+        }
+    }
 }
