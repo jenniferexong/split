@@ -2,6 +2,7 @@ mod api;
 mod error;
 
 use crate::api::{
+    people::{create_person, get_all_people, get_person_by_id},
     products::{create_product, get_all_products, get_product_by_id},
     stores::{create_store, get_all_stores, get_store_by_id},
 };
@@ -23,6 +24,8 @@ async fn main() -> Result<(), sqlx::Error> {
         .route("/products/:id", get(get_product_by_id))
         .route("/stores", get(get_all_stores).post(create_store))
         .route("/stores/:id", get(get_store_by_id))
+        .route("/people", get(get_all_people).post(create_person))
+        .route("/people/:id", get(get_person_by_id))
         .with_state(Arc::new(AppState { pool }));
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 5133));

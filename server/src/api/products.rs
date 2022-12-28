@@ -15,6 +15,7 @@ use crate::{
 };
 
 #[derive(Serialize, sqlx::FromRow)]
+#[serde(rename_all = "camelCase")]
 pub struct Product {
     id: i32,
     name: String,
@@ -44,6 +45,7 @@ pub async fn get_all_products(State(state): State<Arc<AppState>>) -> ApiResult<V
 }
 
 #[derive(Deserialize, Validate)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateProductRequest {
     #[validate(length(min = 1))]
     name: String,

@@ -1,3 +1,4 @@
+pub mod people;
 pub mod products;
 pub mod stores;
 

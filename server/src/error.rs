@@ -59,6 +59,7 @@ pub enum ResourceIdentifier {
     ProductName(String),
     StoreId(i32),
     StoreName(String),
+    PersonId(i32),
     PersonEmail(String),
 }
 
@@ -76,6 +77,9 @@ impl fmt::Display for ResourceIdentifier {
             }
             ResourceIdentifier::StoreName(name) => {
                 write!(f, "Store with name=\"{}\"", name)
+            }
+            ResourceIdentifier::PersonId(id) => {
+                write!(f, "Person with id={}", id)
             }
             ResourceIdentifier::PersonEmail(email) => {
                 write!(f, "Person with email=\"{}\"", email)
