@@ -1,5 +1,5 @@
 use axum::{
-    extract::State,
+    extract::{Path, State},
     http::StatusCode,
     response::{IntoResponse, Response},
     routing::get,
@@ -21,10 +21,9 @@ async fn main() -> Result<(), sqlx::Error> {
 
     let app = Router::new()
         .route("/products", get(get_all_products).post(create_product))
+        .route("/products/:id", get(get_product_by_id))
         .with_state(Arc::new(AppState { pool }));
 
-    // run our app with hyper
-    // `axum::Server` is a re-export of `hyper::Server`
     let addr = SocketAddr::from(([127, 0, 0, 1], 5133));
     tracing::debug!("listening on {}", addr);
     axum::Server::bind(&addr)
@@ -35,11 +34,14 @@ async fn main() -> Result<(), sqlx::Error> {
     Ok(())
 }
 
+type ApiResult<T, E = Error> = ::std::result::Result<(StatusCode, Json<T>), E>;
+
 #[derive(Debug)]
 enum Error {
-    AlreadyExists(ResourceKind),
+    AlreadyExists(ResourceIdentifier),
     Invalid(ValidationErrors),
-    Unknown(sqlx::Error),
+    Database(sqlx::Error),
+    NotFound(ResourceIdentifier),
 }
 
 impl From<ValidationErrors> for Error {
@@ -48,14 +50,18 @@ impl From<ValidationErrors> for Error {
     }
 }
 
+impl From<sqlx::Error> for Error {
+    fn from(err: sqlx::Error) -> Self {
+        Self::Database(err)
+    }
+}
+
 #[derive(Debug)]
-enum ResourceKind {
-    Product { name: String },
-    Store { name: String },
-    Person { email: String },
-    Receipt,
-    ReceiptLine,
-    ReceiptLineSplit,
+enum ResourceIdentifier {
+    ProductId(i32),
+    ProductName(String),
+    StoreName(String),
+    PersonEmail(String),
 }
 
 impl IntoResponse for Error {
@@ -65,25 +71,48 @@ impl IntoResponse for Error {
                 StatusCode::CONFLICT,
                 format!("{resource_kind:?} already exists"),
             ),
+            Error::NotFound(resource_kind) => (
+                StatusCode::NOT_FOUND,
+                format!("{resource_kind:?} not found"),
+            ),
             Error::Invalid(err) => (
                 StatusCode::UNPROCESSABLE_ENTITY,
                 format!("Invalid request body: {err}"),
             ),
-            Error::Unknown(err) => (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                format!("Request failed: {err}"),
-            ),
+            Error::Database(err) => {
+                tracing::error!("Unknown error: {err}");
+
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    format!("Request failed: {err}"),
+                )
+            }
         }
         .into_response()
     }
 }
 
-async fn get_all_products(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+async fn get_product_by_id(
+    Path(product_id): Path<i32>,
+    State(state): State<Arc<AppState>>,
+) -> ApiResult<Product> {
+    let mut products = sqlx::query_as("SELECT id, name FROM product WHERE id = $1")
+        .bind(product_id)
+        .fetch_all(&state.pool)
+        .await?;
+
+    match products.pop() {
+        Some(product) => Ok((StatusCode::OK, Json(product))),
+        None => Err(Error::NotFound(ResourceIdentifier::ProductId(product_id))),
+    }
+}
+
+async fn get_all_products(State(state): State<Arc<AppState>>) -> ApiResult<Vec<Product>> {
     let products = sqlx::query_as::<_, Product>("SELECT id, name FROM product")
         .fetch_all(&state.pool)
-        .await;
+        .await?;
 
-    (StatusCode::OK, Json(products.unwrap()))
+    Ok((StatusCode::OK, Json(products)))
 }
 
 enum PgCodes {}
@@ -95,7 +124,7 @@ impl PgCodes {
 async fn create_product(
     State(state): State<Arc<AppState>>,
     req: Json<ProductRequest>,
-) -> impl IntoResponse {
+) -> ApiResult<Product> {
     req.validate()?;
 
     let created_product =
@@ -111,15 +140,15 @@ async fn create_product(
                 if let (Some(code), Some(constraint)) = (err.code(), err.constraint()) {
                     if code == PgCodes::CONSTRAINT_VIOLATION && constraint == "unique_product_name"
                     {
-                        return Err(Error::AlreadyExists(ResourceKind::Product {
-                            name: req.name.clone(),
-                        }));
+                        return Err(Error::AlreadyExists(ResourceIdentifier::ProductName(
+                            req.name.clone(),
+                        )));
                     }
                 }
             }
 
             tracing::error!("Create product with name `{}` failed: {err}", req.name);
-            Err(Error::Unknown(err))
+            Err(Error::Database(err))
         }
     }
 }
