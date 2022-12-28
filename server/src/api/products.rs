@@ -75,7 +75,7 @@ pub async fn create_product(
                 }
             }
 
-            tracing::error!("Create product with name `{}` failed: {err}", req.name);
+            tracing::error!("Create product with name=\"{}\" failed: {err}", req.name);
             Err(Error::Database(err))
         }
     }

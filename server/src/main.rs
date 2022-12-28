@@ -1,7 +1,10 @@
 mod api;
 mod error;
 
-use crate::api::products::{create_product, get_all_products, get_product_by_id};
+use crate::api::{
+    products::{create_product, get_all_products, get_product_by_id},
+    stores::{create_store, get_all_stores, get_store_by_id},
+};
 use axum::{routing::get, Router};
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use std::{net::SocketAddr, sync::Arc};
@@ -18,6 +21,8 @@ async fn main() -> Result<(), sqlx::Error> {
     let app = Router::new()
         .route("/products", get(get_all_products).post(create_product))
         .route("/products/:id", get(get_product_by_id))
+        .route("/stores", get(get_all_stores).post(create_store))
+        .route("/stores/:id", get(get_store_by_id))
         .with_state(Arc::new(AppState { pool }));
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 5133));

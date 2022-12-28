@@ -1,4 +1,5 @@
 pub mod products;
+pub mod stores;
 
 use axum::{http::StatusCode, Json};
 

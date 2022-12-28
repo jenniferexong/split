@@ -57,6 +57,7 @@ impl From<sqlx::Error> for Error {
 pub enum ResourceIdentifier {
     ProductId(i32),
     ProductName(String),
+    StoreId(i32),
     StoreName(String),
     PersonEmail(String),
 }
@@ -70,8 +71,11 @@ impl fmt::Display for ResourceIdentifier {
             ResourceIdentifier::ProductName(name) => {
                 write!(f, "Product with name=\"{}\"", name)
             }
+            ResourceIdentifier::StoreId(id) => {
+                write!(f, "Store with id={}", id)
+            }
             ResourceIdentifier::StoreName(name) => {
-                write!(f, "Store with id=\"{}\"", name)
+                write!(f, "Store with name=\"{}\"", name)
             }
             ResourceIdentifier::PersonEmail(email) => {
                 write!(f, "Person with email=\"{}\"", email)
