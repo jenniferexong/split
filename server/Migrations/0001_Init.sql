@@ -28,9 +28,30 @@ CREATE UNIQUE INDEX unique_person_email ON person (lower(email));
 
 CREATE TABLE receipt (
     id serial PRIMARY KEY,
-    store_id int REFERENCES store (id) NOT NULL
+    store_id int REFERENCES store (id) NOT NULL,
+    -- Paid by
+    person_id int REFERENCES person (id) NOT NULL,
+    date date NOT NULL
 );
+
+CREATE TABLE receipt_line (
+    id serial PRIMARY KEY,
+    receipt_id int REFERENCES receipt (id) NOT NULL,
+    product_id int REFERENCES product (id) NOT NULL,
+    price float (8) NOT NULL
+);
+
+CREATE TABLE receipt_line_split (
+    id serial PRIMARY KEY,
+    receipt_line_id int REFERENCES receipt_line (id) NOT NULL,
+    -- Paid by
+    person_id int REFERENCES person (id) NOT NULL,
+    -- numerator of ratio!
+    antecedent int NOT NULL
+);
+
+CREATE UNIQUE INDEX unique_receipt_line_split ON receipt_line_split (receipt_line_id, person_id);
 
 COMMIT;
 
--- DROP TABLE product, store, person;
+-- DROP TABLE product, store, person, receipt;

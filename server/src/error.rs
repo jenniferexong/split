@@ -1,7 +1,6 @@
+use crate::api::Id;
 use std::fmt;
 use validator::ValidationErrors;
-
-use crate::api::Id;
 
 #[derive(Debug)]
 pub enum Error {
@@ -43,6 +42,9 @@ pub enum ResourceIdentifier {
     ProductId(Id),
     ProductName(String),
     ReceiptId(Id),
+    ReceiptLineId(Id),
+    ReceiptLineSplitId(Id),
+    ReceiptLineSplit { receipt_line_id: Id, person_id: Id },
     StoreId(Id),
     StoreName(String),
     PersonId(Id),
@@ -59,6 +61,16 @@ impl fmt::Display for ResourceIdentifier {
             ResourceIdentifier::PersonId(id) => write!(f, "Person with id `{id}`"),
             ResourceIdentifier::PersonEmail(email) => write!(f, "Person with email `{email}`"),
             ResourceIdentifier::ReceiptId(id) => write!(f, "Receipt with id `{id}`"),
+            ResourceIdentifier::ReceiptLineId(id) => write!(f, "Receipt line with id `{id}`"),
+            ResourceIdentifier::ReceiptLineSplitId(id) => {
+                write!(f, "Receipt line split with id `{id}`")
+            }
+            ResourceIdentifier::ReceiptLineSplit {
+                receipt_line_id,
+                person_id,
+            } => {
+                write!(f, "Receipt line split with receipt line id `{receipt_line_id}` and person id `{person_id}`")
+            }
         }
     }
 }

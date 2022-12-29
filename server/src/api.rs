@@ -1,17 +1,24 @@
-pub mod people;
-pub mod products;
-pub mod receipts;
-pub mod stores;
-
-use async_graphql::{Context, EmptySubscription, Object, Schema};
-
-use crate::{error::Error, AppState};
+pub mod person;
+pub mod product;
+pub mod receipt;
+pub mod receipt_line;
+pub mod receipt_line_split;
+pub mod store;
 
 use self::{
-    people::{CreatePersonInput, Person},
-    products::{CreateProductInput, Product},
-    stores::{CreateStoreInput, Store},
+    person::{CreatePersonInput, Person},
+    product::{CreateProductInput, Product},
+    receipt::Receipt,
+    store::{CreateStoreInput, Store},
 };
+use crate::{error::Error, AppState};
+use async_graphql::{Context, EmptySubscription, Object, Schema};
+use person::*;
+use product::*;
+use receipt::*;
+use receipt_line::*;
+use receipt_line_split::*;
+use store::*;
 
 pub(crate) type SplitSchema = Schema<Query, Mutation, EmptySubscription>;
 
@@ -64,6 +71,15 @@ impl Query {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_person_by_id(id).await
     }
+
+    /// Get all receipts
+    async fn receipts(&self, ctx: &Context<'_>) -> Result<Vec<Receipt>> {
+        let state = ctx.data_unchecked::<AppState>();
+        state.db.get_all_receipts().await
+    }
+
+    // TODO add get all receipt lines by receipt id
+    // TODO add get all receipt line splits by receipt line id
 }
 
 pub struct Mutation;

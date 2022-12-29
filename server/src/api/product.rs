@@ -1,12 +1,11 @@
-use async_graphql::{InputObject, SimpleObject};
-use validator::Validate;
-
 use super::Id;
 use crate::{
     api::{PgCodes, Result},
     error::{Error, ResourceIdentifier},
     Db,
 };
+use async_graphql::{InputObject, SimpleObject};
+use validator::Validate;
 
 #[derive(SimpleObject, sqlx::FromRow)]
 pub struct Product {

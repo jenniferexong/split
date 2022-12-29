@@ -1,7 +1,7 @@
 mod api;
 mod error;
 
-use api::Result;
+use crate::api::{Mutation, Query};
 use api::SplitSchema;
 use async_graphql::{http::GraphiQLSource, EmptySubscription, Schema};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
@@ -12,8 +12,6 @@ use axum::{
 };
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use std::net::SocketAddr;
-
-use crate::api::{Mutation, Query};
 
 #[tokio::main]
 async fn main() -> Result<(), sqlx::Error> {
