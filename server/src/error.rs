@@ -1,7 +1,3 @@
-use axum::{
-    http::StatusCode,
-    response::{IntoResponse, Response},
-};
 use std::fmt;
 use validator::ValidationErrors;
 
@@ -13,31 +9,18 @@ pub enum Error {
     NotFound(ResourceIdentifier),
 }
 
-impl IntoResponse for Error {
-    fn into_response(self) -> Response {
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Error::AlreadyExists(resource_kind) => (
-                StatusCode::CONFLICT,
-                format!("{resource_kind} already exists"),
-            ),
-            Error::NotFound(resource_kind) => (
-                StatusCode::NOT_FOUND,
-                format!("{resource_kind} could not be found"),
-            ),
-            Error::Invalid(err) => (
-                StatusCode::UNPROCESSABLE_ENTITY,
-                format!("Invalid request body: {err}"),
-            ),
-            Error::Database(err) => {
-                tracing::error!("Unknown error: {err}");
-
-                (
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    format!("Request failed: {err}"),
-                )
+            Error::AlreadyExists(resource_identifier) => {
+                write!(f, "{resource_identifier} already exists")
             }
+            Error::NotFound(resource_identifier) => {
+                write!(f, "{resource_identifier} could not be found")
+            }
+            Error::Invalid(err) => write!(f, "Invalid request body: {err}"),
+            Error::Database(err) => write!(f, "Request failed: {err}"),
         }
-        .into_response()
     }
 }
 
@@ -57,6 +40,7 @@ impl From<sqlx::Error> for Error {
 pub enum ResourceIdentifier {
     ProductId(i32),
     ProductName(String),
+    ReceiptId(i32),
     StoreId(i32),
     StoreName(String),
     PersonId(i32),
@@ -66,24 +50,13 @@ pub enum ResourceIdentifier {
 impl fmt::Display for ResourceIdentifier {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            ResourceIdentifier::ProductId(id) => {
-                write!(f, "Product with id={}", id)
-            }
-            ResourceIdentifier::ProductName(name) => {
-                write!(f, "Product with name=\"{}\"", name)
-            }
-            ResourceIdentifier::StoreId(id) => {
-                write!(f, "Store with id={}", id)
-            }
-            ResourceIdentifier::StoreName(name) => {
-                write!(f, "Store with name=\"{}\"", name)
-            }
-            ResourceIdentifier::PersonId(id) => {
-                write!(f, "Person with id={}", id)
-            }
-            ResourceIdentifier::PersonEmail(email) => {
-                write!(f, "Person with email=\"{}\"", email)
-            }
+            ResourceIdentifier::ProductId(id) => write!(f, "Product with id `{id}`"),
+            ResourceIdentifier::ProductName(name) => write!(f, "Product with name `{name}`"),
+            ResourceIdentifier::StoreId(id) => write!(f, "Store with id `{id}`"),
+            ResourceIdentifier::StoreName(name) => write!(f, "Store with name `{name}`"),
+            ResourceIdentifier::PersonId(id) => write!(f, "Person with id `{id}`"),
+            ResourceIdentifier::PersonEmail(email) => write!(f, "Person with email `{email}`"),
+            ResourceIdentifier::ReceiptId(id) => write!(f, "Receipt with id `{id}`"),
         }
     }
 }

@@ -1,14 +1,19 @@
 mod api;
 mod error;
 
-use crate::api::{
-    people::{create_person, get_all_people, get_person_by_id},
-    products::{create_product, get_all_products, get_product_by_id},
-    stores::{create_store, get_all_stores, get_store_by_id},
+use api::Result;
+use api::SplitSchema;
+use async_graphql::{http::GraphiQLSource, EmptySubscription, Schema};
+use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
+use axum::{
+    response::{self, IntoResponse},
+    routing::{get, post},
+    Extension, Router,
 };
-use axum::{routing::get, Router};
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
-use std::{net::SocketAddr, sync::Arc};
+use std::net::SocketAddr;
+
+use crate::api::{Mutation, Query};
 
 #[tokio::main]
 async fn main() -> Result<(), sqlx::Error> {
@@ -19,14 +24,15 @@ async fn main() -> Result<(), sqlx::Error> {
         .connect("postgres://postgres:password@localhost/postgres")
         .await?;
 
+    let state = AppState::new(Db::new(pool));
+    let schema = Schema::build(Query, Mutation, EmptySubscription)
+        .data(state)
+        .finish();
+
     let app = Router::new()
-        .route("/products", get(get_all_products).post(create_product))
-        .route("/products/:id", get(get_product_by_id))
-        .route("/stores", get(get_all_stores).post(create_store))
-        .route("/stores/:id", get(get_store_by_id))
-        .route("/people", get(get_all_people).post(create_person))
-        .route("/people/:id", get(get_person_by_id))
-        .with_state(Arc::new(AppState { pool }));
+        .route("/", get(graphiql))
+        .route("/query", post(graphql_handler))
+        .layer(Extension(schema));
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 5133));
     tracing::debug!("listening on {}", addr);
@@ -38,6 +44,31 @@ async fn main() -> Result<(), sqlx::Error> {
     Ok(())
 }
 
+async fn graphql_handler(schema: Extension<SplitSchema>, req: GraphQLRequest) -> GraphQLResponse {
+    schema.execute(req.into_inner()).await.into()
+}
+
+// Graphql client api
+async fn graphiql() -> impl IntoResponse {
+    response::Html(GraphiQLSource::build().endpoint("/query").finish())
+}
+
 pub struct AppState {
+    db: Db,
+}
+
+impl AppState {
+    pub fn new(db: Db) -> Self {
+        Self { db }
+    }
+}
+
+pub struct Db {
     pool: Pool<Postgres>,
+}
+
+impl Db {
+    pub fn new(pool: Pool<Postgres>) -> Self {
+        Self { pool }
+    }
 }

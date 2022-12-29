@@ -26,6 +26,11 @@ CREATE TABLE person (
 
 CREATE UNIQUE INDEX unique_person_email ON person (lower(email));
 
+CREATE TABLE receipt (
+    id serial PRIMARY KEY,
+    store_id int REFERENCES store (id) NOT NULL
+);
+
 COMMIT;
 
 -- DROP TABLE product, store, person;

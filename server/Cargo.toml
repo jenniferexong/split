@@ -10,7 +10,7 @@ axum = "0.6.1"
 tokio = { version = "1.0", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3" }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0.68"
 sqlx = { version = "0.6", features = [ "runtime-tokio-rustls", "postgres" ] }
 validator = { version = "0.15", features = ["derive"] }
+async-graphql = "5.0.4"
+async-graphql-axum = "5.0.4"
