@@ -1,6 +1,8 @@
 use std::fmt;
 use validator::ValidationErrors;
 
+use crate::api::Id;
+
 #[derive(Debug)]
 pub enum Error {
     AlreadyExists(ResourceIdentifier),
@@ -38,12 +40,12 @@ impl From<sqlx::Error> for Error {
 
 #[derive(Debug)]
 pub enum ResourceIdentifier {
-    ProductId(i32),
+    ProductId(Id),
     ProductName(String),
-    ReceiptId(i32),
-    StoreId(i32),
+    ReceiptId(Id),
+    StoreId(Id),
     StoreName(String),
-    PersonId(i32),
+    PersonId(Id),
     PersonEmail(String),
 }
 

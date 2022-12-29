@@ -1,6 +1,7 @@
 use async_graphql::{InputObject, SimpleObject};
 use validator::Validate;
 
+use super::Id;
 use crate::{
     api::{PgCodes, Result},
     error::{Error, ResourceIdentifier},
@@ -9,22 +10,25 @@ use crate::{
 
 #[derive(SimpleObject, sqlx::FromRow)]
 pub struct Product {
-    id: i32,
+    id: Id,
     name: String,
 }
 
 #[derive(Validate, InputObject)]
-pub struct CreateProductRequest {
+pub struct CreateProductInput {
     #[validate(length(min = 1))]
     name: String,
 }
 
 impl Db {
-    pub async fn get_product_by_id(&self, product_id: i32) -> Result<Product> {
-        let mut products = sqlx::query_as("SELECT id, name FROM product WHERE id = $1")
-            .bind(product_id)
-            .fetch_all(&self.pool)
-            .await?;
+    pub async fn get_product_by_id(&self, product_id: Id) -> Result<Product> {
+        let mut products = sqlx::query_as!(
+            Product,
+            "SELECT id, name FROM product WHERE id = $1",
+            product_id
+        )
+        .fetch_all(&self.pool)
+        .await?;
 
         match products.pop() {
             Some(product) => Ok(product),
@@ -33,20 +37,23 @@ impl Db {
     }
 
     pub async fn get_all_products(&self) -> Result<Vec<Product>> {
-        let products = sqlx::query_as::<_, Product>("SELECT id, name FROM product")
+        let products = sqlx::query_as!(Product, "SELECT id, name FROM product")
             .fetch_all(&self.pool)
             .await?;
 
         Ok(products)
     }
 
-    pub async fn create_product(&self, req: CreateProductRequest) -> Result<Product> {
+    pub async fn create_product(&self, req: CreateProductInput) -> Result<Product> {
         req.validate()?;
 
-        let created_product = sqlx::query_as::<_, Product>(
+        let CreateProductInput { name } = req;
+
+        let created_product = sqlx::query_as!(
+            Product,
             "INSERT INTO product (name) VALUES ($1) RETURNING id, name",
+            name
         )
-        .bind(&req.name)
         .fetch_one(&self.pool)
         .await;
 
@@ -59,13 +66,13 @@ impl Db {
                             && constraint == "unique_product_name"
                         {
                             return Err(Error::AlreadyExists(ResourceIdentifier::ProductName(
-                                req.name.clone(),
+                                name,
                             )));
                         }
                     }
                 }
 
-                tracing::error!("Create product with name=\"{}\" failed: {err}", req.name);
+                tracing::error!("Create product with name `{name}` failed: {err}");
                 Err(Error::Database(err))
             }
         }
