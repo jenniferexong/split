@@ -1,4 +1,4 @@
-use crate::api::Id;
+use crate::api::{PersonId, ProductId, ReceiptId, ReceiptLineId, ReceiptLineSplitId, StoreId};
 use std::fmt;
 use validator::ValidationErrors;
 
@@ -39,15 +39,18 @@ impl From<sqlx::Error> for Error {
 
 #[derive(Debug)]
 pub enum ResourceIdentifier {
-    ProductId(Id),
+    ProductId(ProductId),
     ProductName(String),
-    ReceiptId(Id),
-    ReceiptLineId(Id),
-    ReceiptLineSplitId(Id),
-    ReceiptLineSplit { receipt_line_id: Id, person_id: Id },
-    StoreId(Id),
+    ReceiptId(ReceiptId),
+    ReceiptLineId(ReceiptLineId),
+    ReceiptLineSplitId(ReceiptLineSplitId),
+    ReceiptLineSplit {
+        receipt_line_id: ReceiptLineId,
+        person_id: PersonId,
+    },
+    StoreId(StoreId),
     StoreName(String),
-    PersonId(Id),
+    PersonId(PersonId),
     PersonEmail(String),
 }
 

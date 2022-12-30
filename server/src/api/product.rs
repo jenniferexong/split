@@ -1,4 +1,4 @@
-use super::Id;
+use super::ProductId;
 use crate::{
     api::{PgCodes, Result},
     error::{Error, ResourceIdentifier},
@@ -9,7 +9,7 @@ use validator::Validate;
 
 #[derive(SimpleObject, sqlx::FromRow)]
 pub struct Product {
-    id: Id,
+    id: ProductId,
     name: String,
 }
 
@@ -20,7 +20,7 @@ pub struct CreateProductInput {
 }
 
 impl Db {
-    pub async fn get_product_by_id(&self, product_id: Id) -> Result<Product> {
+    pub async fn get_product_by_id(&self, product_id: ProductId) -> Result<Product> {
         let mut products = sqlx::query_as!(
             Product,
             "SELECT id, name FROM product WHERE id = $1",

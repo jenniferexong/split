@@ -1,4 +1,4 @@
-use super::{ApiReceiptLineSplit, Id, Product, Receipt};
+use super::{ApiReceiptLineSplit, Product, ProductId, Receipt, ReceiptId, ReceiptLineId};
 use crate::error::{Error, ResourceIdentifier};
 use crate::{api::Result, AppState, Db};
 use async_graphql::{Context, InputObject, Object};
@@ -7,16 +7,16 @@ use validator::Validate;
 
 #[derive(sqlx::FromRow)]
 pub struct DbReceiptLine {
-    id: Id,
-    receipt_id: Id,
-    product_id: Id,
+    id: ReceiptLineId,
+    receipt_id: ReceiptId,
+    product_id: ProductId,
     price: f32,
 }
 
 pub struct ApiReceiptLine {
-    id: Id,
-    receipt_id: Id,
-    product_id: Id,
+    id: ReceiptLineId,
+    receipt_id: ReceiptId,
+    product_id: ProductId,
     price: f32,
 }
 
@@ -65,13 +65,22 @@ impl From<DbReceiptLine> for ApiReceiptLine {
 
 #[derive(Validate, Serialize, InputObject)]
 pub struct CreateReceiptLineInput {
-    receipt_id: Id,
-    product_id: Id,
+    receipt_id: ReceiptId,
+    product_id: ProductId,
     price: f32,
 }
 
+#[derive(Default, InputObject)]
+pub struct GetReceiptLinesInput {
+    pub receipt_id: Option<ReceiptId>,
+    pub product_id: Option<ProductId>,
+}
+
 impl Db {
-    pub async fn get_receipt_line_by_id(&self, receipt_line_id: Id) -> Result<ApiReceiptLine> {
+    pub async fn get_receipt_line_by_id(
+        &self,
+        receipt_line_id: ReceiptLineId,
+    ) -> Result<ApiReceiptLine> {
         let mut receipt_lines = sqlx::query_as!(
             DbReceiptLine,
             "SELECT id, receipt_id, product_id, price FROM receipt_line WHERE id = $1",
@@ -111,17 +120,24 @@ impl Db {
         Ok(created_receipt_line.into())
     }
 
-    pub async fn get_receipt_lines_by_receipt_id(
+    pub async fn get_receipt_lines(
         &self,
-        receipt_id: Id,
+        input: GetReceiptLinesInput,
     ) -> Result<Vec<ApiReceiptLine>> {
+        let GetReceiptLinesInput {
+            receipt_id,
+            product_id,
+        } = input;
+
         let receipt_lines = sqlx::query_as!(
             DbReceiptLine,
-            "SELECT line.id, line.receipt_id, line.product_id, line.price 
+            "SELECT line.id, line.receipt_id, line.product_id, line.price
             FROM receipt_line AS line 
             LEFT JOIN receipt ON line.receipt_id = receipt.id 
-            WHERE receipt.id = $1",
-            receipt_id
+            WHERE ($1::int IS NULL OR receipt.id = $1) 
+              AND ($2::int IS NULL OR line.product_id = $2)",
+            receipt_id,
+            product_id
         )
         .fetch_all(&self.pool)
         .await?;

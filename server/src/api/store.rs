@@ -1,4 +1,4 @@
-use super::Id;
+use super::StoreId;
 use crate::{
     api::{PgCodes, Result},
     error::{Error, ResourceIdentifier},
@@ -9,7 +9,7 @@ use validator::Validate;
 
 #[derive(SimpleObject, sqlx::FromRow)]
 pub struct Store {
-    id: Id,
+    id: StoreId,
     name: String,
 }
 
@@ -20,7 +20,7 @@ pub struct CreateStoreInput {
 }
 
 impl Db {
-    pub async fn get_store_by_id(&self, store_id: Id) -> Result<Store> {
+    pub async fn get_store_by_id(&self, store_id: StoreId) -> Result<Store> {
         let mut stores =
             sqlx::query_as!(Store, "SELECT id, name FROM store WHERE id = $1", store_id)
                 .fetch_all(&self.pool)

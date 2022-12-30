@@ -1,4 +1,4 @@
-use super::Id;
+use super::PersonId;
 use crate::{
     api::{PgCodes, Result},
     error::{Error, ResourceIdentifier},
@@ -9,7 +9,7 @@ use validator::Validate;
 
 #[derive(SimpleObject, sqlx::FromRow)]
 pub struct Person {
-    id: Id,
+    id: PersonId,
     first_name: String,
     last_name: String,
     email: String,
@@ -26,7 +26,7 @@ pub struct CreatePersonInput {
 }
 
 impl Db {
-    pub async fn get_person_by_id(&self, person_id: Id) -> Result<Person> {
+    pub async fn get_person_by_id(&self, person_id: PersonId) -> Result<Person> {
         let mut people = sqlx::query_as!(
             Person,
             "SELECT id, first_name, last_name, email FROM person WHERE id = $1",

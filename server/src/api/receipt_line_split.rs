@@ -6,26 +6,26 @@ use async_graphql::{Context, InputObject, Object};
 use serde::Serialize;
 use validator::Validate;
 use crate::error::{Error, ResourceIdentifier};
-use super::{ApiReceiptLine, Id, Person};
+use super::{ApiReceiptLine, ReceiptLineSplitId, ReceiptLineId, ReceiptId, Person, PersonId};
 
 #[derive(sqlx::FromRow)]
 pub struct DbReceiptLineSplit {
-    id: Id,
-    receipt_line_id: Id,
-    person_id: Id,
+    id: ReceiptLineSplitId,
+    receipt_line_id: ReceiptLineId,
+    person_id: PersonId,
     antecedent: i32,
 }
 
 pub struct ApiReceiptLineSplit {
-    id: Id,
-    receipt_line_id: Id,
-    person_id: Id,
+    id: ReceiptLineSplitId,
+    receipt_line_id: ReceiptLineId,
+    person_id: PersonId,
     antecedent: i32,
 }
 
 #[Object]
 impl ApiReceiptLineSplit {
-    async fn id(&self) -> Id {
+    async fn id(&self) -> ReceiptLineSplitId {
         self.id
     }
 
@@ -64,8 +64,8 @@ impl From<DbReceiptLineSplit> for ApiReceiptLineSplit {
 
 #[derive(Validate, Serialize, InputObject)]
 pub struct CreateReceiptLineSplitInput {
-    receipt_line_id: Id,
-    person_id: Id,
+    receipt_line_id: ReceiptLineId,
+    person_id: PersonId,
     #[validate(range(min = 1))]
     antecedent: i32,
 }
@@ -73,7 +73,7 @@ pub struct CreateReceiptLineSplitInput {
 impl Db {
     pub async fn get_receipt_line_split_by_id(
         &self,
-        receipt_line_split_id: Id,
+        receipt_line_split_id: ReceiptLineSplitId,
     ) -> Result<ApiReceiptLineSplit> {
         let mut receipt_line_splits = sqlx::query_as!(
             DbReceiptLineSplit,
@@ -93,7 +93,7 @@ impl Db {
 
     pub async fn get_receipt_line_splits_by_receipt_line_id(
         &self,
-        receipt_line_id: Id,
+        receipt_line_id: ReceiptLineId,
     ) -> Result<Vec<ApiReceiptLineSplit>> {
         let receipt_line_splits = sqlx::query_as!(
             DbReceiptLineSplit,

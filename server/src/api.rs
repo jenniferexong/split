@@ -24,7 +24,12 @@ pub(crate) type SplitSchema = Schema<Query, Mutation, EmptySubscription>;
 
 pub type Result<T, E = Error> = ::std::result::Result<T, E>;
 
-pub type Id = i32;
+pub type ProductId = i32;
+pub type StoreId = i32;
+pub type PersonId = i32;
+pub type ReceiptId = i32;
+pub type ReceiptLineId = i32;
+pub type ReceiptLineSplitId = i32;
 
 pub enum PgCodes {}
 
@@ -43,7 +48,7 @@ impl Query {
     }
 
     /// Get product by id
-    async fn product(&self, ctx: &Context<'_>, id: Id) -> Result<Product> {
+    async fn product(&self, ctx: &Context<'_>, id: ProductId) -> Result<Product> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_product_by_id(id).await
     }
@@ -55,7 +60,7 @@ impl Query {
     }
 
     /// Get store by id
-    async fn store(&self, ctx: &Context<'_>, id: Id) -> Result<Store> {
+    async fn store(&self, ctx: &Context<'_>, id: StoreId) -> Result<Store> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_store_by_id(id).await
     }
@@ -67,7 +72,7 @@ impl Query {
     }
 
     /// Get person by id
-    async fn person(&self, ctx: &Context<'_>, id: Id) -> Result<Person> {
+    async fn person(&self, ctx: &Context<'_>, id: PersonId) -> Result<Person> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_person_by_id(id).await
     }
@@ -78,7 +83,16 @@ impl Query {
         state.db.get_all_receipts().await
     }
 
-    // TODO add get all receipt lines by receipt id
+    /// Get receipt lines
+    async fn receipt_lines(
+        &self,
+        ctx: &Context<'_>,
+        #[graphql(default)] filter: GetReceiptLinesInput,
+    ) -> Result<Vec<ApiReceiptLine>> {
+        let state = ctx.data_unchecked::<AppState>();
+        state.db.get_receipt_lines(filter).await
+    }
+
     // TODO add get all receipt line splits by receipt line id
 }
 

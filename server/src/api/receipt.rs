@@ -1,4 +1,5 @@
-use super::{ApiReceiptLine, CreateReceiptLineInput, Id, Person, Store};
+use super::receipt_line::GetReceiptLinesInput;
+use super::{ApiReceiptLine, CreateReceiptLineInput, Person, PersonId, ReceiptId, Store, StoreId};
 use crate::error::{Error, ResourceIdentifier};
 use crate::{api::Result, AppState, Db};
 use async_graphql::{Context, InputObject, Object};
@@ -8,15 +9,15 @@ use validator::Validate;
 
 #[derive(sqlx::FromRow)]
 pub struct Receipt {
-    id: Id,
-    store_id: Id,
-    person_id: Id,
+    id: ReceiptId,
+    store_id: StoreId,
+    person_id: PersonId,
     date: Date,
 }
 
 #[Object]
 impl Receipt {
-    async fn id(&self) -> Id {
+    async fn id(&self) -> ReceiptId {
         self.id
     }
 
@@ -34,21 +35,24 @@ impl Receipt {
         let state = ctx.data_unchecked::<AppState>();
         state
             .db
-            .get_receipt_lines_by_receipt_id(self.person_id)
+            .get_receipt_lines(GetReceiptLinesInput {
+                receipt_id: Some(self.id),
+                ..Default::default()
+            })
             .await
     }
 }
 
 #[derive(Validate, InputObject)]
 pub struct CreateReceiptInput {
-    store_id: Id,
-    receipt_id: Id,
+    store_id: StoreId,
+    receipt_id: ReceiptId,
     #[validate(length(min = 1))]
     receipt_lines: Vec<CreateReceiptLineInput>,
 }
 
 impl Db {
-    pub async fn get_receipt_by_id(&self, receipt_id: Id) -> Result<Receipt> {
+    pub async fn get_receipt_by_id(&self, receipt_id: ReceiptId) -> Result<Receipt> {
         let mut receipts = sqlx::query_as!(
             Receipt,
             "SELECT id, store_id, person_id, date FROM receipt WHERE id = $1",
