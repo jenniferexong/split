@@ -3,8 +3,8 @@ use super::{ApiReceiptLine, CreateReceiptLineInput, Person, PersonId, ReceiptId,
 use crate::error::{Error, ResourceIdentifier};
 use crate::{api::Result, AppState, Db};
 use async_graphql::{Context, InputObject, Object};
-use axum::Json;
-use sqlx::types::time::Date;
+use chrono::Utc;
+use sqlx::types::chrono::DateTime;
 use validator::Validate;
 
 #[derive(sqlx::FromRow)]
@@ -12,7 +12,7 @@ pub struct Receipt {
     id: ReceiptId,
     store_id: StoreId,
     person_id: PersonId,
-    date: Date,
+    date: DateTime<Utc>,
 }
 
 #[Object]
@@ -46,7 +46,8 @@ impl Receipt {
 #[derive(Validate, InputObject)]
 pub struct CreateReceiptInput {
     store_id: StoreId,
-    receipt_id: ReceiptId,
+    person_id: PersonId,
+    date: DateTime<Utc>,
     #[validate(length(min = 1))]
     receipt_lines: Vec<CreateReceiptLineInput>,
 }
@@ -76,24 +77,29 @@ impl Db {
         Ok(receipts)
     }
 
-    pub async fn create_receipt(&self, req: Json<CreateReceiptInput>) -> Result<Receipt> {
-        /*
+    pub async fn create_receipt(&self, req: CreateReceiptInput) -> Result<Receipt> {
         req.validate()?;
 
         let CreateReceiptInput {
             store_id,
-            receipt_id,
+            person_id,
+            date,
             receipt_lines,
         } = req;
 
         let created_receipt = sqlx::query_as!(
-            "INSERT INTO receipt (name) VALUES ($1) RETURNING id, name",
+            Receipt,
+            "INSERT INTO receipt (store_id, person_id, date) VALUES ($1, $2, $3) RETURNING id, store_id, person_id, date",
+            store_id, person_id, date
         )
         .fetch_one(&self.pool)
         .await?;
 
+        // TODO remove receiptId from receipt line input thing
+        for item in receipt_lines {
+            self.create_receipt_line(item).await?;
+        }
+
         Ok(created_receipt)
-        */
-        todo!();
     }
 }

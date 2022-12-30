@@ -1,3 +1,4 @@
+use super::receipt_line_split::CreateReceiptLineSplitInput;
 use super::{ApiReceiptLineSplit, Product, ProductId, Receipt, ReceiptId, ReceiptLineId};
 use crate::error::{Error, ResourceIdentifier};
 use crate::{api::Result, AppState, Db};
@@ -68,6 +69,8 @@ pub struct CreateReceiptLineInput {
     receipt_id: ReceiptId,
     product_id: ProductId,
     price: f32,
+    #[validate(length(min = 1))]
+    receipt_line_splits: Vec<CreateReceiptLineSplitInput>,
 }
 
 #[derive(Default, InputObject)]
@@ -97,29 +100,6 @@ impl Db {
         }
     }
 
-    pub async fn create_receipt_line(&self, req: CreateReceiptLineInput) -> Result<ApiReceiptLine> {
-        req.validate()?;
-
-        let CreateReceiptLineInput {
-            receipt_id,
-            product_id,
-            price,
-        } = req;
-
-        let created_receipt_line = sqlx::query_as!(
-            DbReceiptLine,
-            "INSERT INTO receipt_line (receipt_id, product_id, price) VALUES ($1, $2, $3) 
-            RETURNING id, receipt_id, product_id, price",
-            receipt_id,
-            product_id,
-            price
-        )
-        .fetch_one(&self.pool)
-        .await?;
-
-        Ok(created_receipt_line.into())
-    }
-
     pub async fn get_receipt_lines(
         &self,
         input: GetReceiptLinesInput,
@@ -144,6 +124,41 @@ impl Db {
 
         Ok(receipt_lines.into_iter().map(Into::into).collect())
     }
+
+    pub async fn create_receipt_line(&self, req: CreateReceiptLineInput) -> Result<ApiReceiptLine> {
+        req.validate()?;
+
+        let CreateReceiptLineInput {
+            receipt_id,
+            product_id,
+            price,
+            receipt_line_splits,
+        } = req;
+
+        let created_receipt_line = sqlx::query_as!(
+            DbReceiptLine,
+            "INSERT INTO receipt_line (receipt_id, product_id, price) VALUES ($1, $2, $3) 
+            RETURNING id, receipt_id, product_id, price",
+            receipt_id,
+            product_id,
+            price
+        )
+        .fetch_one(&self.pool)
+        .await?;
+
+        // create receipt line splits
+        for item in receipt_line_splits {
+            self.create_receipt_line_split(CreateReceiptLineSplitInput {
+                receipt_line_id: created_receipt_line.id,
+                person_id: item.person_id,
+                antecedent: item.antecedent,
+            })
+            .await?;
+        }
+
+        Ok(created_receipt_line.into())
+    }
+
     // TODO
     // get by person
     // get by product

@@ -64,10 +64,10 @@ impl From<DbReceiptLineSplit> for ApiReceiptLineSplit {
 
 #[derive(Validate, Serialize, InputObject)]
 pub struct CreateReceiptLineSplitInput {
-    receipt_line_id: ReceiptLineId,
-    person_id: PersonId,
+    pub receipt_line_id: ReceiptLineId,
+    pub person_id: PersonId,
     #[validate(range(min = 1))]
-    antecedent: i32,
+    pub antecedent: i32,
 }
 
 impl Db {

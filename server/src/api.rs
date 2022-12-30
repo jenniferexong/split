@@ -117,4 +117,10 @@ impl Mutation {
         let state = ctx.data_unchecked::<AppState>();
         state.db.create_person(input).await
     }
+
+    /// Create receipt
+    async fn receipt(&self, ctx: &Context<'_>, input: CreateReceiptInput) -> Result<Receipt> {
+        let state = ctx.data_unchecked::<AppState>();
+        state.db.create_receipt(input).await
+    }
 }

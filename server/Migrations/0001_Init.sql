@@ -31,7 +31,7 @@ CREATE TABLE receipt (
     store_id int REFERENCES store (id) NOT NULL,
     -- Paid by
     person_id int REFERENCES person (id) NOT NULL,
-    date date NOT NULL
+    date timestamptz NOT NULL
 );
 
 CREATE TABLE receipt_line (
@@ -54,4 +54,4 @@ CREATE UNIQUE INDEX unique_receipt_line_split ON receipt_line_split (receipt_lin
 
 COMMIT;
 
--- DROP TABLE product, store, person, receipt;
+-- DROP TABLE product, store, person, receipt, receipt_line, receipt_line_split;
