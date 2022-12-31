@@ -19,6 +19,16 @@ pub struct CreateStoreInput {
     name: String,
 }
 
+// TODO Look into?
+trait Entity: Sized {
+    type Id;
+    type CreateInput;
+
+    fn create(input: Self::CreateInput) -> Self;
+    fn get(id: Self::Id) -> Self;
+    fn get_all(ids: &[Self::Id]) -> Vec<Self>;
+}
+
 impl Db {
     pub async fn get_store_by_id(&self, store_id: StoreId) -> Result<Store> {
         let mut stores =
@@ -53,20 +63,20 @@ impl Db {
         .fetch_one(&self.pool)
         .await;
 
+        let resource_identifier = &ResourceIdentifier::StoreName(name);
+
         match created_store {
             Ok(store) => Ok(store),
             Err(err) => {
-                if let sqlx::Error::Database(err) = &err {
-                    if let (Some(code), Some(constraint)) = (err.code(), err.constraint()) {
-                        if code == PgCodes::CONSTRAINT_VIOLATION
-                            && constraint == "unique_store_name"
-                        {
-                            return Err(Error::AlreadyExists(ResourceIdentifier::StoreName(name)));
-                        }
-                    }
+                if let Some(err) = Db::handle_unique_constraint_violation(
+                    &err,
+                    resource_identifier,
+                    "unique_store_name",
+                ) {
+                    return Err(err);
                 }
 
-                tracing::error!("Create store with name `{name}` failed: {err}");
+                tracing::error!("Create {resource_identifier} failed: {err}");
                 Err(err.into())
             }
         }

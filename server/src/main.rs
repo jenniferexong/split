@@ -7,7 +7,7 @@ use api::{
         PersonLoader, ProductLoader, ReceiptLineLoader, ReceiptLineSplitLoader, ReceiptLoader,
         StoreLoader,
     },
-    SplitSchema,
+    PgCodes, SplitSchema,
 };
 use async_graphql::{dataloader::DataLoader, http::GraphiQLSource, EmptySubscription, Schema};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
@@ -16,6 +16,7 @@ use axum::{
     routing::{get, post},
     Extension, Router,
 };
+use error::{Error, ResourceIdentifier};
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use std::net::SocketAddr;
 
@@ -94,5 +95,21 @@ impl Db {
             ),
             pool,
         }
+    }
+
+    pub fn handle_unique_constraint_violation(
+        err: &sqlx::Error,
+        resource_identifier: &ResourceIdentifier,
+        unique_constraint_name: &str,
+    ) -> Option<Error> {
+        if let sqlx::Error::Database(err) = &err {
+            if let (Some(code), Some(constraint)) = (err.code(), err.constraint()) {
+                if code == PgCodes::CONSTRAINT_VIOLATION && constraint == unique_constraint_name {
+                    return Some(Error::AlreadyExists(resource_identifier.clone()));
+                }
+            }
+        }
+
+        None
     }
 }

@@ -59,22 +59,20 @@ impl Db {
         .fetch_one(&self.pool)
         .await;
 
+        let resource_identifier = &ResourceIdentifier::ProductName(name);
+
         match created_product {
             Ok(product) => Ok(product),
             Err(err) => {
-                if let sqlx::Error::Database(err) = &err {
-                    if let (Some(code), Some(constraint)) = (err.code(), err.constraint()) {
-                        if code == PgCodes::CONSTRAINT_VIOLATION
-                            && constraint == "unique_product_name"
-                        {
-                            return Err(Error::AlreadyExists(ResourceIdentifier::ProductName(
-                                name,
-                            )));
-                        }
-                    }
+                if let Some(err) = Db::handle_unique_constraint_violation(
+                    &err,
+                    resource_identifier,
+                    "unique_product_name",
+                ) {
+                    return Err(err);
                 }
 
-                tracing::error!("Create product with name `{name}` failed: {err}");
+                tracing::error!("Create {resource_identifier} failed: {err}");
                 Err(err.into())
             }
         }

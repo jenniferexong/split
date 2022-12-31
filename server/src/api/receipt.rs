@@ -24,6 +24,10 @@ impl Receipt {
         self.id
     }
 
+    async fn date(&self) -> DateTime<Utc> {
+        self.date
+    }
+
     async fn store(&self, ctx: &Context<'_>) -> Result<Store> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_store_by_id(self.store_id).await

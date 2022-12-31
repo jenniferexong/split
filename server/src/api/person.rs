@@ -63,8 +63,8 @@ impl Db {
 
         let created_person = sqlx::query_as!(
             Person,
-            "INSERT INTO person (first_name, last_name, email) 
-            VALUES ($1, $2, $3) 
+            "INSERT INTO person (first_name, last_name, email)
+            VALUES ($1, $2, $3)
             RETURNING id, first_name, last_name, email",
             first_name,
             last_name,
@@ -73,22 +73,20 @@ impl Db {
         .fetch_one(&self.pool)
         .await;
 
+        let resource_identifier = &ResourceIdentifier::PersonEmail(email);
+
         match created_person {
             Ok(store) => Ok(store),
             Err(err) => {
-                if let sqlx::Error::Database(err) = &err {
-                    if let (Some(code), Some(constraint)) = (err.code(), err.constraint()) {
-                        if code == PgCodes::CONSTRAINT_VIOLATION
-                            && constraint == "unique_person_email"
-                        {
-                            return Err(Error::AlreadyExists(ResourceIdentifier::PersonEmail(
-                                email,
-                            )));
-                        }
-                    }
+                if let Some(err) = Db::handle_unique_constraint_violation(
+                    &err,
+                    resource_identifier,
+                    "unique_person_name",
+                ) {
+                    return Err(err);
                 }
 
-                tracing::error!("Create person with email `{email}` failed: {err}");
+                tracing::error!("Create {resource_identifier} failed: {err}");
                 Err(err.into())
             }
         }

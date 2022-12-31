@@ -85,6 +85,12 @@ impl Query {
         state.db.get_all_receipts().await
     }
 
+    /// Get receipt by id
+    async fn receipt(&self, ctx: &Context<'_>, id: ReceiptId) -> Result<Receipt> {
+        let state = ctx.data_unchecked::<AppState>();
+        state.db.get_receipt_by_id(id).await
+    }
+
     /// Get receipt lines
     async fn receipt_lines(
         &self,
@@ -93,6 +99,22 @@ impl Query {
     ) -> Result<Vec<ApiReceiptLine>> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_receipt_lines(filter).await
+    }
+
+    /// Get receipt line split by id
+    async fn receipt_line_split(
+        &self,
+        ctx: &Context<'_>,
+        id: ReceiptLineSplitId,
+    ) -> Result<ApiReceiptLineSplit> {
+        let state = ctx.data_unchecked::<AppState>();
+        state.db.get_receipt_line_split_by_id(id).await
+    }
+
+    /// Get receipt line by id
+    async fn receipt_line(&self, ctx: &Context<'_>, id: ReceiptLineId) -> Result<ApiReceiptLine> {
+        let state = ctx.data_unchecked::<AppState>();
+        state.db.get_receipt_line_by_id(id).await
     }
 
     // TODO add get all receipt line splits by receipt line id

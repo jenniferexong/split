@@ -1,3 +1,5 @@
+use super::{ApiReceiptLine, Person, PersonId, ReceiptId, ReceiptLineId, ReceiptLineSplitId};
+use crate::error::{Error, ResourceIdentifier};
 use crate::{
     api::{PgCodes, Result},
     AppState, Db,
@@ -5,8 +7,6 @@ use crate::{
 use async_graphql::{Context, InputObject, Object};
 use serde::Serialize;
 use validator::Validate;
-use crate::error::{Error, ResourceIdentifier};
-use super::{ApiReceiptLine, ReceiptLineSplitId, ReceiptLineId, ReceiptId, Person, PersonId};
 
 #[derive(sqlx::FromRow, Clone)]
 pub struct DbReceiptLineSplit {
@@ -75,7 +75,10 @@ impl Db {
         &self,
         receipt_line_split_id: ReceiptLineSplitId,
     ) -> Result<ApiReceiptLineSplit> {
-        let receipt_line_split = self.receipt_line_split_loader.load_one(receipt_line_split_id).await?;
+        let receipt_line_split = self
+            .receipt_line_split_loader
+            .load_one(receipt_line_split_id)
+            .await?;
 
         match receipt_line_split {
             Some(split) => Ok(ApiReceiptLineSplit::from(split)),
@@ -85,16 +88,16 @@ impl Db {
         }
     }
 
-    // TOOD
+    // TODO
     pub async fn get_receipt_line_splits_by_receipt_line_id(
         &self,
         receipt_line_id: ReceiptLineId,
     ) -> Result<Vec<ApiReceiptLineSplit>> {
         let receipt_line_splits = sqlx::query_as!(
             DbReceiptLineSplit,
-            "SELECT split.id, split.receipt_line_id, split.person_id, split.antecedent 
-            FROM receipt_line_split AS split 
-            LEFT JOIN receipt_line AS line ON split.receipt_line_id = line.id 
+            "SELECT split.id, split.receipt_line_id, split.person_id, split.antecedent
+            FROM receipt_line_split AS split
+            LEFT JOIN receipt_line AS line ON split.receipt_line_id = line.id
             WHERE line.id = $1",
             receipt_line_id
         )
@@ -117,33 +120,31 @@ impl Db {
         } = req;
 
         let created_split = sqlx::query_as!(
-            DbReceiptLineSplit, 
-            "INSERT INTO receipt_line_split (receipt_line_id, person_id, antecedent) VALUES ($1, $2, $3) 
+            DbReceiptLineSplit,
+            "INSERT INTO receipt_line_split (receipt_line_id, person_id, antecedent) VALUES ($1, $2, $3)
             RETURNING id, receipt_line_id, person_id, antecedent",
             receipt_line_id, person_id, antecedent
         )
         .fetch_one(&self.pool)
         .await;
 
+        let resource_identifier = ResourceIdentifier::ReceiptLineSplit {
+            receipt_line_id,
+            person_id,
+        };
+
         match created_split {
             Ok(split) => Ok(split.into()),
             Err(err) => {
-                if let sqlx::Error::Database(err) = &err {
-                    if let (Some(code), Some(constraint)) = (err.code(), err.constraint()) {
-                        if code == PgCodes::CONSTRAINT_VIOLATION
-                            && constraint == "unique_receipt_line_split"
-                        {
-                            return Err(Error::AlreadyExists(
-                                ResourceIdentifier::ReceiptLineSplit {
-                                    receipt_line_id,
-                                    person_id,
-                                },
-                            ));
-                        }
-                    }
-                }
+                if let Some(err) = Db::handle_unique_constraint_violation(
+                    &err,
+                    &resource_identifier,
+                    "unique_receipt_line_split",
+                ) {
+                    return Err(err);
+                };
 
-                tracing::error!("Create receipt line split with receipt line `{receipt_line_id}` and person_id `{person_id}` failed: {err}");
+                tracing::error!("Create {resource_identifier} failed: {err}");
                 Err(err.into())
             }
         }

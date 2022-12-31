@@ -44,7 +44,7 @@ impl From<Arc<sqlx::Error>> for Error {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ResourceIdentifier {
     ProductId(ProductId),
     ProductName(String),
