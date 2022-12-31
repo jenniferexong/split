@@ -1,18 +1,21 @@
-use super::receipt_line::GetReceiptLinesInput;
-use super::{ApiReceiptLine, CreateReceiptLineInput, Person, PersonId, ReceiptId, Store, StoreId};
+use super::receipt_line::{
+    CreateReceiptLineInput, CreateReceiptReceiptLineSplitInput, GetReceiptLinesInput,
+};
+use super::{ApiReceiptLine, Person, PersonId, ProductId, ReceiptId, Store, StoreId};
 use crate::error::{Error, ResourceIdentifier};
 use crate::{api::Result, AppState, Db};
 use async_graphql::{Context, InputObject, Object};
 use chrono::Utc;
+use serde::Serialize;
 use sqlx::types::chrono::DateTime;
 use validator::Validate;
 
-#[derive(sqlx::FromRow)]
+#[derive(sqlx::FromRow, Clone)]
 pub struct Receipt {
-    id: ReceiptId,
-    store_id: StoreId,
-    person_id: PersonId,
-    date: DateTime<Utc>,
+    pub id: ReceiptId,
+    pub store_id: StoreId,
+    pub person_id: PersonId,
+    pub date: DateTime<Utc>,
 }
 
 #[Object]
@@ -49,7 +52,15 @@ pub struct CreateReceiptInput {
     person_id: PersonId,
     date: DateTime<Utc>,
     #[validate(length(min = 1))]
-    receipt_lines: Vec<CreateReceiptLineInput>,
+    receipt_lines: Vec<CreateReceiptReceiptLineInput>,
+}
+
+#[derive(Validate, Serialize, InputObject)]
+pub struct CreateReceiptReceiptLineInput {
+    product_id: ProductId,
+    price: f32,
+    #[validate(length(min = 1))]
+    receipt_line_splits: Vec<CreateReceiptReceiptLineSplitInput>,
 }
 
 impl Db {
@@ -69,13 +80,25 @@ impl Db {
     }
 
     pub async fn get_all_receipts(&self) -> Result<Vec<Receipt>> {
-        let receipts =
-            sqlx::query_as!(Receipt, "SELECT id, store_id, person_id, date FROM receipt")
-                .fetch_all(&self.pool)
-                .await?;
+        struct ReceiptKey {
+            id: ReceiptId,
+        }
 
-        Ok(receipts)
+        let keys = sqlx::query_as!(ReceiptKey, "SELECT id FROM receipt")
+            .fetch_all(&self.pool)
+            .await?;
+
+        let receipts = self
+            .receipt_loader
+            .load_many(keys.iter().map(|key| key.id))
+            .await?;
+
+        Ok(receipts.values().cloned().collect())
     }
+
+    // Get all receipts by month
+    // Get all receipts by person
+    // Get all receipts by store
 
     pub async fn create_receipt(&self, req: CreateReceiptInput) -> Result<Receipt> {
         req.validate()?;
@@ -96,8 +119,14 @@ impl Db {
         .await?;
 
         // TODO remove receiptId from receipt line input thing
-        for item in receipt_lines {
-            self.create_receipt_line(item).await?;
+        for line in receipt_lines {
+            self.create_receipt_line(CreateReceiptLineInput {
+                receipt_id: created_receipt.id,
+                product_id: line.product_id,
+                price: line.price,
+                receipt_line_splits: line.receipt_line_splits,
+            })
+            .await?;
         }
 
         Ok(created_receipt)

@@ -8,12 +8,12 @@ use validator::Validate;
 use crate::error::{Error, ResourceIdentifier};
 use super::{ApiReceiptLine, ReceiptLineSplitId, ReceiptLineId, ReceiptId, Person, PersonId};
 
-#[derive(sqlx::FromRow)]
+#[derive(sqlx::FromRow, Clone)]
 pub struct DbReceiptLineSplit {
-    id: ReceiptLineSplitId,
-    receipt_line_id: ReceiptLineId,
-    person_id: PersonId,
-    antecedent: i32,
+    pub id: ReceiptLineSplitId,
+    pub receipt_line_id: ReceiptLineId,
+    pub person_id: PersonId,
+    pub antecedent: i32,
 }
 
 pub struct ApiReceiptLineSplit {
@@ -75,15 +75,9 @@ impl Db {
         &self,
         receipt_line_split_id: ReceiptLineSplitId,
     ) -> Result<ApiReceiptLineSplit> {
-        let mut receipt_line_splits = sqlx::query_as!(
-            DbReceiptLineSplit,
-            "SELECT id, receipt_line_id, person_id, antecedent FROM receipt_line_split WHERE id = $1",
-            receipt_line_split_id
-        )
-        .fetch_all(&self.pool)
-        .await?;
+        let receipt_line_split = self.receipt_line_split_loader.load_one(receipt_line_split_id).await?;
 
-        match receipt_line_splits.pop() {
+        match receipt_line_split {
             Some(split) => Ok(ApiReceiptLineSplit::from(split)),
             None => Err(Error::NotFound(ResourceIdentifier::ReceiptLineSplitId(
                 receipt_line_split_id,
@@ -91,6 +85,7 @@ impl Db {
         }
     }
 
+    // TOOD
     pub async fn get_receipt_line_splits_by_receipt_line_id(
         &self,
         receipt_line_id: ReceiptLineId,
@@ -149,7 +144,7 @@ impl Db {
                 }
 
                 tracing::error!("Create receipt line split with receipt line `{receipt_line_id}` and person_id `{person_id}` failed: {err}");
-                Err(Error::Database(err))
+                Err(err.into())
             }
         }
     }

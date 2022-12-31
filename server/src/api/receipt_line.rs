@@ -1,17 +1,17 @@
 use super::receipt_line_split::CreateReceiptLineSplitInput;
-use super::{ApiReceiptLineSplit, Product, ProductId, Receipt, ReceiptId, ReceiptLineId};
+use super::{ApiReceiptLineSplit, PersonId, Product, ProductId, Receipt, ReceiptId, ReceiptLineId};
 use crate::error::{Error, ResourceIdentifier};
 use crate::{api::Result, AppState, Db};
 use async_graphql::{Context, InputObject, Object};
 use serde::Serialize;
 use validator::Validate;
 
-#[derive(sqlx::FromRow)]
+#[derive(sqlx::FromRow, Clone)]
 pub struct DbReceiptLine {
-    id: ReceiptLineId,
-    receipt_id: ReceiptId,
-    product_id: ProductId,
-    price: f32,
+    pub id: ReceiptLineId,
+    pub receipt_id: ReceiptId,
+    pub product_id: ProductId,
+    pub price: f32,
 }
 
 pub struct ApiReceiptLine {
@@ -66,11 +66,18 @@ impl From<DbReceiptLine> for ApiReceiptLine {
 
 #[derive(Validate, Serialize, InputObject)]
 pub struct CreateReceiptLineInput {
-    receipt_id: ReceiptId,
-    product_id: ProductId,
-    price: f32,
+    pub receipt_id: ReceiptId,
+    pub product_id: ProductId,
+    pub price: f32,
     #[validate(length(min = 1))]
-    receipt_line_splits: Vec<CreateReceiptLineSplitInput>,
+    pub receipt_line_splits: Vec<CreateReceiptReceiptLineSplitInput>,
+}
+
+#[derive(Validate, Serialize, InputObject)]
+pub struct CreateReceiptReceiptLineSplitInput {
+    pub person_id: PersonId,
+    #[validate(range(min = 1))]
+    pub antecedent: i32,
 }
 
 #[derive(Default, InputObject)]
@@ -84,22 +91,17 @@ impl Db {
         &self,
         receipt_line_id: ReceiptLineId,
     ) -> Result<ApiReceiptLine> {
-        let mut receipt_lines = sqlx::query_as!(
-            DbReceiptLine,
-            "SELECT id, receipt_id, product_id, price FROM receipt_line WHERE id = $1",
-            receipt_line_id
-        )
-        .fetch_all(&self.pool)
-        .await?;
+        let receipt_line = self.receipt_line_loader.load_one(receipt_line_id).await?;
 
-        match receipt_lines.pop() {
-            Some(split) => Ok(split.into()),
+        match receipt_line {
+            Some(line) => Ok(ApiReceiptLine::from(line)),
             None => Err(Error::NotFound(ResourceIdentifier::ReceiptLineId(
                 receipt_line_id,
             ))),
         }
     }
 
+    // TODO
     pub async fn get_receipt_lines(
         &self,
         input: GetReceiptLinesInput,

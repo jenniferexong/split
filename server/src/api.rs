@@ -1,3 +1,4 @@
+pub mod loader;
 pub mod person;
 pub mod product;
 pub mod receipt;
@@ -13,6 +14,7 @@ use self::{
 };
 use crate::{error::Error, AppState};
 use async_graphql::{Context, EmptySubscription, Object, Schema};
+use loader::*;
 use person::*;
 use product::*;
 use receipt::*;

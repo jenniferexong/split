@@ -2,8 +2,14 @@ mod api;
 mod error;
 
 use crate::api::{Mutation, Query};
-use api::SplitSchema;
-use async_graphql::{http::GraphiQLSource, EmptySubscription, Schema};
+use api::{
+    loader::{
+        PersonLoader, ProductLoader, ReceiptLineLoader, ReceiptLineSplitLoader, ReceiptLoader,
+        StoreLoader,
+    },
+    SplitSchema,
+};
+use async_graphql::{dataloader::DataLoader, http::GraphiQLSource, EmptySubscription, Schema};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::{
     response::{self, IntoResponse},
@@ -62,11 +68,31 @@ impl AppState {
 }
 
 pub struct Db {
+    person_loader: DataLoader<PersonLoader>,
+    product_loader: DataLoader<ProductLoader>,
+    store_loader: DataLoader<StoreLoader>,
+    receipt_loader: DataLoader<ReceiptLoader>,
+    receipt_line_loader: DataLoader<ReceiptLineLoader>,
+    receipt_line_split_loader: DataLoader<ReceiptLineSplitLoader>,
     pool: Pool<Postgres>,
 }
 
 impl Db {
     pub fn new(pool: Pool<Postgres>) -> Self {
-        Self { pool }
+        Self {
+            person_loader: DataLoader::new(PersonLoader::new(pool.clone()), tokio::spawn),
+            product_loader: DataLoader::new(ProductLoader::new(pool.clone()), tokio::spawn),
+            store_loader: DataLoader::new(StoreLoader::new(pool.clone()), tokio::spawn),
+            receipt_loader: DataLoader::new(ReceiptLoader::new(pool.clone()), tokio::spawn),
+            receipt_line_loader: DataLoader::new(
+                ReceiptLineLoader::new(pool.clone()),
+                tokio::spawn,
+            ),
+            receipt_line_split_loader: DataLoader::new(
+                ReceiptLineSplitLoader::new(pool.clone()),
+                tokio::spawn,
+            ),
+            pool,
+        }
     }
 }

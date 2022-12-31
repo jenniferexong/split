@@ -7,10 +7,10 @@ use crate::{
 use async_graphql::{InputObject, SimpleObject};
 use validator::Validate;
 
-#[derive(SimpleObject, sqlx::FromRow)]
+#[derive(SimpleObject, sqlx::FromRow, Clone)]
 pub struct Product {
-    id: ProductId,
-    name: String,
+    pub id: ProductId,
+    pub name: String,
 }
 
 #[derive(Validate, InputObject)]
@@ -21,26 +21,29 @@ pub struct CreateProductInput {
 
 impl Db {
     pub async fn get_product_by_id(&self, product_id: ProductId) -> Result<Product> {
-        let mut products = sqlx::query_as!(
-            Product,
-            "SELECT id, name FROM product WHERE id = $1",
-            product_id
-        )
-        .fetch_all(&self.pool)
-        .await?;
+        let product = self.product_loader.load_one(product_id).await?;
 
-        match products.pop() {
+        match product {
             Some(product) => Ok(product),
             None => Err(Error::NotFound(ResourceIdentifier::ProductId(product_id))),
         }
     }
 
     pub async fn get_all_products(&self) -> Result<Vec<Product>> {
-        let products = sqlx::query_as!(Product, "SELECT id, name FROM product")
+        struct ProductKey {
+            id: ProductId,
+        }
+
+        let keys = sqlx::query_as!(ProductKey, "SELECT id FROM product")
             .fetch_all(&self.pool)
             .await?;
 
-        Ok(products)
+        let products = self
+            .product_loader
+            .load_many(keys.iter().map(|key| key.id))
+            .await?;
+
+        Ok(products.values().cloned().collect())
     }
 
     pub async fn create_product(&self, req: CreateProductInput) -> Result<Product> {
@@ -72,7 +75,7 @@ impl Db {
                 }
 
                 tracing::error!("Create product with name `{name}` failed: {err}");
-                Err(Error::Database(err))
+                Err(err.into())
             }
         }
     }

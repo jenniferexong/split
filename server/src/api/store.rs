@@ -7,10 +7,10 @@ use crate::{
 use async_graphql::{InputObject, SimpleObject};
 use validator::Validate;
 
-#[derive(SimpleObject, sqlx::FromRow)]
+#[derive(SimpleObject, sqlx::FromRow, Clone)]
 pub struct Store {
-    id: StoreId,
-    name: String,
+    pub id: StoreId,
+    pub name: String,
 }
 
 #[derive(Validate, InputObject)]
@@ -67,7 +67,7 @@ impl Db {
                 }
 
                 tracing::error!("Create store with name `{name}` failed: {err}");
-                Err(Error::Database(err))
+                Err(err.into())
             }
         }
     }

@@ -7,12 +7,12 @@ use crate::{
 use async_graphql::{InputObject, SimpleObject};
 use validator::Validate;
 
-#[derive(SimpleObject, sqlx::FromRow)]
+#[derive(SimpleObject, sqlx::FromRow, Clone)]
 pub struct Person {
-    id: PersonId,
-    first_name: String,
-    last_name: String,
-    email: String,
+    pub id: PersonId,
+    pub first_name: String,
+    pub last_name: String,
+    pub email: String,
 }
 
 #[derive(Validate, InputObject)]
@@ -27,29 +27,29 @@ pub struct CreatePersonInput {
 
 impl Db {
     pub async fn get_person_by_id(&self, person_id: PersonId) -> Result<Person> {
-        let mut people = sqlx::query_as!(
-            Person,
-            "SELECT id, first_name, last_name, email FROM person WHERE id = $1",
-            person_id
-        )
-        .fetch_all(&self.pool)
-        .await?;
+        let person = self.person_loader.load_one(person_id).await?;
 
-        match people.pop() {
+        match person {
             Some(person) => Ok(person),
             None => Err(Error::NotFound(ResourceIdentifier::PersonId(person_id))),
         }
     }
 
     pub async fn get_all_people(&self) -> Result<Vec<Person>> {
-        let people = sqlx::query_as!(
-            Person,
-            "SELECT id, first_name, last_name, email FROM person"
-        )
-        .fetch_all(&self.pool)
-        .await?;
+        struct PersonKey {
+            id: PersonId,
+        }
 
-        Ok(people)
+        let keys = sqlx::query_as!(PersonKey, "SELECT id FROM person")
+            .fetch_all(&self.pool)
+            .await?;
+
+        let people = self
+            .person_loader
+            .load_many(keys.iter().map(|key| key.id))
+            .await?;
+
+        Ok(people.values().cloned().collect())
     }
 
     pub async fn create_person(&self, req: CreatePersonInput) -> Result<Person> {
@@ -89,7 +89,7 @@ impl Db {
                 }
 
                 tracing::error!("Create person with email `{email}` failed: {err}");
-                Err(Error::Database(err))
+                Err(err.into())
             }
         }
     }

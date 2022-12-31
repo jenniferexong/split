@@ -1,12 +1,13 @@
 use crate::api::{PersonId, ProductId, ReceiptId, ReceiptLineId, ReceiptLineSplitId, StoreId};
 use std::fmt;
+use std::sync::Arc;
 use validator::ValidationErrors;
 
 #[derive(Debug)]
 pub enum Error {
     AlreadyExists(ResourceIdentifier),
     Invalid(ValidationErrors),
-    Database(sqlx::Error),
+    Database(Arc<sqlx::Error>),
     NotFound(ResourceIdentifier),
 }
 
@@ -33,6 +34,12 @@ impl From<ValidationErrors> for Error {
 
 impl From<sqlx::Error> for Error {
     fn from(err: sqlx::Error) -> Self {
+        Self::Database(Arc::new(err))
+    }
+}
+
+impl From<Arc<sqlx::Error>> for Error {
+    fn from(err: Arc<sqlx::Error>) -> Self {
         Self::Database(err)
     }
 }
