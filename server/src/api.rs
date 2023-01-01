@@ -1,4 +1,3 @@
-pub mod loader;
 pub mod person;
 pub mod product;
 pub mod receipt;
@@ -6,15 +5,15 @@ pub mod receipt_line;
 pub mod receipt_line_split;
 pub mod store;
 
-use self::{
-    person::{CreatePersonInput, Person},
-    product::{CreateProductInput, Product},
-    receipt::Receipt,
-    store::{CreateStoreInput, Store},
+use crate::{
+    db::{
+        person::CreatePersonInput, product::CreateProductInput, receipt::CreateReceiptInput,
+        receipt_line::GetReceiptLinesInput, store::CreateStoreInput,
+    },
+    error::Error,
+    AppState,
 };
-use crate::{error::Error, AppState};
 use async_graphql::{Context, EmptySubscription, Object, Schema};
-use loader::*;
 use person::*;
 use product::*;
 use receipt::*;
@@ -44,49 +43,49 @@ pub struct Query;
 #[Object]
 impl Query {
     /// Get all products
-    async fn products(&self, ctx: &Context<'_>) -> Result<Vec<Product>> {
+    async fn products(&self, ctx: &Context<'_>) -> Result<Vec<ApiProduct>> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_all_products().await
     }
 
     /// Get product by id
-    async fn product(&self, ctx: &Context<'_>, id: ProductId) -> Result<Product> {
+    async fn product(&self, ctx: &Context<'_>, id: ProductId) -> Result<ApiProduct> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_product_by_id(id).await
     }
 
     /// Get all stores
-    async fn stores(&self, ctx: &Context<'_>) -> Result<Vec<Store>> {
+    async fn stores(&self, ctx: &Context<'_>) -> Result<Vec<ApiStore>> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_all_stores().await
     }
 
     /// Get store by id
-    async fn store(&self, ctx: &Context<'_>, id: StoreId) -> Result<Store> {
+    async fn store(&self, ctx: &Context<'_>, id: StoreId) -> Result<ApiStore> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_store_by_id(id).await
     }
 
     /// Get all people
-    async fn people(&self, ctx: &Context<'_>) -> Result<Vec<Person>> {
+    async fn people(&self, ctx: &Context<'_>) -> Result<Vec<ApiPerson>> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_all_people().await
     }
 
     /// Get person by id
-    async fn person(&self, ctx: &Context<'_>, id: PersonId) -> Result<Person> {
+    async fn person(&self, ctx: &Context<'_>, id: PersonId) -> Result<ApiPerson> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_person_by_id(id).await
     }
 
     /// Get all receipts
-    async fn receipts(&self, ctx: &Context<'_>) -> Result<Vec<Receipt>> {
+    async fn receipts(&self, ctx: &Context<'_>) -> Result<Vec<ApiReceipt>> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_all_receipts().await
     }
 
     /// Get receipt by id
-    async fn receipt(&self, ctx: &Context<'_>, id: ReceiptId) -> Result<Receipt> {
+    async fn receipt(&self, ctx: &Context<'_>, id: ReceiptId) -> Result<ApiReceipt> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_receipt_by_id(id).await
     }
@@ -125,25 +124,25 @@ pub struct Mutation;
 #[Object]
 impl Mutation {
     /// Create product
-    async fn product(&self, ctx: &Context<'_>, input: CreateProductInput) -> Result<Product> {
+    async fn product(&self, ctx: &Context<'_>, input: CreateProductInput) -> Result<ApiProduct> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.create_product(input).await
     }
 
     /// Create store
-    async fn store(&self, ctx: &Context<'_>, input: CreateStoreInput) -> Result<Store> {
+    async fn store(&self, ctx: &Context<'_>, input: CreateStoreInput) -> Result<ApiStore> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.create_store(input).await
     }
 
     /// Create person
-    async fn person(&self, ctx: &Context<'_>, input: CreatePersonInput) -> Result<Person> {
+    async fn person(&self, ctx: &Context<'_>, input: CreatePersonInput) -> Result<ApiPerson> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.create_person(input).await
     }
 
     /// Create receipt
-    async fn receipt(&self, ctx: &Context<'_>, input: CreateReceiptInput) -> Result<Receipt> {
+    async fn receipt(&self, ctx: &Context<'_>, input: CreateReceiptInput) -> Result<ApiReceipt> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.create_receipt(input).await
     }

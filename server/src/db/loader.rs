@@ -1,9 +1,10 @@
-use super::{
-    product::Product, receipt::Receipt, receipt_line::DbReceiptLine,
-    receipt_line_split::DbReceiptLineSplit, store::Store, PersonId, ProductId, ReceiptId,
-    ReceiptLineId, ReceiptLineSplitId, StoreId,
+use crate::{
+    api::{PersonId, ProductId, ReceiptId, ReceiptLineId, ReceiptLineSplitId, StoreId},
+    db::{
+        person::DbPerson, product::DbProduct, receipt::DbReceipt, receipt_line::DbReceiptLine,
+        receipt_line_split::DbReceiptLineSplit, store::DbStore,
+    },
 };
-use crate::api::person::Person;
 use async_graphql::dataloader::Loader;
 use axum::async_trait;
 use sqlx::{Pool, Postgres};
@@ -21,13 +22,13 @@ impl PersonLoader {
 
 #[async_trait]
 impl Loader<PersonId> for PersonLoader {
-    type Value = Person;
+    type Value = DbPerson;
 
     type Error = Arc<sqlx::Error>;
 
     async fn load(&self, keys: &[PersonId]) -> Result<HashMap<PersonId, Self::Value>, Self::Error> {
         let people = sqlx::query_as!(
-            Person,
+            DbPerson,
             "SELECT id, first_name, last_name, email FROM person WHERE id = ANY($1)",
             keys
         )
@@ -53,7 +54,7 @@ impl ProductLoader {
 
 #[async_trait]
 impl Loader<ProductId> for ProductLoader {
-    type Value = Product;
+    type Value = DbProduct;
 
     type Error = Arc<sqlx::Error>;
 
@@ -62,7 +63,7 @@ impl Loader<ProductId> for ProductLoader {
         keys: &[ProductId],
     ) -> Result<HashMap<ProductId, Self::Value>, Self::Error> {
         let products = sqlx::query_as!(
-            Product,
+            DbProduct,
             "SELECT id, name FROM product WHERE id = ANY($1)",
             keys
         )
@@ -88,14 +89,18 @@ impl StoreLoader {
 
 #[async_trait]
 impl Loader<StoreId> for StoreLoader {
-    type Value = Store;
+    type Value = DbStore;
 
     type Error = Arc<sqlx::Error>;
 
     async fn load(&self, keys: &[StoreId]) -> Result<HashMap<StoreId, Self::Value>, Self::Error> {
-        let stores = sqlx::query_as!(Store, "SELECT id, name FROM store WHERE id = ANY($1)", keys)
-            .fetch_all(&self.pool)
-            .await?;
+        let stores = sqlx::query_as!(
+            DbStore,
+            "SELECT id, name FROM store WHERE id = ANY($1)",
+            keys
+        )
+        .fetch_all(&self.pool)
+        .await?;
 
         Ok(stores.into_iter().map(|store| (store.id, store)).collect())
     }
@@ -113,7 +118,7 @@ impl ReceiptLoader {
 
 #[async_trait]
 impl Loader<ReceiptId> for ReceiptLoader {
-    type Value = Receipt;
+    type Value = DbReceipt;
 
     type Error = Arc<sqlx::Error>;
 
@@ -122,7 +127,7 @@ impl Loader<ReceiptId> for ReceiptLoader {
         keys: &[ReceiptId],
     ) -> Result<HashMap<ReceiptId, Self::Value>, Self::Error> {
         let receipts = sqlx::query_as!(
-            Receipt,
+            DbReceipt,
             "SELECT id, store_id, person_id, date FROM receipt WHERE id = ANY($1)",
             keys
         )
