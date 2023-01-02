@@ -57,18 +57,22 @@ impl Db {
         &self,
         input: GetReceiptLinesInput,
     ) -> Result<Vec<ApiReceiptLine>> {
-        let GetReceiptLinesInput {
-            receipt_id,
-            product_id,
-        } = input;
+        let receipt_id = input.receipt_id.map(|id| id.0);
+        let product_id = input.product_id.map(|id| id.0);
 
         let receipt_lines = sqlx::query_as!(
             DbReceiptLine,
-            "SELECT line.id, line.receipt_id, line.product_id, line.price
-            FROM receipt_line AS line
-            LEFT JOIN receipt ON line.receipt_id = receipt.id
-            WHERE ($1::int IS NULL OR receipt.id = $1)
-              AND ($2::int IS NULL OR line.product_id = $2)",
+            r#"
+                SELECT line.id AS "id: ReceiptLineId",
+                       line.receipt_id AS "receipt_id: ReceiptId",
+                       line.product_id AS "product_id: ProductId",
+                       line.price
+                FROM receipt_line AS line
+                LEFT JOIN receipt
+                ON line.receipt_id = receipt.id
+                WHERE ($1::int IS NULL OR receipt.id = $1)
+                AND ($2::int IS NULL OR line.product_id = $2)
+            "#,
             receipt_id,
             product_id
         )
@@ -90,10 +94,16 @@ impl Db {
 
         let created_receipt_line = sqlx::query_as!(
             DbReceiptLine,
-            "INSERT INTO receipt_line (receipt_id, product_id, price) VALUES ($1, $2, $3)
-            RETURNING id, receipt_id, product_id, price",
-            receipt_id,
-            product_id,
+            r#"
+                INSERT INTO receipt_line (receipt_id, product_id, price)
+                VALUES ($1, $2, $3)
+                RETURNING id AS "id: ReceiptLineId",
+                          receipt_id AS "receipt_id: ReceiptId",
+                          product_id AS "product_id: ProductId",
+                          price
+            "#,
+            receipt_id.0,
+            product_id.0,
             price
         )
         .fetch_one(&self.pool)

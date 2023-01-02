@@ -33,9 +33,15 @@ impl Db {
             id: ProductId,
         }
 
-        let keys = sqlx::query_as!(ProductKey, "SELECT id FROM product")
-            .fetch_all(&self.pool)
-            .await?;
+        let keys = sqlx::query_as!(
+            ProductKey,
+            r#"
+                SELECT id AS "id: ProductId"
+                FROM product
+            "#
+        )
+        .fetch_all(&self.pool)
+        .await?;
 
         let products = self
             .product_loader
@@ -57,7 +63,10 @@ impl Db {
 
         let created_product = sqlx::query_as!(
             DbProduct,
-            "INSERT INTO product (name) VALUES ($1) RETURNING id, name",
+            r#"
+                INSERT INTO product (name) VALUES ($1)
+                RETURNING id as "id: ProductId", name
+            "#,
             name
         )
         .fetch_one(&self.pool)

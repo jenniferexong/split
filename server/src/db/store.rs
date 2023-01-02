@@ -33,9 +33,15 @@ impl Db {
             id: StoreId,
         }
 
-        let keys = sqlx::query_as!(StoreKey, "SELECT id FROM store")
-            .fetch_all(&self.pool)
-            .await?;
+        let keys = sqlx::query_as!(
+            StoreKey,
+            r#"
+                SELECT id AS "id: StoreId"
+                FROM store
+            "#
+        )
+        .fetch_all(&self.pool)
+        .await?;
 
         let stores = self
             .store_loader
@@ -57,7 +63,11 @@ impl Db {
 
         let created_store = sqlx::query_as!(
             ApiStore,
-            "INSERT INTO store (name) VALUES ($1) RETURNING id, name",
+            r#"
+                INSERT INTO store (name)
+                VALUES ($1)
+                RETURNING id AS "id: StoreId", name
+            "#,
             name
         )
         .fetch_one(&self.pool)

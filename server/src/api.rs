@@ -13,7 +13,9 @@ use crate::{
     error::Error,
     AppState,
 };
-use async_graphql::{Context, EmptySubscription, Object, Schema};
+use async_graphql::Context;
+use async_graphql::{EmptySubscription, InputType, Object, Schema};
+use axum::async_trait;
 use person::*;
 use product::*;
 use receipt::*;
@@ -25,12 +27,74 @@ pub(crate) type SplitSchema = Schema<Query, Mutation, EmptySubscription>;
 
 pub type Result<T, E = Error> = ::std::result::Result<T, E>;
 
-pub type ProductId = i32;
-pub type StoreId = i32;
-pub type PersonId = i32;
-pub type ReceiptId = i32;
-pub type ReceiptLineId = i32;
-pub type ReceiptLineSplitId = i32;
+macro_rules! newtype_id {
+    ($name:ident) => {
+        #[derive(PartialEq, Eq, Hash, Debug, Clone, Copy, sqlx::Type, serde::Serialize)]
+        #[sqlx(transparent)]
+        #[serde(transparent)]
+        pub struct $name(pub i32);
+
+        #[async_trait]
+        impl async_graphql::OutputType for $name {
+            fn type_name() -> std::borrow::Cow<'static, str> {
+                <i32 as async_graphql::OutputType>::type_name()
+            }
+
+            fn create_type_info(
+                registry: &mut async_graphql::registry::Registry,
+            ) -> ::std::string::String {
+                <i32 as async_graphql::OutputType>::create_type_info(registry)
+            }
+
+            async fn resolve(
+                &self,
+                ctx: &async_graphql::ContextSelectionSet<'_>,
+                field: &async_graphql::Positioned<async_graphql::parser::types::Field>,
+            ) -> async_graphql::ServerResult<async_graphql::Value> {
+                <i32 as async_graphql::OutputType>::resolve(&self.0, ctx, field).await
+            }
+        }
+
+        impl async_graphql::InputType for $name {
+            type RawValueType = i32;
+
+            fn type_name() -> std::borrow::Cow<'static, str> {
+                <Self::RawValueType as InputType>::type_name()
+            }
+
+            fn create_type_info(registry: &mut async_graphql::registry::Registry) -> String {
+                <Self::RawValueType as InputType>::create_type_info(registry)
+            }
+
+            fn parse(value: Option<async_graphql::Value>) -> async_graphql::InputValueResult<Self> {
+                <Self::RawValueType as InputType>::parse(value)
+                    .map(Self)
+                    .map_err(|err| err.propagate())
+            }
+
+            fn to_value(&self) -> async_graphql::Value {
+                <Self::RawValueType as InputType>::to_value(&self.0)
+            }
+
+            fn as_raw_value(&self) -> Option<&Self::RawValueType> {
+                <Self::RawValueType as InputType>::as_raw_value(&self.0)
+            }
+        }
+
+        impl std::fmt::Display for $name {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                <i32 as std::fmt::Display>::fmt(&self.0, f)
+            }
+        }
+    };
+}
+
+newtype_id!(ProductId);
+newtype_id!(StoreId);
+newtype_id!(PersonId);
+newtype_id!(ReceiptId);
+newtype_id!(ReceiptLineId);
+newtype_id!(ReceiptLineSplitId);
 
 pub enum PgCodes {}
 

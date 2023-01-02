@@ -47,11 +47,17 @@ impl Db {
     ) -> Result<Vec<ApiReceiptLineSplit>> {
         let receipt_line_splits = sqlx::query_as!(
             DbReceiptLineSplit,
-            "SELECT split.id, split.receipt_line_id, split.person_id, split.antecedent
-            FROM receipt_line_split AS split
-            LEFT JOIN receipt_line AS line ON split.receipt_line_id = line.id
-            WHERE line.id = $1",
-            receipt_line_id
+            r#"
+                SELECT split.id AS "id: ReceiptLineSplitId",
+                       split.receipt_line_id AS "receipt_line_id: ReceiptLineId",
+                       split.person_id as "person_id: PersonId",
+                       split.antecedent
+                FROM receipt_line_split AS split
+                LEFT JOIN receipt_line AS line
+                ON split.receipt_line_id = line.id
+                WHERE line.id = $1
+            "#,
+            receipt_line_id.0
         )
         .fetch_all(&self.pool)
         .await?;
@@ -73,9 +79,16 @@ impl Db {
 
         let created_split = sqlx::query_as!(
             DbReceiptLineSplit,
-            "INSERT INTO receipt_line_split (receipt_line_id, person_id, antecedent) VALUES ($1, $2, $3)
-            RETURNING id, receipt_line_id, person_id, antecedent",
-            receipt_line_id, person_id, antecedent
+            r#"
+                INSERT INTO receipt_line_split (receipt_line_id, person_id, antecedent)
+                VALUES ($1, $2, $3)
+                RETURNING id AS "id: ReceiptLineSplitId",
+                          receipt_line_id AS "receipt_line_id: ReceiptLineId",
+                          person_id AS "person_id: PersonId", antecedent
+            "#,
+            receipt_line_id.0,
+            person_id.0,
+            antecedent
         )
         .fetch_one(&self.pool)
         .await;

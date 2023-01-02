@@ -39,9 +39,15 @@ impl Db {
             id: PersonId,
         }
 
-        let keys = sqlx::query_as!(PersonKey, "SELECT id FROM person")
-            .fetch_all(&self.pool)
-            .await?;
+        let keys = sqlx::query_as!(
+            PersonKey,
+            r#"
+                SELECT id as "id: PersonId"
+                FROM person
+            "#
+        )
+        .fetch_all(&self.pool)
+        .await?;
 
         let people = self
             .person_loader
@@ -67,9 +73,11 @@ impl Db {
 
         let created_person = sqlx::query_as!(
             DbPerson,
-            "INSERT INTO person (first_name, last_name, email)
-            VALUES ($1, $2, $3)
-            RETURNING id, first_name, last_name, email",
+            r#"
+                INSERT INTO person (first_name, last_name, email)
+                VALUES ($1, $2, $3)
+                RETURNING id AS "id: PersonId", first_name, last_name, email
+            "#,
             first_name,
             last_name,
             email

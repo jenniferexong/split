@@ -27,10 +27,16 @@ impl Loader<PersonId> for PersonLoader {
     type Error = Arc<sqlx::Error>;
 
     async fn load(&self, keys: &[PersonId]) -> Result<HashMap<PersonId, Self::Value>, Self::Error> {
+        let keys = keys.iter().map(|key| key.0).collect::<Vec<i32>>();
+
         let people = sqlx::query_as!(
             DbPerson,
-            "SELECT id, first_name, last_name, email FROM person WHERE id = ANY($1)",
-            keys
+            r#"
+                SELECT id AS "id: PersonId", first_name, last_name, email
+                FROM person
+                WHERE id = ANY($1)
+            "#,
+            &keys
         )
         .fetch_all(&self.pool)
         .await?;
@@ -62,10 +68,16 @@ impl Loader<ProductId> for ProductLoader {
         &self,
         keys: &[ProductId],
     ) -> Result<HashMap<ProductId, Self::Value>, Self::Error> {
+        let keys = keys.iter().map(|key| key.0).collect::<Vec<i32>>();
+
         let products = sqlx::query_as!(
             DbProduct,
-            "SELECT id, name FROM product WHERE id = ANY($1)",
-            keys
+            r#"
+                SELECT id AS "id: ProductId", name
+                FROM product
+                WHERE id = ANY($1)
+            "#,
+            &keys
         )
         .fetch_all(&self.pool)
         .await?;
@@ -94,10 +106,16 @@ impl Loader<StoreId> for StoreLoader {
     type Error = Arc<sqlx::Error>;
 
     async fn load(&self, keys: &[StoreId]) -> Result<HashMap<StoreId, Self::Value>, Self::Error> {
+        let keys = keys.iter().map(|key| key.0).collect::<Vec<i32>>();
+
         let stores = sqlx::query_as!(
             DbStore,
-            "SELECT id, name FROM store WHERE id = ANY($1)",
-            keys
+            r#"
+                SELECT id AS "id: StoreId", name
+                FROM store
+                WHERE id = ANY($1)
+            "#,
+            &keys
         )
         .fetch_all(&self.pool)
         .await?;
@@ -126,10 +144,19 @@ impl Loader<ReceiptId> for ReceiptLoader {
         &self,
         keys: &[ReceiptId],
     ) -> Result<HashMap<ReceiptId, Self::Value>, Self::Error> {
+        let keys = keys.iter().map(|key| key.0).collect::<Vec<i32>>();
+
         let receipts = sqlx::query_as!(
             DbReceipt,
-            "SELECT id, store_id, person_id, date FROM receipt WHERE id = ANY($1)",
-            keys
+            r#"
+                SELECT id AS "id: ReceiptId",
+                       store_id AS "store_id: StoreId",
+                       person_id AS "person_id: PersonId",
+                       date
+                FROM receipt
+                WHERE id = ANY($1)
+            "#,
+            &keys
         )
         .fetch_all(&self.pool)
         .await?;
@@ -161,10 +188,19 @@ impl Loader<ReceiptLineId> for ReceiptLineLoader {
         &self,
         keys: &[ReceiptLineId],
     ) -> Result<HashMap<ReceiptLineId, Self::Value>, Self::Error> {
+        let keys = keys.iter().map(|key| key.0).collect::<Vec<i32>>();
+
         let receipt_lines = sqlx::query_as!(
             DbReceiptLine,
-            "SELECT id, receipt_id, product_id, price FROM receipt_line WHERE id = ANY($1)",
-            keys
+            r#"
+                SELECT id AS "id: ReceiptLineId",
+                       receipt_id AS "receipt_id: ReceiptId",
+                       product_id AS "product_id: ProductId",
+                       price
+                FROM receipt_line
+                WHERE id = ANY($1)
+            "#,
+            &keys
         )
         .fetch_all(&self.pool)
         .await?;
@@ -196,10 +232,19 @@ impl Loader<ReceiptLineSplitId> for ReceiptLineSplitLoader {
         &self,
         keys: &[ReceiptLineSplitId],
     ) -> Result<HashMap<ReceiptLineSplitId, Self::Value>, Self::Error> {
+        let keys = keys.iter().map(|key| key.0).collect::<Vec<i32>>();
+
         let receipt_line_splits = sqlx::query_as!(
             DbReceiptLineSplit,
-            "SELECT id, receipt_line_id, person_id, antecedent FROM receipt_line_split WHERE id = ANY($1)",
-            keys
+            r#"
+                SELECT id AS "id: ReceiptLineSplitId",
+                              receipt_line_id AS "receipt_line_id: ReceiptLineId",
+                              person_id AS "person_id: PersonId",
+                              antecedent
+                FROM receipt_line_split
+                WHERE id = ANY($1)
+            "#,
+            &keys
         )
         .fetch_all(&self.pool)
         .await?;
@@ -208,5 +253,42 @@ impl Loader<ReceiptLineSplitId> for ReceiptLineSplitLoader {
             .into_iter()
             .map(|split| (split.id, split))
             .collect())
+    }
+}
+
+#[async_trait]
+impl Loader<ReceiptLineId> for ReceiptLineSplitLoader {
+    type Value = Vec<DbReceiptLineSplit>;
+
+    type Error = Arc<sqlx::Error>;
+
+    async fn load(
+        &self,
+        keys: &[ReceiptLineId],
+    ) -> Result<HashMap<ReceiptLineId, Self::Value>, Self::Error> {
+        let mut map = HashMap::new();
+
+        for line_id in keys {
+            let receipt_line_splits = sqlx::query_as!(
+                DbReceiptLineSplit,
+                r#"
+                    SELECT split.id AS "id: ReceiptLineSplitId",
+                           split.receipt_line_id AS "receipt_line_id: ReceiptLineId",
+                           split.person_id AS "person_id: PersonId",
+                           split.antecedent
+                    FROM receipt_line_split AS split
+                    LEFT JOIN receipt_line AS line
+                    ON split.receipt_line_id = line.id
+                    WHERE line.id = $1
+                "#,
+                line_id.0
+            )
+            .fetch_all(&self.pool)
+            .await?;
+
+            map.insert(*line_id, receipt_line_splits);
+        }
+
+        Ok(map)
     }
 }
