@@ -38,6 +38,7 @@ impl Db {
             r#"
                 SELECT id AS "id: ProductId"
                 FROM product
+                ORDER BY name
             "#
         )
         .fetch_all(&self.pool)
@@ -48,11 +49,9 @@ impl Db {
             .load_many(keys.iter().map(|key| key.id))
             .await?;
 
-        Ok(products
-            .values()
-            .cloned()
-            .into_iter()
-            .map(Into::into)
+        Ok(keys
+            .iter()
+            .map(|key| products[&key.id].clone().into())
             .collect())
     }
 

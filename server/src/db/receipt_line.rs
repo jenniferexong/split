@@ -7,7 +7,7 @@ use async_graphql::InputObject;
 use serde::Serialize;
 use validator::Validate;
 
-#[derive(sqlx::FromRow, Clone)]
+#[derive(sqlx::FromRow, Clone, Copy)]
 pub struct DbReceiptLine {
     pub(crate) id: ReceiptLineId,
     pub(crate) receipt_id: ReceiptId,
@@ -52,7 +52,6 @@ impl Db {
         }
     }
 
-    // TODO
     pub async fn get_receipt_lines(
         &self,
         input: GetReceiptLinesInput,
@@ -121,9 +120,4 @@ impl Db {
 
         Ok(created_receipt_line.into())
     }
-
-    // TODO
-    // get by person
-    // get by product
-    // get by month?
 }

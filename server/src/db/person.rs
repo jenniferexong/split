@@ -44,6 +44,7 @@ impl Db {
             r#"
                 SELECT id as "id: PersonId"
                 FROM person
+                ORDER BY first_name
             "#
         )
         .fetch_all(&self.pool)
@@ -54,11 +55,9 @@ impl Db {
             .load_many(keys.iter().map(|key| key.id))
             .await?;
 
-        Ok(people
-            .values()
-            .cloned()
-            .into_iter()
-            .map(Into::into)
+        Ok(keys
+            .iter()
+            .map(|key| people[&key.id].clone().into())
             .collect())
     }
 

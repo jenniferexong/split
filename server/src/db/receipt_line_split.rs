@@ -6,7 +6,7 @@ use async_graphql::InputObject;
 use serde::Serialize;
 use validator::Validate;
 
-#[derive(sqlx::FromRow, Clone)]
+#[derive(sqlx::FromRow, Clone, Copy)]
 pub struct DbReceiptLineSplit {
     pub id: ReceiptLineSplitId,
     pub receipt_line_id: ReceiptLineId,
@@ -40,29 +40,31 @@ impl Db {
         }
     }
 
-    // TODO
     pub async fn get_receipt_line_splits_by_receipt_line_id(
         &self,
         receipt_line_id: ReceiptLineId,
     ) -> Result<Vec<ApiReceiptLineSplit>> {
-        let receipt_line_splits = sqlx::query_as!(
-            DbReceiptLineSplit,
-            r#"
-                SELECT split.id AS "id: ReceiptLineSplitId",
-                       split.receipt_line_id AS "receipt_line_id: ReceiptLineId",
-                       split.person_id as "person_id: PersonId",
-                       split.antecedent
-                FROM receipt_line_split AS split
-                LEFT JOIN receipt_line AS line
-                ON split.receipt_line_id = line.id
-                WHERE line.id = $1
-            "#,
-            receipt_line_id.0
-        )
-        .fetch_all(&self.pool)
-        .await?;
+        let receipt_line_splits = self
+            .receipt_line_split_loader
+            .load_one(receipt_line_id)
+            .await?;
 
-        Ok(receipt_line_splits.into_iter().map(Into::into).collect())
+        match receipt_line_splits {
+            Some(splits) => Ok(splits.into_iter().map(Into::into).collect()),
+            None => Ok(vec![]),
+        }
+    }
+
+    pub async fn get_receipt_line_splits_by_person_id(
+        &self,
+        person_id: PersonId,
+    ) -> Result<Vec<ApiReceiptLineSplit>> {
+        let receipt_line_splits = self.receipt_line_split_loader.load_one(person_id).await?;
+
+        match receipt_line_splits {
+            Some(splits) => Ok(splits.into_iter().map(Into::into).collect()),
+            None => Ok(vec![]),
+        }
     }
 
     pub async fn create_receipt_line_split(
@@ -84,7 +86,8 @@ impl Db {
                 VALUES ($1, $2, $3)
                 RETURNING id AS "id: ReceiptLineSplitId",
                           receipt_line_id AS "receipt_line_id: ReceiptLineId",
-                          person_id AS "person_id: PersonId", antecedent
+                          person_id AS "person_id: PersonId",
+                          antecedent
             "#,
             receipt_line_id.0,
             person_id.0,
@@ -114,9 +117,4 @@ impl Db {
             }
         }
     }
-
-    // TODO
-    // get by person
-    // get by product
-    // get by month?
 }

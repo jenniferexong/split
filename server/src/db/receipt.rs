@@ -11,7 +11,7 @@ use chrono::{DateTime, Utc};
 use serde::Serialize;
 use validator::Validate;
 
-#[derive(sqlx::FromRow, Clone)]
+#[derive(sqlx::FromRow, Clone, Copy)]
 pub struct DbReceipt {
     pub(crate) id: ReceiptId,
     pub(crate) store_id: StoreId,
@@ -58,7 +58,15 @@ impl Db {
         }
     }
 
-    // TODO sort by date
+    pub async fn get_receipts_by_person_id(&self, person_id: PersonId) -> Result<Vec<ApiReceipt>> {
+        let receipts = self.receipt_loader.load_one(person_id).await?;
+
+        match receipts {
+            Some(receipts) => Ok(receipts.into_iter().map(Into::into).collect()),
+            None => Ok(vec![]),
+        }
+    }
+
     pub async fn get_all_receipts(&self) -> Result<Vec<ApiReceipt>> {
         struct ReceiptKey {
             id: ReceiptId,
@@ -69,6 +77,7 @@ impl Db {
             r#"
                 SELECT id AS "id: ReceiptId"
                 FROM receipt
+                ORDER BY date
             "#
         )
         .fetch_all(&self.pool)
@@ -79,12 +88,7 @@ impl Db {
             .load_many(keys.iter().map(|key| key.id))
             .await?;
 
-        Ok(receipts
-            .values()
-            .cloned()
-            .into_iter()
-            .map(Into::into)
-            .collect())
+        Ok(keys.iter().map(|k| receipts[&k.id].into()).collect())
     }
 
     pub async fn create_receipt(&self, req: CreateReceiptInput) -> Result<ApiReceipt> {

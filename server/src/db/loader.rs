@@ -168,6 +168,40 @@ impl Loader<ReceiptId> for ReceiptLoader {
     }
 }
 
+#[async_trait]
+impl Loader<PersonId> for ReceiptLoader {
+    type Value = Vec<DbReceipt>;
+
+    type Error = Arc<sqlx::Error>;
+
+    async fn load(&self, keys: &[PersonId]) -> Result<HashMap<PersonId, Self::Value>, Self::Error> {
+        let keys = keys.iter().map(|key| key.0).collect::<Vec<i32>>();
+
+        let mut map = HashMap::<PersonId, Self::Value>::new();
+
+        let receipts = sqlx::query_as!(
+            DbReceipt,
+            r#"
+                SELECT id AS "id: ReceiptId",
+                       store_id AS "store_id: StoreId",
+                       person_id AS "person_id: PersonId",
+                       date
+                FROM receipt
+                WHERE person_id = ANY($1)
+            "#,
+            &keys
+        )
+        .fetch_all(&self.pool)
+        .await?;
+
+        for receipt in receipts {
+            map.entry(receipt.person_id).or_default().push(receipt);
+        }
+
+        Ok(map)
+    }
+}
+
 pub struct ReceiptLineLoader {
     pool: Pool<Postgres>,
 }
@@ -238,9 +272,9 @@ impl Loader<ReceiptLineSplitId> for ReceiptLineSplitLoader {
             DbReceiptLineSplit,
             r#"
                 SELECT id AS "id: ReceiptLineSplitId",
-                              receipt_line_id AS "receipt_line_id: ReceiptLineId",
-                              person_id AS "person_id: PersonId",
-                              antecedent
+                       receipt_line_id AS "receipt_line_id: ReceiptLineId",
+                       person_id AS "person_id: PersonId",
+                       antecedent
                 FROM receipt_line_split
                 WHERE id = ANY($1)
             "#,
@@ -266,27 +300,61 @@ impl Loader<ReceiptLineId> for ReceiptLineSplitLoader {
         &self,
         keys: &[ReceiptLineId],
     ) -> Result<HashMap<ReceiptLineId, Self::Value>, Self::Error> {
-        let mut map = HashMap::new();
+        let keys = keys.iter().map(|key| key.0).collect::<Vec<i32>>();
 
-        for line_id in keys {
-            let receipt_line_splits = sqlx::query_as!(
-                DbReceiptLineSplit,
-                r#"
-                    SELECT split.id AS "id: ReceiptLineSplitId",
-                           split.receipt_line_id AS "receipt_line_id: ReceiptLineId",
-                           split.person_id AS "person_id: PersonId",
-                           split.antecedent
-                    FROM receipt_line_split AS split
-                    LEFT JOIN receipt_line AS line
-                    ON split.receipt_line_id = line.id
-                    WHERE line.id = $1
-                "#,
-                line_id.0
-            )
-            .fetch_all(&self.pool)
-            .await?;
+        let mut map = HashMap::<ReceiptLineId, Self::Value>::new();
 
-            map.insert(*line_id, receipt_line_splits);
+        let receipt_line_splits = sqlx::query_as!(
+            DbReceiptLineSplit,
+            r#"
+                SELECT id AS "id: ReceiptLineSplitId",
+                       receipt_line_id AS "receipt_line_id: ReceiptLineId",
+                       person_id AS "person_id: PersonId",
+                       antecedent
+                FROM receipt_line_split
+                WHERE receipt_line_id = ANY($1)
+            "#,
+            &keys
+        )
+        .fetch_all(&self.pool)
+        .await?;
+
+        for split in receipt_line_splits {
+            map.entry(split.receipt_line_id).or_default().push(split);
+        }
+
+        Ok(map)
+    }
+}
+
+#[async_trait]
+impl Loader<PersonId> for ReceiptLineSplitLoader {
+    type Value = Vec<DbReceiptLineSplit>;
+
+    type Error = Arc<sqlx::Error>;
+
+    async fn load(&self, keys: &[PersonId]) -> Result<HashMap<PersonId, Self::Value>, Self::Error> {
+        let keys = keys.iter().map(|key| key.0).collect::<Vec<i32>>();
+
+        let mut map = HashMap::<PersonId, Self::Value>::new();
+
+        let receipt_line_splits = sqlx::query_as!(
+            DbReceiptLineSplit,
+            r#"
+                SELECT id AS "id: ReceiptLineSplitId",
+                       receipt_line_id AS "receipt_line_id: ReceiptLineId",
+                       person_id AS "person_id: PersonId",
+                       antecedent
+                FROM receipt_line_split
+                WHERE person_id = ANY($1)
+            "#,
+            &keys
+        )
+        .fetch_all(&self.pool)
+        .await?;
+
+        for split in receipt_line_splits {
+            map.entry(split.person_id).or_default().push(split);
         }
 
         Ok(map)
