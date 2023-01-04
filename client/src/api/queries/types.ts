@@ -1,9 +1,6 @@
 import { ApiProduct, ApiReceipt, ApiPerson, ApiStore } from 'api';
 
-export interface QueryResult<T> {
-  data?: T;
-  fetching: boolean;
-}
+export type QueryResult<T> = () => Promise<T>;
 
 export interface ProductResult {
   product: ApiProduct;

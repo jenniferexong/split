@@ -1,6 +1,5 @@
 import { ApiPerson } from 'api/types';
-import { gql, useQuery } from 'urql';
-import { showError } from 'utils/showError';
+import { gql, useClient } from 'urql';
 import { PeopleResult, QueryResult } from './types';
 
 const query = gql`
@@ -15,11 +14,18 @@ const query = gql`
 `;
 
 export const useGetPeople = (): QueryResult<ApiPerson[]> => {
-  const [result] = useQuery<PeopleResult, {}>({ query });
-  const { data, fetching, error } = result;
+  const client = useClient();
+  const loadData = client.query<PeopleResult>(query, {}).toPromise;
 
-  if (fetching) return { fetching };
-  if (error) showError('Could not get people', error);
+  return async () => {
+    const result = await loadData();
 
-  return { data: data?.people, fetching };
+    const { data, error } = result;
+
+    if (error || !data) {
+      throw new Error(JSON.stringify(error));
+    }
+
+    return data.people;
+  };
 };

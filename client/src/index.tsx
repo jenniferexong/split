@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { App } from './App';
+import { Routes } from './Routes';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from 'styles/GlobalStyle';
 import { theme } from 'styles';
@@ -12,7 +12,7 @@ ReactDOM.render(
     <Provider value={splitClient}>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <App />
+        <Routes />
       </ThemeProvider>
     </Provider>
   </React.StrictMode>,

@@ -1,6 +1,5 @@
 import { ApiReceipt } from 'api';
-import { gql, useQuery } from 'urql';
-import { showError } from 'utils/showError';
+import { gql, useClient } from 'urql';
 import { QueryResult, ReceiptsResult } from './types';
 
 // TODO
@@ -13,11 +12,18 @@ const query = gql`
 `;
 
 export const useGetReceipts = (): QueryResult<ApiReceipt[]> => {
-  const [result] = useQuery<ReceiptsResult, {}>({ query });
-  const { data, fetching, error } = result;
+  const client = useClient();
+  const loadData = client.query<ReceiptsResult>(query, {}).toPromise;
 
-  if (fetching) return { fetching };
-  if (error) showError('Could not get receipts', error);
+  return async () => {
+    const result = await loadData();
 
-  return { data: data?.receipts, fetching };
+    const { data, error } = result;
+
+    if (error || !data) {
+      throw new Error(JSON.stringify(error));
+    }
+
+    return data.receipts;
+  };
 };

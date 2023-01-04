@@ -1,6 +1,5 @@
 import { ApiStore } from 'api';
-import { gql, useQuery } from 'urql';
-import { showError } from 'utils/showError';
+import { gql, useClient } from 'urql';
 import { QueryResult, StoresResult } from './types';
 
 const query = gql`
@@ -13,11 +12,18 @@ const query = gql`
 `;
 
 export const useGetStores = (): QueryResult<ApiStore[]> => {
-  const [result] = useQuery<StoresResult, {}>({ query });
-  const { data, fetching, error } = result;
+  const client = useClient();
+  const loadData = client.query<StoresResult>(query, {}).toPromise;
 
-  if (fetching) return { fetching };
-  if (error) showError('Could not get stores', error);
+  return async () => {
+    const result = await loadData();
 
-  return { data: data?.stores, fetching };
+    const { data, error } = result;
+
+    if (error || !data) {
+      throw new Error(JSON.stringify(error));
+    }
+
+    return data.stores;
+  };
 };
