@@ -1,6 +1,7 @@
 import { useGetPeople, useGetProducts, useGetStores } from 'api';
 import { Layout } from 'pages/Layout';
-import { UploadPage } from 'pages/boards';
+import { AnalyticsPage, EntryPage, HistoryPage } from 'pages/section';
+import { NotFoundPage } from 'pages/NotFoundPage';
 import {
   createBrowserRouter,
   redirect,
@@ -17,18 +18,19 @@ export const Routes = () => {
     {
       path: '/',
       element: <Layout />,
+      errorElement: <NotFoundPage />,
       children: [
         {
           index: true,
           loader: ({ request }) => {
             if (new URL(request.url).pathname === '/') {
-              return redirect('/upload');
+              return redirect('/entry');
             }
           },
         },
         {
-          path: 'upload',
-          element: <UploadPage />,
+          path: 'entry',
+          element: <EntryPage />,
           loader: async () => {
             const products = await getProducts();
             const people = await getStores();
@@ -36,6 +38,14 @@ export const Routes = () => {
 
             return json({ products, people, stores }, { status: 200 });
           },
+        },
+        {
+          path: 'history',
+          element: <HistoryPage />,
+        },
+        {
+          path: 'analytics',
+          element: <AnalyticsPage />,
         },
       ],
     },

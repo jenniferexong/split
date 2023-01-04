@@ -4,6 +4,7 @@ export type Color =
   | 'white'
   | 'black'
   | 'charcoal'
+  | 'taupe'
   | 'caramel'
   | 'beige'
   | 'green'
@@ -45,5 +46,10 @@ export interface Theme {
       frameWidth: string;
     };
     whose: Record<Whose, Color>;
+    tabBarButton: {
+      active: Color;
+      inactive: Color;
+      text: Color;
+    };
   };
 }

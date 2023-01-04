@@ -3,13 +3,14 @@ import { ToastContainer } from 'react-toastify';
 import { Outlet } from 'react-router-dom';
 
 import 'react-toastify/dist/ReactToastify.css';
+import { TabBarMenu } from 'components/navigation/TabBarMenu';
+import { ReactNode } from 'react';
 
-const BoardContainer = styled.section`
+const BoardsContainer = styled.section`
   height: 100%;
   display: flex;
-  // TODO
-  padding: 40px;
-  gap: 40px;
+  padding: 20px 60px;
+  gap: 52px;
 `;
 
 const Container = styled.div`
@@ -17,7 +18,13 @@ const Container = styled.div`
   height: 100vh;
 `;
 
-export const Layout = () => {
+interface LayoutProps {
+  children?: ReactNode | ReactNode[];
+}
+
+export const Layout = (props: LayoutProps) => {
+  const { children } = props;
+
   return (
     <>
       <ToastContainer
@@ -28,9 +35,12 @@ export const Layout = () => {
         limit={1}
       />
       <Container>
-        <BoardContainer>
+        <TabBarMenu position="top" />
+        <BoardsContainer>
+          {children && children}
           <Outlet />
-        </BoardContainer>
+        </BoardsContainer>
+        <TabBarMenu position="bottom" />
       </Container>
     </>
   );

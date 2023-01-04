@@ -7,6 +7,7 @@ export const theme: Theme = {
     black: '#000',
     charcoal: '#423F3D',
     caramel: '#C6A26E',
+    taupe: '#8A8168',
     green: '#00FF94',
     red: '#FF0000',
     yellow: '#FFD600',
@@ -57,6 +58,11 @@ export const theme: Theme = {
       mine: 'green',
       theirs: 'red',
       split: 'yellow',
+    },
+    tabBarButton: {
+      active: 'charcoal',
+      inactive: 'taupe',
+      text: 'white',
     },
   },
 };

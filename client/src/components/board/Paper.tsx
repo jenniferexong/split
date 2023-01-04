@@ -28,7 +28,7 @@ const Container = styled.div<{
 
     background: ${background
       ? theme.colors[background]
-      : theme.components.receipt.background};
+      : theme.colors[theme.components.receipt.background]};
 
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
 
