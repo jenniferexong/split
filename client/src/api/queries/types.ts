@@ -1,20 +1,38 @@
+import { ApiProduct, ApiReceipt, ApiPerson, ApiStore } from 'api';
+
+export interface QueryResult<T> {
+  data?: T;
+  fetching: boolean;
+}
+
 export interface ProductResult {
-  id: number;
-  name: string;
+  product: ApiProduct;
+}
+
+export interface ProductsResult {
+  products: ApiProduct[];
 }
 
 export interface StoreResult {
-  id: number;
-  name: string;
+  store: ApiStore;
+}
+
+export interface StoresResult {
+  stores: ApiStore[];
+}
+
+export interface PeopleResult {
+  people: ApiPerson[];
 }
 
 export interface PersonResult {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
+  person: ApiPerson;
 }
 
 export interface ReceiptResult {
-  id: number;
+  receipt: ApiReceipt;
+}
+
+export interface ReceiptsResult {
+  receipts: ApiReceipt[];
 }

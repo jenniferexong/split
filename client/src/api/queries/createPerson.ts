@@ -34,7 +34,7 @@ export const useCreatePerson = () => {
 
     updateResult({ input }).then(({ error }) => {
       if (error) {
-        showError(`Could not create person: ${error.graphQLErrors}`);
+        showError('Could not create person', error);
       }
     });
   };

@@ -1,8 +1,11 @@
 import { toast } from 'react-toastify';
+import { CombinedError } from 'urql';
 
-export const showError = (message: string) => {
-  console.log('show error');
-  toast.error(message, {
+export const showError = (title: string, error: CombinedError) => {
+  console.log('show error', JSON.stringify(error));
+
+  // TODO handle network errors too?
+  toast.error(`${title}: ${error.graphQLErrors}`, {
     theme: 'light',
   });
 };

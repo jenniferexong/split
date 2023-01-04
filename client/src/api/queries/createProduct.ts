@@ -29,7 +29,7 @@ export const useCreateProduct = () => {
 
     updateResult({ name }).then(({ error }) => {
       if (error) {
-        showError(`Could not create product: ${error.graphQLErrors}`);
+        showError('Could not create product', error);
       }
     });
   };

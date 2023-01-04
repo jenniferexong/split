@@ -28,7 +28,7 @@ export const useCreateStore = () => {
 
     updateResult({ name }).then(({ error }) => {
       if (error) {
-        showError(`Could not create store: ${error.graphQLErrors}`);
+        showError('Could not create store', error);
       }
     });
   };

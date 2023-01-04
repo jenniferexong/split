@@ -29,6 +29,7 @@ interface CreateReceiptVariables {
   };
 }
 
+// TODO
 const query = gql<ReceiptResult, CreateReceiptVariables>`
   mutation ($input: CreateReceiptInput!) {
     receipt(input: $input) {
@@ -61,7 +62,7 @@ export const useCreateReceipt = () => {
 
     updateResult(variables).then(({ error }) => {
       if (error) {
-        showError(`Could not create receipt: ${error.graphQLErrors}`);
+        showError('Could not create receipt', error);
       }
     });
   };
