@@ -1,4 +1,5 @@
 import { TabBarButton } from 'components/button';
+import { PageUrl } from 'pages/types';
 import styled from 'styled-components';
 
 const Container = styled.nav`
@@ -17,13 +18,13 @@ export const TabBarMenu = (props: Props) => {
 
   return (
     <Container>
-      <TabBarButton to="entry" position={position}>
+      <TabBarButton to={PageUrl.Entry} position={position}>
         Entry
       </TabBarButton>
-      <TabBarButton to="history" position={position}>
+      <TabBarButton to={PageUrl.History} position={position}>
         History
       </TabBarButton>
-      <TabBarButton to="analytics" position={position}>
+      <TabBarButton to={PageUrl.Analytics} position={position}>
         Analytics
       </TabBarButton>
     </Container>

@@ -8,6 +8,7 @@ import {
   RouterProvider,
   json,
 } from 'react-router-dom';
+import { PageUrl } from './types';
 
 export const Routes = () => {
   const getProducts = useGetProducts();
@@ -24,12 +25,12 @@ export const Routes = () => {
           index: true,
           loader: ({ request }) => {
             if (new URL(request.url).pathname === '/') {
-              return redirect('/entry');
+              return redirect(PageUrl.Entry);
             }
           },
         },
         {
-          path: 'entry',
+          path: PageUrl.Entry,
           element: <EntryPage />,
           loader: async () => {
             const products = await getProducts();
@@ -40,11 +41,11 @@ export const Routes = () => {
           },
         },
         {
-          path: 'history',
+          path: PageUrl.History,
           element: <HistoryPage />,
         },
         {
-          path: 'analytics',
+          path: PageUrl.Analytics,
           element: <AnalyticsPage />,
         },
       ],
