@@ -1,20 +1,25 @@
-export type Whose = 'mine' | 'theirs' | 'split';
+import { ApiPerson, ApiProduct, ApiStore } from 'api';
+
+interface SplitType {
+  person: ApiPerson;
+  antecedent: number;
+}
 
 export interface ItemType {
-  title: string;
-  /** Should default to mine if not specified */
-  whose: Whose;
+  product: ApiProduct;
+  splits: SplitType[];
   price: number;
 }
 
 export interface ReceiptType {
-  title: string;
+  store: ApiStore;
+  date: Date;
   items: ItemType[];
   subtotal: number;
 }
 
 export interface PersonType {
-  name: string;
+  person: ApiPerson;
   receipts: ReceiptType[];
   image?: string;
 }

@@ -3,35 +3,35 @@
 exports[`calculate calculates the correct information case 1 1`] = `
 Object {
   "globalTotal": 1083.3500000000001,
-  "invoices": Array [
-    Object {
+  "invoices": Object {
+    "1": Object {
       "actualSpendings": 1032.3,
       "oweings": 0,
       "totalSpendings": 534.84,
     },
-    Object {
+    "2": Object {
       "actualSpendings": 51.05,
       "oweings": 497.4599999999999,
       "totalSpendings": 548.5099999999999,
     },
-  ],
+  },
 }
 `;
 
 exports[`calculate calculates the correct information case 2 1`] = `
 Object {
   "globalTotal": 38.3,
-  "invoices": Array [
-    Object {
+  "invoices": Object {
+    "1": Object {
       "actualSpendings": 19.15,
       "oweings": 0,
       "totalSpendings": 19.15,
     },
-    Object {
+    "2": Object {
       "actualSpendings": 19.15,
       "oweings": 0,
       "totalSpendings": 19.15,
     },
-  ],
+  },
 }
 `;

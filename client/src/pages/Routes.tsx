@@ -34,8 +34,8 @@ export const Routes = () => {
           element: <EntryPage />,
           loader: async () => {
             const products = await getProducts();
-            const people = await getStores();
-            const stores = await getPeople();
+            const stores = await getStores();
+            const people = await getPeople();
 
             return json({ products, people, stores }, { status: 200 });
           },
