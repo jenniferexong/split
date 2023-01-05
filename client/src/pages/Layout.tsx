@@ -3,8 +3,10 @@ import { ToastContainer } from 'react-toastify';
 import { Outlet } from 'react-router-dom';
 
 import 'react-toastify/dist/ReactToastify.css';
-import { TabBarMenu } from 'components/navigation/TabBarMenu';
-import { ReactNode } from 'react';
+import { TabBarMenu, TabBarMenuButton } from 'components/navigation/TabBarMenu';
+import { ReactNode, useState } from 'react';
+import { PageUrl } from './types';
+import { LayoutContextProvider } from './contexts/LayoutContext';
 
 const BoardsContainer = styled.section`
   height: 100%;
@@ -22,8 +24,27 @@ interface LayoutProps {
   children?: ReactNode | ReactNode[];
 }
 
+const navBarButtons: TabBarMenuButton[] = [
+  {
+    label: 'Entry',
+    to: PageUrl.Entry,
+  },
+  {
+    label: 'History',
+    to: PageUrl.History,
+  },
+  {
+    label: 'Analytics',
+    to: PageUrl.Analytics,
+  },
+];
+
 export const Layout = (props: LayoutProps) => {
   const { children } = props;
+
+  const [bottomTabBarButtons, setBottomTabBarButtons] = useState<
+    TabBarMenuButton[]
+  >([]);
 
   return (
     <>
@@ -35,12 +56,14 @@ export const Layout = (props: LayoutProps) => {
         limit={1}
       />
       <Container>
-        <TabBarMenu position="top" />
-        <BoardsContainer>
-          {children && children}
-          <Outlet />
-        </BoardsContainer>
-        <TabBarMenu position="bottom" />
+        <LayoutContextProvider setBottomTabBarButtons={setBottomTabBarButtons}>
+          <TabBarMenu position="top" buttons={navBarButtons} />
+          <BoardsContainer>
+            {children && children}
+            <Outlet />
+          </BoardsContainer>
+          <TabBarMenu position="bottom" buttons={bottomTabBarButtons} />
+        </LayoutContextProvider>
       </Container>
     </>
   );

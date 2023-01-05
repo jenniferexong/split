@@ -32,7 +32,15 @@ interface UpdateItem {
   item: ItemType;
 }
 
-export type Action = AddReceipt | UpdateReceipt | AddItem | UpdateItem;
+interface Clear {
+  type: 'clear';
+}
+
+export const clearAction: Clear = {
+  type: 'clear',
+};
+
+export type Action = AddReceipt | UpdateReceipt | AddItem | UpdateItem | Clear;
 
 export const initialState: AppType = {
   people: [
@@ -58,6 +66,10 @@ const emptyItem: ItemType = {
 export const reducer: Reducer<AppType, Action> = (state, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case 'clear': {
+        draft.people.forEach(person => (person.receipts.length = 0));
+        break;
+      }
       case 'addReceipt': {
         const { personIndex } = action;
         draft.people[personIndex].receipts.push({

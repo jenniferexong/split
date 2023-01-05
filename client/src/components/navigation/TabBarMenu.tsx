@@ -1,32 +1,39 @@
 import { TabBarButton } from 'components/button';
-import { PageUrl } from 'pages/types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const Container = styled.nav`
-  display: flex;
-  width: fit-content;
-  gap: 52px;
-  padding: 0 40px;
-`;
+export interface TabBarMenuButton {
+  label: string;
+  to?: string;
+  onClick?: () => void;
+}
 
 interface Props {
   position: 'top' | 'bottom';
+  buttons: TabBarMenuButton[];
 }
 
+const Container = styled.nav<Props>`
+  display: flex;
+  gap: 52px;
+  padding: 0 40px;
+
+  ${props =>
+    props.position === 'bottom' &&
+    css`
+      justify-content: flex-end;
+    `}
+`;
+
 export const TabBarMenu = (props: Props) => {
-  const { position } = props;
+  const { position, buttons } = props;
 
   return (
-    <Container>
-      <TabBarButton to={PageUrl.Entry} position={position}>
-        Entry
-      </TabBarButton>
-      <TabBarButton to={PageUrl.History} position={position}>
-        History
-      </TabBarButton>
-      <TabBarButton to={PageUrl.Analytics} position={position}>
-        Analytics
-      </TabBarButton>
+    <Container {...props}>
+      {buttons.map(({ label, ...props }) => (
+        <TabBarButton key={label} position={position} {...props}>
+          {label}
+        </TabBarButton>
+      ))}
     </Container>
   );
 };
