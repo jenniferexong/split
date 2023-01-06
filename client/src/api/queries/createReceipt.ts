@@ -57,14 +57,14 @@ export const useCreateReceipt = () => {
 
   const { fetching } = result;
 
-  const createReceipt = (input: CreateReceiptInput) => {
+  const createReceipt = async (input: CreateReceiptInput) => {
     const variables = mapReceiptInputToReceiptVariables(input);
 
-    updateResult(variables).then(({ error }) => {
-      if (error) {
-        showError('Could not create receipt', error);
-      }
-    });
+    const { error } = await updateResult(variables);
+
+    if (error) {
+      showError('Could not create receipt', error);
+    }
   };
 
   return { createReceipt, fetching };

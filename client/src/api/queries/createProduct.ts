@@ -1,5 +1,4 @@
 import { gql, useMutation } from 'urql';
-import { showError } from 'utils/showError';
 import { toTitleCase } from 'utils/toTitleCase';
 import { ProductResult } from './types';
 
@@ -24,14 +23,17 @@ export const useCreateProduct = () => {
 
   const { fetching } = result;
 
-  const createProduct = (name: string) => {
+  const createProduct = async (name: string) => {
     name = toTitleCase(name);
 
-    updateResult({ name }).then(({ error }) => {
-      if (error) {
-        showError('Could not create product', error);
-      }
-    });
+    const { data, error } = await updateResult({ name });
+
+    if (error || !data) {
+      // TODO
+      throw new Error(JSON.stringify(error));
+    }
+
+    return data.product;
   };
 
   return { createProduct, fetching };

@@ -1,5 +1,5 @@
+import { ApiStore } from 'api/types';
 import { gql, useMutation } from 'urql';
-import { showError } from 'utils/showError';
 import { toTitleCase } from 'utils/toTitleCase';
 import { StoreResult } from './types';
 
@@ -23,14 +23,17 @@ export const useCreateStore = () => {
 
   const { fetching } = result;
 
-  const createStore = (name: string) => {
+  const createStore = async (name: string): Promise<ApiStore> => {
     name = toTitleCase(name);
 
-    updateResult({ name }).then(({ error }) => {
-      if (error) {
-        showError('Could not create store', error);
-      }
-    });
+    const { data, error } = await updateResult({ name });
+
+    if (error || !data) {
+      // TODO
+      throw new Error(JSON.stringify(error));
+    }
+
+    return data.store;
   };
 
   return { createStore, fetching };

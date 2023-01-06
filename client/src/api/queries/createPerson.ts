@@ -1,5 +1,4 @@
 import { gql, useMutation } from 'urql';
-import { showError } from 'utils/showError';
 import { PersonResult } from './types';
 
 interface CreatePersonVariables {
@@ -29,14 +28,17 @@ export const useCreatePerson = () => {
 
   const { fetching } = result;
 
-  const createPerson = (input: CreatePersonVariables['input']) => {
+  const createPerson = async (input: CreatePersonVariables['input']) => {
     input.email = input.email.toLowerCase();
 
-    updateResult({ input }).then(({ error }) => {
-      if (error) {
-        showError('Could not create person', error);
-      }
-    });
+    const { data, error } = await updateResult({ input });
+
+    if (error || !data) {
+      // TODO
+      throw new Error(JSON.stringify(error));
+    }
+
+    return data.person;
   };
 
   return { createPerson, fetching };
