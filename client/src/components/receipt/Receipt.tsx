@@ -9,12 +9,9 @@ import { Barcode } from './Barcode';
 import { Paper } from 'components/board';
 import { Container } from './Container';
 import { useCreateStore } from 'api';
-import Creatable from 'react-select/creatable';
 import { ActionMeta } from 'react-select';
-import { StoreOption } from 'pages/types';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
-
-const getStoreOptionValue = (option: StoreOption) => option.label;
+import { Select, StoreOption } from 'components/select';
 
 const StyledReceipt = styled(Paper)`
   grid-column: span 2;
@@ -37,8 +34,9 @@ export const Receipt = (props: ReceiptProps) => {
 
   const { storeOptions, addStoreOption } = useEntryPageContext();
   const { createStore } = useCreateStore();
-  const [storeOptionValue, setStoreOptionValue] =
-    useState<StoreOption | null>();
+  const [storeOptionValue, setStoreOptionValue] = useState<StoreOption | null>(
+    null,
+  );
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const theme = useTheme();
@@ -91,6 +89,8 @@ export const Receipt = (props: ReceiptProps) => {
           receiptIndex,
           receipt: { store: option?.data, items, subtotal, date: undefined }, // TODO date
         });
+
+        setStoreOptionValue(option);
       }
     },
     [dispatch, items, personIndex, receiptIndex, subtotal],
@@ -104,17 +104,12 @@ export const Receipt = (props: ReceiptProps) => {
             <TableRow borderBottom>
               <TableCell colSpan={3} as="th" textAlign="center">
                 {/* TODO extract to own component? */}
-                <Creatable
+                <Select
                   placeholder="Untitled"
                   options={storeOptions}
                   value={storeOptionValue}
-                  getOptionValue={getStoreOptionValue}
-                  onChange={handleChangeOption}
+                  onChangeOption={handleChangeOption}
                   onCreateOption={handleCreateOption}
-                  components={{
-                    DropdownIndicator: () => null,
-                    IndicatorSeparator: () => null,
-                  }}
                 />
               </TableCell>
             </TableRow>

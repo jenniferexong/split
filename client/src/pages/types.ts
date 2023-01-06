@@ -12,18 +12,3 @@ export interface EntryPageData {
   stores: ApiStore[];
   products: ApiProduct[];
 }
-
-export interface StoreOption {
-  label: string;
-  data: ApiStore;
-}
-
-export interface ProductOption {
-  label: string;
-  data: ApiProduct;
-}
-
-export interface PersonOption {
-  label: string;
-  data: ApiPerson;
-}

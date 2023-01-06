@@ -1,5 +1,5 @@
 import { ApiPerson, ApiProduct, ApiStore } from 'api';
-import { StoreOption } from 'pages/types';
+import { StoreOption } from 'components/select';
 import {
   createContext,
   ReactNode,
