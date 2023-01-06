@@ -1,13 +1,24 @@
 import { ReceiptType } from 'calculator/types';
 import { Button } from 'components/button';
 import { Entry as Item } from 'components/item';
-import React, { Dispatch, useRef } from 'react';
+import { Dispatch, useCallback, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { getLastAddedCell, Table, TableCell, TableRow } from 'components/table';
 import { Action } from 'utils/reducer';
 import { Barcode } from './Barcode';
 import { Paper } from 'components/board';
 import { Container } from './Container';
+import { useCreateStore } from 'api';
+import Creatable from 'react-select/creatable';
+import { ActionMeta } from 'react-select';
+import { StoreOption } from 'pages/types';
+import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
+
+const getStoreOptionValue = (option: StoreOption) => option.label;
+
+const StyledReceipt = styled(Paper)`
+  grid-column: span 2;
+`;
 
 interface ReceiptProps {
   personIndex: number;
@@ -16,17 +27,18 @@ interface ReceiptProps {
   dispatch: Dispatch<Action>;
 }
 
-const StyledReceipt = styled(Paper)`
-  grid-column: span 2;
-`;
-
 export const Receipt = (props: ReceiptProps) => {
   const {
     personIndex,
     receiptIndex,
     dispatch,
-    receipt: { items, subtotal, title },
+    receipt: { items, subtotal },
   } = props;
+
+  const { storeOptions, addStoreOption } = useEntryPageContext();
+  const { createStore } = useCreateStore();
+  const [storeOptionValue, setStoreOptionValue] =
+    useState<StoreOption | null>();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const theme = useTheme();
@@ -43,16 +55,46 @@ export const Receipt = (props: ReceiptProps) => {
     }, 0);
   };
 
-  const updateTitle = (e: React.FocusEvent<HTMLTableCellElement>) => {
-    const text = e.target.innerText;
+  const handleCreateOption = useCallback(
+    (inputValue: string) => {
+      createStore(inputValue).then(store => {
+        // Updates store options
+        const newOption = addStoreOption(store);
 
-    dispatch({
-      type: 'updateReceipt',
+        dispatch({
+          type: 'updateReceipt',
+          personIndex,
+          receiptIndex,
+          receipt: { store, items, subtotal, date: undefined }, // TODO date
+        });
+
+        setStoreOptionValue(newOption);
+      });
+    },
+    [
+      addStoreOption,
+      createStore,
+      dispatch,
+      items,
       personIndex,
       receiptIndex,
-      receipt: { title: text, items, subtotal },
-    });
-  };
+      subtotal,
+    ],
+  );
+
+  const handleChangeOption = useCallback(
+    (option: StoreOption | null, actionMeta: ActionMeta<StoreOption>) => {
+      if (actionMeta.action === 'select-option') {
+        dispatch({
+          type: 'updateReceipt',
+          personIndex,
+          receiptIndex,
+          receipt: { store: option?.data, items, subtotal, date: undefined }, // TODO date
+        });
+      }
+    },
+    [dispatch, items, personIndex, receiptIndex, subtotal],
+  );
 
   return (
     <StyledReceipt width={theme.components.receipt.width}>
@@ -60,14 +102,20 @@ export const Receipt = (props: ReceiptProps) => {
         <Table>
           <thead>
             <TableRow borderBottom>
-              <TableCell
-                contentEditable
-                onBlur={updateTitle}
-                colSpan={3}
-                as="th"
-                textAlign="center"
-              >
-                {title}
+              <TableCell colSpan={3} as="th" textAlign="center">
+                {/* TODO extract to own component? */}
+                <Creatable
+                  placeholder="Untitled"
+                  options={storeOptions}
+                  value={storeOptionValue}
+                  getOptionValue={getStoreOptionValue}
+                  onChange={handleChangeOption}
+                  onCreateOption={handleCreateOption}
+                  components={{
+                    DropdownIndicator: () => null,
+                    IndicatorSeparator: () => null,
+                  }}
+                />
               </TableCell>
             </TableRow>
           </thead>

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { Theme } from 'styles/types';
 import { ButtonProps } from './types';
@@ -20,7 +20,7 @@ const getActiveBackground = (
 const activeClassName = 'active';
 
 const StyledNavLink = styled(NavLink).attrs({
-  activeClassName,
+  activeclassname: activeClassName,
 })<Props>`
   text-decoration: none;
   border: none;
@@ -87,13 +87,13 @@ export const TabBarButton = (props: Props) => {
 
   const handleClick = useCallback(() => {
     onClick?.();
-  }, []);
+  }, [onClick]);
 
   if (to) {
     return (
       <StyledNavLink
         to={to}
-        activeClassName={activeClassName}
+        activeclassname={activeClassName}
         onClick={handleClick}
         position={position}
       >

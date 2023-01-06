@@ -6,9 +6,8 @@ import {
   createBrowserRouter,
   redirect,
   RouterProvider,
-  json,
 } from 'react-router-dom';
-import { PageUrl } from './types';
+import { EntryPageData, PageUrl } from './types';
 
 export const Routes = () => {
   const getProducts = useGetProducts();
@@ -32,12 +31,18 @@ export const Routes = () => {
         {
           path: PageUrl.Entry,
           element: <EntryPage />,
-          loader: async () => {
+          loader: async (): Promise<EntryPageData> => {
             const products = await getProducts();
             const stores = await getStores();
             const people = await getPeople();
 
-            return json({ products, people, stores }, { status: 200 });
+            const data: EntryPageData = {
+              products,
+              stores,
+              people,
+            };
+
+            return data;
           },
         },
         {

@@ -3,8 +3,7 @@ import { AppType, ItemType, ReceiptType } from 'calculator/types';
 import produce from 'immer';
 import { Reducer } from 'react';
 import { unreachable } from './unreachable';
-import nibbles from 'images/nibbles.jpg';
-import pandy from 'images/pandy.jpg';
+import { ApiPerson } from 'api';
 
 interface AddReceipt {
   type: 'addReceipt';
@@ -42,25 +41,27 @@ export const clearAction: Clear = {
 
 export type Action = AddReceipt | UpdateReceipt | AddItem | UpdateItem | Clear;
 
-export const initialState: AppType = {
-  people: [
-    {
-      name: 'Jennifer',
-      image: nibbles,
-      receipts: [],
-    },
-    {
-      name: 'Andy',
-      image: pandy,
-      receipts: [],
-    },
-  ],
+/**
+ * Creates a item with no product, with an equal split between each given person.
+ */
+const createEmptyItem = (people: ApiPerson[]): ItemType => {
+  const splits = people.map(person => ({
+    person,
+    antecedent: 1,
+  }));
+
+  return {
+    product: undefined,
+    splits,
+    price: 0,
+  };
 };
 
-const emptyItem: ItemType = {
-  title: '',
-  whose: 'split',
-  price: 0,
+const emptyReceipt: ReceiptType = {
+  store: undefined,
+  date: undefined,
+  items: [],
+  subtotal: 0,
 };
 
 export const reducer: Reducer<AppType, Action> = (state, action) =>
@@ -72,11 +73,7 @@ export const reducer: Reducer<AppType, Action> = (state, action) =>
       }
       case 'addReceipt': {
         const { personIndex } = action;
-        draft.people[personIndex].receipts.push({
-          title: 'Untitled',
-          items: [],
-          subtotal: 0,
-        });
+        draft.people[personIndex].receipts.push(emptyReceipt);
         break;
       }
       case 'updateReceipt': {
@@ -87,9 +84,15 @@ export const reducer: Reducer<AppType, Action> = (state, action) =>
       case 'addItem': {
         const { personIndex, receiptIndex } = action;
 
+        const emptyItem = createEmptyItem(
+          draft.people.map(person => person.person),
+        );
+
         // only add a new item if the previous one has been updated
         const items = draft.people[personIndex].receipts[receiptIndex].items;
-        if (isEqual(items[items.length - 1], emptyItem)) break;
+        if (isEqual(items[items.length - 1], emptyItem)) {
+          break;
+        }
 
         const receipt = draft.people[personIndex].receipts[receiptIndex];
         receipt.items.push(emptyItem);

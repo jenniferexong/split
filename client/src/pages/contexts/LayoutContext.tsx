@@ -27,7 +27,7 @@ export const LayoutContextProvider = (props: LayoutContextProviderProps) => {
     () => ({
       setBottomTabBarButtons,
     }),
-    [],
+    [setBottomTabBarButtons],
   );
 
   return (
@@ -42,5 +42,5 @@ export const useBottomTabBarMenu = (buttons: TabBarMenuButton[]) => {
     setBottomTabBarButtons(buttons);
 
     return () => setBottomTabBarButtons([]);
-  }, []);
+  }, [buttons, setBottomTabBarButtons]);
 };

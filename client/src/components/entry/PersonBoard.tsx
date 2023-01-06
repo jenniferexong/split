@@ -30,7 +30,7 @@ interface PersonBoardProps {
 
 export const PersonBoard = (props: PersonBoardProps) => {
   const {
-    person: { name, image, receipts },
+    person: { person, image, receipts },
     personIndex,
     invoice: { totalSpendings, actualSpendings, oweings },
     dispatch,
@@ -46,7 +46,7 @@ export const PersonBoard = (props: PersonBoardProps) => {
   return (
     <Board>
       <Container>
-        <Person name={name} image={image} />
+        <Person name={person.firstName} image={image} />
         <Invoice
           totalSpendings={totalSpendings}
           actualSpendings={actualSpendings}

@@ -67,7 +67,3 @@ export const selectElementText = (elem: HTMLElement) => {
     }
   }, 0);
 };
-
-export const onCellFocus = (e: React.FocusEvent<HTMLTableCellElement>) => {
-  selectElementText(e.target);
-};

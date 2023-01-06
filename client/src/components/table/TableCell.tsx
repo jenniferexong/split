@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { handleCellKeyDown, onCellFocus } from 'components/table';
+import { handleCellKeyDown } from 'components/table';
 import styled, { css } from 'styled-components';
 import { fontMixin } from 'styles/mixins';
 
@@ -42,7 +42,6 @@ export const TableCell = ({
 
   return (
     <StyledTableCell
-      onFocus={onCellFocus}
       onBlur={setBlur}
       onKeyDown={handleCellKeyDown}
       as={as}

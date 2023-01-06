@@ -1,19 +1,21 @@
 import { ApiPerson, ApiProduct, ApiStore } from 'api';
 
+export type Whose = 'mine' | 'split' | 'theirs';
+
 interface SplitType {
   person: ApiPerson;
   antecedent: number;
 }
 
 export interface ItemType {
-  product: ApiProduct;
+  product: ApiProduct | undefined;
   splits: SplitType[];
   price: number;
 }
 
 export interface ReceiptType {
-  store: ApiStore;
-  date: Date;
+  store: ApiStore | undefined;
+  date: Date | undefined;
   items: ItemType[];
   subtotal: number;
 }
