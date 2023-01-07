@@ -2,7 +2,7 @@ import { ApiPerson, ApiProduct, ApiStore } from 'api';
 
 export type Whose = 'mine' | 'split' | 'theirs';
 
-interface SplitType {
+export interface SplitType {
   person: ApiPerson;
   antecedent: number;
 }

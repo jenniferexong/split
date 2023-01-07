@@ -1,12 +1,18 @@
 import { ItemType, Whose } from 'calculator/types';
 import styled from 'styled-components';
 import { Action } from 'utils/reducer';
-import React from 'react';
-import { Icon } from 'components/icon';
+import React, { useCallback, useState } from 'react';
 import { TableCell } from 'components/table';
 import { TableRow } from 'components/table/TableRow';
+import { ApiPerson, useCreateProduct } from 'api';
+import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
+import { ActionMeta } from 'react-select';
+import { ProductOption, Select } from 'components/select';
+import { Icon } from 'components/icon';
+import { mapWhoseToSplits } from 'utils/splits';
 
 interface ItemProps extends ItemType {
+  people: ApiPerson[];
   personIndex: number;
   receiptIndex: number;
   itemIndex: number;
@@ -21,8 +27,9 @@ const IconsContainer = styled.div`
 
 export const Item = (props: ItemProps) => {
   const {
-    title,
-    whose,
+    people,
+    product,
+    splits,
     price,
     personIndex,
     receiptIndex,
@@ -30,25 +37,29 @@ export const Item = (props: ItemProps) => {
     dispatch,
   } = props;
 
-  const updateTitle = (e: React.FocusEvent<HTMLTableCellElement>) => {
-    dispatch({
-      type: 'updateItem',
-      personIndex,
-      receiptIndex,
-      itemIndex,
-      item: { title: e.target.innerText, whose, price },
-    });
-  };
+  const { productOptions, addProductOption } = useEntryPageContext();
+  const { createProduct } = useCreateProduct();
+  const [productOptionValue, setProductOptionValue] =
+    useState<ProductOption | null>(null);
 
-  const updateWhose = (newWhose: Whose) => {
-    dispatch({
-      type: 'updateItem',
-      personIndex,
-      receiptIndex,
-      itemIndex,
-      item: { title, whose: newWhose, price },
-    });
-  };
+  const [whose, setWhose] = useState<Whose>('split');
+
+  const updateWhose = useCallback(
+    (newWhose: Whose) => {
+      const splits = mapWhoseToSplits(newWhose, personIndex, people);
+
+      dispatch({
+        type: 'updateItem',
+        personIndex,
+        receiptIndex,
+        itemIndex,
+        item: { product, splits, price },
+      });
+
+      setWhose(newWhose);
+    },
+    [dispatch, itemIndex, people, personIndex, price, product, receiptIndex],
+  );
 
   const updatePrice = (e: React.FocusEvent<HTMLTableCellElement>) => {
     const priceText = e.target.innerText;
@@ -63,14 +74,66 @@ export const Item = (props: ItemProps) => {
       personIndex,
       receiptIndex,
       itemIndex,
-      item: { title, whose, price: parseFloat(priceText) },
+      item: { product, splits, price: parseFloat(priceText) },
     });
   };
 
+  const handleCreateOption = useCallback(
+    (inputValue: string) => {
+      createProduct(inputValue).then(product => {
+        // Updates product options
+        const newOption = addProductOption(product);
+
+        dispatch({
+          type: 'updateItem',
+          personIndex,
+          receiptIndex,
+          itemIndex,
+          item: { product: newOption.data, splits, price },
+        });
+
+        setProductOptionValue(newOption);
+      });
+    },
+    [
+      addProductOption,
+      createProduct,
+      dispatch,
+      itemIndex,
+      personIndex,
+      price,
+      receiptIndex,
+      splits,
+    ],
+  );
+
+  const handleChangeOption = useCallback(
+    (option: ProductOption | null, actionMeta: ActionMeta<ProductOption>) => {
+      if (actionMeta.action === 'select-option') {
+        dispatch({
+          type: 'updateItem',
+          personIndex,
+          receiptIndex,
+          itemIndex,
+          item: { product: option?.data, splits, price },
+        });
+
+        setProductOptionValue(option);
+      }
+    },
+    [dispatch, personIndex, receiptIndex, itemIndex, splits, price],
+  );
+
   return (
     <TableRow borderTop={itemIndex === 0}>
-      <TableCell contentEditable onBlur={updateTitle} width="55%">
-        {title}
+      <TableCell width="55%">
+        <Select
+          placeholder="..."
+          options={productOptions}
+          value={productOptionValue}
+          onChangeOption={handleChangeOption}
+          onCreateOption={handleCreateOption}
+        />
       </TableCell>
 
       <TableCell>

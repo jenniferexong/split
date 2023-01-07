@@ -29,9 +29,23 @@ const getInitalState = (people: ApiPerson[]): AppType => ({
 });
 
 export const EntryPage = () => {
-  const { stores, products, people } = useLoaderData() as EntryPageData;
+  const {
+    stores: loadedStores,
+    products: loadedProducts,
+    people: loadedPeople,
+  } = useLoaderData() as EntryPageData;
 
-  const [appState, dispatch] = useReducer(reducer, getInitalState(people));
+  const [appState, dispatch] = useReducer(
+    reducer,
+    getInitalState(loadedPeople),
+  );
+
+  console.log('app state', appState);
+
+  const people: ApiPerson[] = useMemo(
+    () => appState.people.map(person => person.person),
+    [appState.people],
+  );
 
   useBottomTabBarMenu([
     {
@@ -48,11 +62,12 @@ export const EntryPage = () => {
   return (
     <EntryPageContextProvider
       loadedPeople={people}
-      loadedProducts={products}
-      loadedStores={stores}
+      loadedProducts={loadedProducts}
+      loadedStores={loadedStores}
     >
       {appState.people.map((person, index) => (
         <PersonBoard
+          people={people}
           key={index}
           person={person}
           personIndex={index}

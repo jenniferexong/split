@@ -8,7 +8,7 @@ import { Action } from 'utils/reducer';
 import { Barcode } from './Barcode';
 import { Paper } from 'components/board';
 import { Container } from './Container';
-import { useCreateStore } from 'api';
+import { ApiPerson, useCreateStore } from 'api';
 import { ActionMeta } from 'react-select';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { Select, StoreOption } from 'components/select';
@@ -18,6 +18,7 @@ const StyledReceipt = styled(Paper)`
 `;
 
 interface ReceiptProps {
+  people: ApiPerson[];
   personIndex: number;
   receiptIndex: number;
   receipt: ReceiptType;
@@ -30,6 +31,7 @@ export const Receipt = (props: ReceiptProps) => {
     receiptIndex,
     dispatch,
     receipt: { items, subtotal },
+    people,
   } = props;
 
   const { storeOptions, addStoreOption } = useEntryPageContext();
@@ -117,6 +119,7 @@ export const Receipt = (props: ReceiptProps) => {
           <tbody>
             {items.map((item, index) => (
               <Item
+                people={people}
                 key={`${personIndex}-${receiptIndex}-${index}`}
                 personIndex={personIndex}
                 receiptIndex={receiptIndex}

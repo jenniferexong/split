@@ -1,3 +1,4 @@
+import { ApiPerson } from 'api';
 import { InvoiceData, PersonType } from 'calculator/types';
 import { Board, BoardLetters } from 'components/board';
 import { Person } from 'components/board/Person';
@@ -22,6 +23,7 @@ const Container = styled.div`
 `;
 
 interface PersonBoardProps {
+  people: ApiPerson[];
   personIndex: number;
   person: PersonType;
   invoice: InvoiceData;
@@ -30,6 +32,7 @@ interface PersonBoardProps {
 
 export const PersonBoard = (props: PersonBoardProps) => {
   const {
+    people,
     person: { person, image, receipts },
     personIndex,
     invoice: { totalSpendings, actualSpendings, oweings },
@@ -54,6 +57,7 @@ export const PersonBoard = (props: PersonBoardProps) => {
         />
         {receipts.map((receipt, index) => (
           <Receipt
+            people={people}
             key={`${personIndex}-${index}`}
             personIndex={personIndex}
             receiptIndex={index}

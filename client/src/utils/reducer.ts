@@ -4,6 +4,7 @@ import produce from 'immer';
 import { Reducer } from 'react';
 import { unreachable } from './unreachable';
 import { ApiPerson } from 'api';
+import { createEqualSplits } from './splits';
 
 interface AddReceipt {
   type: 'addReceipt';
@@ -45,10 +46,7 @@ export type Action = AddReceipt | UpdateReceipt | AddItem | UpdateItem | Clear;
  * Creates a item with no product, with an equal split between each given person.
  */
 const createEmptyItem = (people: ApiPerson[]): ItemType => {
-  const splits = people.map(person => ({
-    person,
-    antecedent: 1,
-  }));
+  const splits = createEqualSplits(people);
 
   return {
     product: undefined,

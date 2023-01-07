@@ -1,5 +1,5 @@
 import { ApiPerson, ApiProduct, ApiStore } from 'api';
-import { StoreOption } from 'components/select';
+import { ProductOption, StoreOption } from 'components/select';
 import {
   createContext,
   ReactNode,
@@ -15,21 +15,26 @@ const convertStoreToOption = (store: ApiStore): StoreOption => ({
   data: store,
 });
 
+const convertProductToOption = (product: ApiProduct): ProductOption => ({
+  label: product.name,
+  data: product,
+});
+
 interface EntryPageContextValue {
   storeOptions: StoreOption[];
-  // productOptions: ProductOption[];
+  productOptions: ProductOption[];
   // personOptions: PersonOption[];
   addStoreOption: (store: ApiStore) => StoreOption;
-  // addProductOption: (store: ApiProduct) => void;
+  addProductOption: (store: ApiProduct) => ProductOption;
   // addPersonOption: (store: ApiPerson) => void;
 }
 
 const EntryPageContext = createContext<EntryPageContextValue>({
   storeOptions: [],
-  // productOptions: [],
+  productOptions: [],
   // personOptions: [],
   addStoreOption: () => null as unknown as StoreOption,
-  // addProductOption: noop,
+  addProductOption: () => null as unknown as ProductOption,
   // addPersonOption: noop,
 });
 
@@ -43,10 +48,14 @@ interface EntryPageContextProviderProps {
 export const EntryPageContextProvider = (
   props: EntryPageContextProviderProps,
 ) => {
-  const { loadedStores, children } = props;
+  const { loadedStores, loadedProducts, children } = props;
 
   const [storeOptions, setStoreOptions] = useState<StoreOption[]>(
     loadedStores.map(convertStoreToOption),
+  );
+
+  const [productOptions, setProductOptions] = useState<ProductOption[]>(
+    loadedProducts.map(convertProductToOption),
   );
 
   const addStoreOption = useCallback(
@@ -62,12 +71,31 @@ export const EntryPageContextProvider = (
     [storeOptions],
   );
 
+  const addProductOption = useCallback(
+    (product: ApiProduct): ProductOption => {
+      const newOption = convertProductToOption(product);
+
+      setProductOptions(
+        insertIntoSortedArray(
+          productOptions,
+          newOption,
+          option => option.label,
+        ),
+      );
+
+      return newOption;
+    },
+    [productOptions],
+  );
+
   const value: EntryPageContextValue = useMemo(
     () => ({
       storeOptions,
+      productOptions,
       addStoreOption,
+      addProductOption,
     }),
-    [addStoreOption, storeOptions],
+    [addProductOption, addStoreOption, productOptions, storeOptions],
   );
 
   return (
