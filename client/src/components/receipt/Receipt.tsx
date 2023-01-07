@@ -3,7 +3,13 @@ import { Button } from 'components/button';
 import { Entry as Item } from 'components/item';
 import { Dispatch, useCallback, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
-import { getLastAddedCell, Table, TableCell, TableRow } from 'components/table';
+import {
+  focusTableCell,
+  getLastAddedCell,
+  Table,
+  TableCell,
+  TableRow,
+} from 'components/table';
 import { Action } from 'utils/reducer';
 import { Barcode } from './Barcode';
 import { Paper } from 'components/board';
@@ -51,7 +57,7 @@ export const Receipt = (props: ReceiptProps) => {
     });
 
     setTimeout(() => {
-      getLastAddedCell(buttonRef.current)?.focus();
+      focusTableCell(getLastAddedCell(buttonRef.current));
     }, 0);
   };
 
