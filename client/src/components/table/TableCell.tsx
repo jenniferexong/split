@@ -19,12 +19,21 @@ const StyledTableCell = styled.td<{ as: string; textAlign: string }>`
     ${fontMixin(theme.fonts.receipt)}
 
     text-align: ${textAlign};
+    .react-select__input {
+      text-align: ${textAlign};
+    }
 
     ${as === 'th' &&
     css`
       font-size: 20px;
       font-weight: 700;
       letter-spacing: 0.2em;
+
+      .react-select__input {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+      }
     `}
   `}
 `;
