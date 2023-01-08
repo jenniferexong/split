@@ -1,0 +1,38 @@
+import { ChangeEventHandler, FocusEventHandler } from 'react';
+import styled from 'styled-components';
+import { backgroundHover } from 'styles/mixins/backgroundHover';
+import { onInputFocus } from './utils';
+
+const StyledInput = styled.input`
+  width: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+
+  :focus {
+    box-shadow: 0 0 0 1px ${props => props.theme.colors.blue};
+  }
+
+  ${backgroundHover()}
+`;
+
+interface InputProps {
+  value: string;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  onBlur: FocusEventHandler<HTMLInputElement>;
+}
+
+export const Input = (props: InputProps) => {
+  const { value, onChange, onBlur } = props;
+
+  return (
+    <StyledInput
+      type="text"
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      onFocus={onInputFocus}
+    />
+  );
+};
+Input.displayName = 'Input';

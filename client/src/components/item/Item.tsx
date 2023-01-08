@@ -2,12 +2,12 @@ import { ItemType, Whose } from 'calculator/types';
 import styled from 'styled-components';
 import { Action } from 'utils/reducer';
 import React, { useCallback, useState } from 'react';
-import { TableCell } from 'components/table';
+import { Input, TableCell } from 'components/table';
 import { TableRow } from 'components/table/TableRow';
 import { ApiPerson, useCreateProduct } from 'api';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { ActionMeta } from 'react-select';
-import { ProductOption, Select } from 'components/select';
+import { ProductOption, Select } from 'components/input';
 import { Icon } from 'components/icon';
 import { getSplitCost, mapWhoseToSplits } from 'utils/splits';
 
@@ -61,22 +61,36 @@ export const Item = (props: ItemProps) => {
     [dispatch, itemIndex, people, personIndex, price, product, receiptIndex],
   );
 
-  const updatePrice = (e: React.FocusEvent<HTMLTableCellElement>) => {
-    const priceText = e.target.innerText;
-    // If invalid number, reset value to previous price
-    if (!priceText.match(/^-?\d*\.?\d*$/)) {
-      e.target.innerText = price.toFixed(2);
-      return;
-    }
+  const [priceInput, setPriceInput] = useState<string>(price.toFixed(2));
+  const handleChangePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
 
-    dispatch({
-      type: 'updateItem',
-      personIndex,
-      receiptIndex,
-      itemIndex,
-      item: { product, splits, price: parseFloat(priceText) },
-    });
+    const value = e.target.value;
+    setPriceInput(value);
   };
+
+  const updatePrice = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      const priceText = e.target.value;
+      // If invalid number, reset value to previous price
+      if (!priceText.match(/^-?\d*\.?\d*$/)) {
+        setPriceInput(price.toFixed(2));
+        return;
+      }
+
+      const newPrice = parseFloat(priceText);
+      dispatch({
+        type: 'updateItem',
+        personIndex,
+        receiptIndex,
+        itemIndex,
+        item: { product, splits, price: newPrice },
+      });
+
+      setPriceInput(newPrice.toFixed(2));
+    },
+    [dispatch, itemIndex, personIndex, price, product, receiptIndex, splits],
+  );
 
   const handleCreateOption = useCallback(
     (inputValue: string) => {
@@ -145,13 +159,12 @@ export const Item = (props: ItemProps) => {
           </IconsContainer>
         </TableCell>
 
-        <TableCell
-          contentEditable
-          onBlur={updatePrice}
-          width="23%"
-          textAlign="right"
-        >
-          {price.toFixed(2)}
+        <TableCell width="23%" textAlign="right">
+          <Input
+            value={priceInput}
+            onChange={handleChangePriceInput}
+            onBlur={updatePrice}
+          />
         </TableCell>
       </TableRow>
       {splits.map(split => (
@@ -160,7 +173,7 @@ export const Item = (props: ItemProps) => {
             &emsp;&emsp;&emsp;{split.person.firstName}
           </TableCell>
           <TableCell textSize="small" textAlign="right">
-            {split.antecedent}
+            {splits.length > 1 && split.antecedent}
           </TableCell>
           <TableCell textSize="small" textAlign="right">
             {getSplitCost(splits, split.antecedent, price).toFixed(2)}

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { handleCellKeyDown, onCellFocus } from 'components/table';
+import { handleCellKeyDown } from 'components/table';
 import styled, { css } from 'styled-components';
 import { fontMixin } from 'styles/mixins';
 
@@ -10,7 +10,6 @@ interface TableCellProps {
 
   bold?: boolean;
   textSize?: 'normal' | 'small';
-  contentEditable?: boolean;
   colSpan?: number;
   width?: string;
   textAlign?: 'left' | 'center' | 'right';
@@ -24,6 +23,7 @@ const StyledTableCell = styled.td<{
 }>`
   ${({ theme, as, textAlign, textSize, bold }) => css`
     ${fontMixin(theme.fonts.receipt)}
+    white-space: nowrap;
 
     ${bold &&
     css`
@@ -31,7 +31,7 @@ const StyledTableCell = styled.td<{
     `}
 
     text-align: ${textAlign};
-    .react-select__input {
+    & > * {
       text-align: ${textAlign};
     }
 
@@ -69,7 +69,6 @@ export const TableCell = ({
 
   return (
     <StyledTableCell
-      onFocus={onCellFocus}
       onBlur={setBlur}
       onKeyDown={handleCellKeyDown}
       as={as}

@@ -1,5 +1,5 @@
 import { ApiPerson, ApiProduct, ApiStore } from 'api';
-import { ProductOption, StoreOption } from 'components/select';
+import { ProductOption, StoreOption } from 'components/input';
 import {
   createContext,
   ReactNode,

@@ -10,6 +10,7 @@ export type Color =
   | 'green'
   | 'red'
   | 'yellow'
+  | 'blue'
   | 'disabled';
 
 export interface Font {

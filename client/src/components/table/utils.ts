@@ -38,11 +38,7 @@ const getNextCell = (current: HTMLElement): HTMLElement | null => {
   if (!table) throw new Error('td has no parent table');
 
   const all = [...table.querySelectorAll('td, th')].filter(td => {
-    return (
-      td.hasAttribute('contenteditable') ||
-      !!td.querySelector('button') ||
-      td.querySelector('input')
-    );
+    return !!td.querySelector('button') || td.querySelector('input');
   });
 
   for (let i = 0; i < all.length; i++) {
@@ -66,29 +62,11 @@ export const getLastAddedCell = (
 
   if (!table) throw new Error('button has no parent table');
 
-  const all = [...table.querySelectorAll('td')].filter(
-    td => td.hasAttribute('contenteditable') || td.querySelector('input'),
+  const all = [...table.querySelectorAll('td')].filter(td =>
+    td.querySelector('input'),
   );
 
   const lastAddedCell = all[all.length - 2];
   const nestedInput = lastAddedCell.querySelector('input');
   return nestedInput || lastAddedCell;
-};
-
-export const selectElementText = (elem: HTMLElement) => {
-  setTimeout(() => {
-    const sel = window.getSelection();
-    const range = document.createRange();
-    if (sel && range) {
-      range.selectNodeContents(elem);
-      sel.removeAllRanges();
-      sel.addRange(range);
-    }
-  }, 0);
-};
-
-export const onCellFocus = (e: React.FocusEvent<HTMLTableCellElement>) => {
-  if (e.target.nodeName === 'INPUT') return;
-
-  selectElementText(e.target);
 };

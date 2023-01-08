@@ -43,6 +43,9 @@ const StyledCreatable = styled(Creatable)<{ textAlign: string }>`
       min-height: 0;
 
       ${backgroundHover()}
+      &--is-focused {
+        box-shadow: 0 0 0 1px ${props => props.theme.colors.blue};
+      }
     }
 
     &__input {
@@ -57,7 +60,6 @@ const StyledCreatable = styled(Creatable)<{ textAlign: string }>`
   }
 ` as typeof Creatable;
 
-// eslint-disable-next-line comma-spacing
 export const Select = <TOption extends Option<any>>(
   props: SelectProps<TOption>,
 ) => {

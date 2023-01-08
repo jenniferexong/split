@@ -9,6 +9,7 @@ export const theme: Theme = {
     caramel: '#C6A26E',
     taupe: '#8A8168',
     green: '#00FF94',
+    blue: '#37a6d7',
     red: '#FF0000',
     yellow: '#FFD600',
     disabled: '#E7E7E7',

@@ -17,7 +17,7 @@ import { Container } from './Container';
 import { ApiPerson, useCreateStore } from 'api';
 import { ActionMeta } from 'react-select';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
-import { Select, StoreOption } from 'components/select';
+import { Select, StoreOption } from 'components/input';
 
 const StyledReceipt = styled(Paper)`
   grid-column: span 2;
