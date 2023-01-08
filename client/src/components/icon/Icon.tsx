@@ -9,6 +9,7 @@ import {
 import styled, { css } from 'styled-components';
 import { Whose } from 'calculator/types';
 import { Theme } from 'styles/types';
+import { transition } from 'styles/mixins/transition';
 
 const icons: Record<Whose, IconDefinition> = {
   mine: faCheck,
@@ -32,6 +33,7 @@ const IconContainer = styled.div<{ whose: Whose; selected: Whose }>`
         ? getIconColor(whose, theme)
         : theme.colors.disabled};
 
+      ${transition('color')}
       :hover {
         ${whose !== selected &&
         css`

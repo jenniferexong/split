@@ -2,6 +2,7 @@ import { ButtonProps } from 'components/button';
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { fontMixin } from 'styles/mixins';
+import { transition } from 'styles/mixins/transition';
 
 const StyledButton = styled.button`
   ${({ theme }) => css`
@@ -15,14 +16,9 @@ const StyledButton = styled.button`
     border: none;
     grid-column: span 2;
 
-    // add hover effect
+    ${transition('transform')}
     &:hover {
-      // TODO add transition
-      transform: scale(1.1);
-    }
-
-    // add focus effect
-    &:focus {
+      transform: scale(1.3);
     }
   `}
 `;

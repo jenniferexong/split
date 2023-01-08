@@ -111,7 +111,6 @@ export const Receipt = (props: ReceiptProps) => {
           <thead>
             <TableRow borderBottom>
               <TableCell colSpan={3} as="th" textAlign="center">
-                {/* TODO extract to own component? */}
                 <Select
                   placeholder="Untitled"
                   options={storeOptions}
@@ -125,7 +124,9 @@ export const Receipt = (props: ReceiptProps) => {
           <tbody>
             <TableRow borderTop>
               <TableCell colSpan={2}>Date</TableCell>
-              <TableCell colSpan={2}>01-01-22</TableCell>
+              <TableCell colSpan={2} textAlign="right">
+                01-01-22
+              </TableCell>
             </TableRow>
             <TableRow borderBottom>
               <TableCell bold colSpan={2}>

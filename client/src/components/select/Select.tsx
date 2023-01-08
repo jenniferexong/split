@@ -3,6 +3,7 @@ import Creatable from 'react-select/creatable';
 import { getOptionValue } from './utils';
 import { Option } from './types';
 import styled from 'styled-components';
+import { backgroundHover } from 'styles/mixins/backgroundHover';
 
 interface SelectProps<TOption> {
   options: TOption[];
@@ -40,6 +41,8 @@ const StyledCreatable = styled(Creatable)<{ textAlign: string }>`
       border: none;
       border-radius: 0;
       min-height: 0;
+
+      ${backgroundHover()}
     }
 
     &__input {

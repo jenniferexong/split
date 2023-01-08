@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { backgroundHover } from 'styles/mixins/backgroundHover';
 import { ButtonProps } from './types';
 
 const StyledButton = styled.button`
@@ -9,12 +10,8 @@ const StyledButton = styled.button`
   color: ${props => props.theme.colors.black};
   text-align: left;
 
-  // add hover effect
-  &:hover {
-    background-color: lightGray;
-  }
+  ${backgroundHover()}
 
-  // add focus effect
   &:focus {
     color: ${props => props.theme.colors.red};
   }

@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { Theme } from 'styles/types';
 import { ButtonProps } from './types';
 import { NavLink } from 'react-router-dom';
+import { transition } from 'styles/mixins/transition';
 
 interface Props extends ButtonProps {
   to?: string;
@@ -27,6 +28,7 @@ const StyledNavLink = styled(NavLink).attrs({
   display: flex;
   align-items: center;
 
+  // TODO create shared mixin
   ${({ theme, position }) => css`
     color: ${theme.colors[theme.components.tabBarButton.text]};
 
@@ -35,6 +37,7 @@ const StyledNavLink = styled(NavLink).attrs({
       background-color: ${getActiveBackground(true, theme)};
     }
 
+    ${transition('background-color')}
     &:hover {
       background-color: ${theme.colors[theme.components.tabBarButton.active]};
     }
@@ -59,11 +62,13 @@ const StyledButton = styled.button<Props>`
   display: flex;
   align-items: center;
 
+  // TODO create shared mixin
   ${({ theme, position }) => css`
     color: ${theme.colors[theme.components.tabBarButton.text]};
 
     background-color: ${getActiveBackground(false, theme)};
 
+    ${transition('background-color')}
     &:hover {
       background-color: ${theme.colors[theme.components.tabBarButton.active]};
     }
