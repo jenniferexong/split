@@ -17,7 +17,7 @@ import { Container } from './Container';
 import { ApiPerson, useCreateStore } from 'api';
 import { ActionMeta } from 'react-select';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
-import { Select, StoreOption } from 'components/input';
+import { DatePicker, Select, StoreOption } from 'components/input';
 
 const StyledReceipt = styled(Paper)`
   grid-column: span 2;
@@ -36,7 +36,7 @@ export const Receipt = (props: ReceiptProps) => {
     personIndex,
     receiptIndex,
     dispatch,
-    receipt: { items, subtotal },
+    receipt: { items, subtotal, store, date },
     people,
   } = props;
 
@@ -71,7 +71,7 @@ export const Receipt = (props: ReceiptProps) => {
           type: 'updateReceipt',
           personIndex,
           receiptIndex,
-          receipt: { store, items, subtotal, date: undefined }, // TODO date
+          receipt: { store, items, subtotal, date },
         });
 
         setStoreOptionValue(newOption);
@@ -80,6 +80,7 @@ export const Receipt = (props: ReceiptProps) => {
     [
       addStoreOption,
       createStore,
+      date,
       dispatch,
       items,
       personIndex,
@@ -95,13 +96,29 @@ export const Receipt = (props: ReceiptProps) => {
           type: 'updateReceipt',
           personIndex,
           receiptIndex,
-          receipt: { store: option?.data, items, subtotal, date: undefined }, // TODO date
+          receipt: { store: option?.data, items, subtotal, date },
         });
 
         setStoreOptionValue(option);
       }
     },
-    [dispatch, items, personIndex, receiptIndex, subtotal],
+    [date, dispatch, items, personIndex, receiptIndex, subtotal],
+  );
+
+  const [dateInput, setDateInput] = useState<Date | null>(null);
+
+  const handleChangeDate = useCallback(
+    (date: Date) => {
+      setDateInput(date);
+
+      dispatch({
+        type: 'updateReceipt',
+        personIndex,
+        receiptIndex,
+        receipt: { store, items, subtotal, date },
+      });
+    },
+    [dispatch, items, personIndex, receiptIndex, store, subtotal],
   );
 
   return (
@@ -123,9 +140,9 @@ export const Receipt = (props: ReceiptProps) => {
           </thead>
           <tbody>
             <TableRow borderTop>
-              <TableCell colSpan={2}>Date</TableCell>
+              <TableCell colSpan={1}>Date</TableCell>
               <TableCell colSpan={2} textAlign="right">
-                01-01-22
+                <DatePicker value={dateInput} onChangeDate={handleChangeDate} />
               </TableCell>
             </TableRow>
             <TableRow borderBottom>

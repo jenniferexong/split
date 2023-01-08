@@ -152,7 +152,7 @@ export const Item = (props: ItemProps) => {
   return (
     <>
       <TableRow borderTop={itemIndex === 0}>
-        <TableCell width="55%">
+        <TableCell width="35%">
           <Select
             placeholder="Untitled"
             options={productOptions}

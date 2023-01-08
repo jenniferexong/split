@@ -31,7 +31,7 @@ const StyledTableCell = styled.td<{
     `}
 
     text-align: ${textAlign};
-    & > * {
+    input {
       text-align: ${textAlign};
     }
 

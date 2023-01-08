@@ -1,4 +1,8 @@
-import { ChangeEventHandler, FocusEventHandler } from 'react';
+import {
+  HTMLInputTypeAttribute,
+  ChangeEventHandler,
+  FocusEventHandler,
+} from 'react';
 import styled from 'styled-components';
 import { backgroundHover } from 'styles/mixins/backgroundHover';
 import { onInputFocus } from './utils';
@@ -21,6 +25,7 @@ export interface InputProps {
   onChange: ChangeEventHandler<HTMLInputElement>;
   onBlur: FocusEventHandler<HTMLInputElement>;
   className?: string;
+  type?: HTMLInputTypeAttribute;
 }
 
 export const Input = (props: InputProps) => {
