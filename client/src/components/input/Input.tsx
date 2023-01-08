@@ -16,17 +16,19 @@ const StyledInput = styled.input`
   ${backgroundHover()}
 `;
 
-interface InputProps {
+export interface InputProps {
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
   onBlur: FocusEventHandler<HTMLInputElement>;
+  className?: string;
 }
 
 export const Input = (props: InputProps) => {
-  const { value, onChange, onBlur } = props;
+  const { value, className, onChange, onBlur } = props;
 
   return (
     <StyledInput
+      className={className}
       type="text"
       value={value}
       onChange={onChange}

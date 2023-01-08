@@ -1,17 +1,17 @@
-import { ItemType, Whose } from 'calculator/types';
+import { ItemType, SplitType, Whose } from 'calculator/types';
 import styled from 'styled-components';
 import { Action } from 'utils/reducer';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Input, TableCell } from 'components/table';
 import { TableRow } from 'components/table/TableRow';
 import { ApiPerson, useCreateProduct } from 'api';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { ActionMeta } from 'react-select';
-import { ProductOption, Select } from 'components/input';
+import { AntecedentInput, ProductOption, Select } from 'components/input';
 import { Icon } from 'components/icon';
 import { getSplitCost, mapWhoseToSplits } from 'utils/splits';
 
-interface ItemProps extends ItemType {
+export interface ItemProps extends ItemType {
   people: ApiPerson[];
   personIndex: number;
   receiptIndex: number;
@@ -65,8 +65,7 @@ export const Item = (props: ItemProps) => {
   const handleChangePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    const value = e.target.value;
-    setPriceInput(value);
+    setPriceInput(e.target.value);
   };
 
   const updatePrice = useCallback(
@@ -92,7 +91,7 @@ export const Item = (props: ItemProps) => {
     [dispatch, itemIndex, personIndex, price, product, receiptIndex, splits],
   );
 
-  const handleCreateOption = useCallback(
+  const handleCreateProductOption = useCallback(
     (inputValue: string) => {
       createProduct(inputValue).then(product => {
         // Updates product options
@@ -121,7 +120,7 @@ export const Item = (props: ItemProps) => {
     ],
   );
 
-  const handleChangeOption = useCallback(
+  const handleChangeProductOption = useCallback(
     (option: ProductOption | null, actionMeta: ActionMeta<ProductOption>) => {
       if (actionMeta.action === 'select-option') {
         dispatch({
@@ -138,6 +137,18 @@ export const Item = (props: ItemProps) => {
     [dispatch, personIndex, receiptIndex, itemIndex, splits, price],
   );
 
+  // Ensure the split of the person who paid for the receipt is first.
+  const sortedSplits: SplitType[] = useMemo(() => {
+    const sorted = [...splits];
+    // index of the split of the person who paid for this receipt
+    const index = sorted.findIndex(
+      split => split.person.id === people[personIndex].id,
+    );
+
+    sorted.unshift(sorted.splice(index, 1)[0]);
+    return sorted;
+  }, [people, personIndex, splits]);
+
   return (
     <>
       <TableRow borderTop={itemIndex === 0}>
@@ -146,8 +157,8 @@ export const Item = (props: ItemProps) => {
             placeholder="Untitled"
             options={productOptions}
             value={productOptionValue}
-            onChangeOption={handleChangeOption}
-            onCreateOption={handleCreateOption}
+            onChangeOption={handleChangeProductOption}
+            onCreateOption={handleCreateProductOption}
           />
         </TableCell>
 
@@ -167,13 +178,15 @@ export const Item = (props: ItemProps) => {
           />
         </TableCell>
       </TableRow>
-      {splits.map(split => (
+      {sortedSplits.map(split => (
         <TableRow key={split.person.email}>
           <TableCell textSize="small">
             &emsp;&emsp;&emsp;{split.person.firstName}
           </TableCell>
           <TableCell textSize="small" textAlign="right">
-            {splits.length > 1 && split.antecedent}
+            {splits.length > 1 && (
+              <AntecedentInput split={split} itemProps={props} />
+            )}
           </TableCell>
           <TableCell textSize="small" textAlign="right">
             {getSplitCost(splits, split.antecedent, price).toFixed(2)}
