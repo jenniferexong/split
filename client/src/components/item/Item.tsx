@@ -9,7 +9,7 @@ import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { ActionMeta } from 'react-select';
 import { ProductOption, Select } from 'components/select';
 import { Icon } from 'components/icon';
-import { mapWhoseToSplits } from 'utils/splits';
+import { getSplitCost, mapWhoseToSplits } from 'utils/splits';
 
 interface ItemProps extends ItemType {
   people: ApiPerson[];
@@ -125,34 +125,49 @@ export const Item = (props: ItemProps) => {
   );
 
   return (
-    <TableRow borderTop={itemIndex === 0}>
-      <TableCell width="55%">
-        <Select
-          placeholder="..."
-          options={productOptions}
-          value={productOptionValue}
-          onChangeOption={handleChangeOption}
-          onCreateOption={handleCreateOption}
-        />
-      </TableCell>
+    <>
+      <TableRow borderTop={itemIndex === 0}>
+        <TableCell width="55%">
+          <Select
+            placeholder="Untitled"
+            options={productOptions}
+            value={productOptionValue}
+            onChangeOption={handleChangeOption}
+            onCreateOption={handleCreateOption}
+          />
+        </TableCell>
 
-      <TableCell>
-        <IconsContainer>
-          <Icon whose="theirs" selected={whose} onClick={updateWhose} />
-          <Icon whose="split" selected={whose} onClick={updateWhose} />
-          <Icon whose="mine" selected={whose} onClick={updateWhose} />
-        </IconsContainer>
-      </TableCell>
+        <TableCell>
+          <IconsContainer>
+            <Icon whose="theirs" selected={whose} onClick={updateWhose} />
+            <Icon whose="split" selected={whose} onClick={updateWhose} />
+            <Icon whose="mine" selected={whose} onClick={updateWhose} />
+          </IconsContainer>
+        </TableCell>
 
-      <TableCell
-        contentEditable
-        onBlur={updatePrice}
-        width="23%"
-        textAlign="right"
-      >
-        {price.toFixed(2)}
-      </TableCell>
-    </TableRow>
+        <TableCell
+          contentEditable
+          onBlur={updatePrice}
+          width="23%"
+          textAlign="right"
+        >
+          {price.toFixed(2)}
+        </TableCell>
+      </TableRow>
+      {splits.map(split => (
+        <TableRow key={split.person.email}>
+          <TableCell textSize="small">
+            &emsp;&emsp;&emsp;{split.person.firstName}
+          </TableCell>
+          <TableCell textSize="small" textAlign="right">
+            {split.antecedent}
+          </TableCell>
+          <TableCell textSize="small" textAlign="right">
+            {getSplitCost(splits, split.antecedent, price).toFixed(2)}
+          </TableCell>
+        </TableRow>
+      ))}
+    </>
   );
 };
 Item.displayName = 'Item';

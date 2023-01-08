@@ -47,6 +47,10 @@ const StyledCreatable = styled(Creatable)<{ textAlign: string }>`
       width: 100%;
       grid-area: 1 / -1 / auto/auto;
     }
+
+    &__placeholder {
+      color: ${props => props.theme.colors.red};
+    }
   }
 ` as typeof Creatable;
 

@@ -123,6 +123,18 @@ export const Receipt = (props: ReceiptProps) => {
             </TableRow>
           </thead>
           <tbody>
+            <TableRow borderTop>
+              <TableCell colSpan={2}>Date</TableCell>
+              <TableCell colSpan={2}>01-01-22</TableCell>
+            </TableRow>
+            <TableRow borderBottom>
+              <TableCell bold colSpan={2}>
+                Paid by
+              </TableCell>
+              <TableCell bold colSpan={2} textAlign="right">
+                {people[personIndex].firstName}
+              </TableCell>
+            </TableRow>
             {items.map((item, index) => (
               <Item
                 people={people}
@@ -135,11 +147,11 @@ export const Receipt = (props: ReceiptProps) => {
               />
             ))}
             <TableRow borderBottom borderTop={items.length === 0}>
-              <td colSpan={3}>
+              <TableCell colSpan={3}>
                 <Button ref={buttonRef} onClick={handleAddItem}>
                   +
                 </Button>
-              </td>
+              </TableCell>
             </TableRow>
             <TableRow borderTop>
               <TableCell colSpan={2}>Item count:</TableCell>

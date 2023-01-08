@@ -8,20 +8,37 @@ interface TableCellProps {
   as?: 'td' | 'th';
   onBlur?: React.FocusEventHandler<HTMLTableCellElement>;
 
+  bold?: boolean;
+  textSize?: 'normal' | 'small';
   contentEditable?: boolean;
   colSpan?: number;
   width?: string;
   textAlign?: 'left' | 'center' | 'right';
 }
 
-const StyledTableCell = styled.td<{ as: string; textAlign: string }>`
-  ${({ theme, as, textAlign }) => css`
+const StyledTableCell = styled.td<{
+  as: string;
+  textAlign: string;
+  textSize: 'normal' | 'small';
+  bold?: boolean;
+}>`
+  ${({ theme, as, textAlign, textSize, bold }) => css`
     ${fontMixin(theme.fonts.receipt)}
+
+    ${bold &&
+    css`
+      font-weight: bolder;
+    `}
 
     text-align: ${textAlign};
     .react-select__input {
       text-align: ${textAlign};
     }
+
+    ${textSize === 'small' &&
+    css`
+      font-size: 10px;
+    `}
 
     ${as === 'th' &&
     css`
@@ -41,6 +58,7 @@ const StyledTableCell = styled.td<{ as: string; textAlign: string }>`
 export const TableCell = ({
   as = 'td',
   textAlign = 'left',
+  textSize = 'normal',
   ...props
 }: TableCellProps) => {
   const { children, onBlur, ...rest } = props;
@@ -56,6 +74,7 @@ export const TableCell = ({
       onKeyDown={handleCellKeyDown}
       as={as}
       textAlign={textAlign}
+      textSize={textSize}
       spellCheck={false}
       {...rest}
     >

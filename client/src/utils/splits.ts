@@ -8,6 +8,16 @@ export const createEqualSplits = (people: ApiPerson[]): SplitType[] =>
     antecedent: 1,
   }));
 
+export const getSplitCost = (
+  splits: SplitType[],
+  antecedent: number,
+  price: number,
+): number => {
+  const consequent = splits.reduce((sum, split) => sum + split.antecedent, 0);
+
+  return (price / consequent) * antecedent;
+};
+
 export const mapWhoseToSplits = (
   whose: Whose,
   personIndex: number,
