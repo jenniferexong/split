@@ -3,6 +3,9 @@ import normalize from 'styled-normalize';
 import { fontMixin } from './mixins/fontMixin';
 import './fonts.scss';
 
+import 'react-toastify/dist/ReactToastify.css';
+import 'react-datepicker/dist/react-datepicker.css';
+
 export const GlobalStyle = createGlobalStyle`
     ${normalize}
 

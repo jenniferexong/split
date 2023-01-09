@@ -1,13 +1,13 @@
+import { ApiReceipt } from 'api/types';
 import { gql, useMutation } from 'urql';
-import { showApiError } from 'utils/showError';
 import { ReceiptResult } from './types';
 
-interface ReceiptLineSplitInput {
+export interface ReceiptLineSplitInput {
   personId: number;
   antecedent: number;
 }
 
-interface ReceiptLineInput {
+export interface ReceiptLineInput {
   productId: number;
   price: number;
   receiptLineSplits: ReceiptLineSplitInput[];
@@ -57,14 +57,18 @@ export const useCreateReceipt = () => {
 
   const { fetching } = result;
 
-  const createReceipt = async (input: CreateReceiptInput) => {
+  const createReceipt = async (
+    input: CreateReceiptInput,
+  ): Promise<ApiReceipt> => {
     const variables = mapReceiptInputToReceiptVariables(input);
 
-    const { error } = await updateResult(variables);
+    const { data, error } = await updateResult(variables);
 
-    if (error) {
-      showApiError('Could not create receipt', error);
+    if (error || !data) {
+      throw new Error(JSON.stringify(error));
     }
+
+    return data.receipt;
   };
 
   return { createReceipt, fetching };

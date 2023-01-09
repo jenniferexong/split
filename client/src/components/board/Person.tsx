@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { ActionMeta } from 'react-select';
 import styled, { css, useTheme } from 'styled-components';
 import { fontMixin } from 'styles/mixins';
-import { showError } from 'utils/showError';
+import { showError } from 'utils/showToast';
 import { Paper } from './Paper';
 
 interface PersonProps {

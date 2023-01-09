@@ -6,7 +6,7 @@ import { Invoice, Receipt } from 'components/receipt';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import styled from 'styled-components';
 import { hasSelectedAllPeople } from 'utils/hasSelectedAllPeople';
-import { showError } from 'utils/showError';
+import { showError } from 'utils/showToast';
 
 const Container = styled.div`
   width: 100%;

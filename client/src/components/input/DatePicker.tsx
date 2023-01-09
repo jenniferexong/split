@@ -3,8 +3,6 @@ import ReactDatePicker from 'react-datepicker';
 import { useCallback } from 'react';
 import { backgroundHover } from 'styles/mixins/backgroundHover';
 
-import 'react-datepicker/dist/react-datepicker.css';
-
 const StyledDatePicker = styled(ReactDatePicker)`
   border: none;
   outline: none;

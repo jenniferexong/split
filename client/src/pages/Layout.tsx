@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 import { Outlet } from 'react-router-dom';
-
-import 'react-toastify/dist/ReactToastify.css';
 import { TabBarMenu, TabBarMenuButton } from 'components/navigation/TabBarMenu';
 import { ReactNode, useState } from 'react';
 import { PageUrl } from './types';

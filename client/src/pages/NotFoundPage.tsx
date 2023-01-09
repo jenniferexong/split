@@ -1,5 +1,4 @@
 import { Board } from 'components/board';
-import 'react-toastify/dist/ReactToastify.css';
 import { Layout } from './Layout';
 
 export const NotFoundPage = () => {
