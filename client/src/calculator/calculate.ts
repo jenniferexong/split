@@ -1,38 +1,43 @@
+import { hasSelectedAllPeople } from '../utils/hasSelectedAllPeople';
 import { AppType, InvoiceData } from './types';
 
 interface CalculateResult {
   globalTotal: number;
   /**
-   * Record from person id to invoice
+   * In the same order of people in the app
    */
-  invoices: Record<number, InvoiceData>;
+  invoices: InvoiceData[];
 }
 
 export const calculate = (data: AppType): CalculateResult => {
   let globalTotal = 0;
 
-  // From person id to invoice data
-  const invoices: Record<number, InvoiceData> = {
-    [data.people[0].person.id]: {
-      totalSpendings: 0,
-      actualSpendings: 0,
-      oweings: 0,
-    },
-    [data.people[1].person.id]: {
-      totalSpendings: 0,
-      actualSpendings: 0,
-      oweings: 0,
-    },
-  };
+  const invoices: InvoiceData[] = data.people.map(person => ({
+    person: person.person,
+    totalSpendings: 0,
+    actualSpendings: 0,
+    oweings: 0,
+  }));
 
-  data.people.forEach(person => {
+  if (!hasSelectedAllPeople(data.people.map(person => person.person))) {
+    return {
+      globalTotal: 0,
+      invoices,
+    };
+  }
+
+  if (invoices[0].person === invoices[1].person) {
+    throw new Error('Cannot calculate invoices for non unique people');
+  }
+
+  data.people.forEach((person, personIndex) => {
     person.receipts.forEach(receipt => {
       receipt.items.forEach(item => {
         const receiptPerson = person.person;
         const { price, splits } = item;
 
         globalTotal += price;
-        invoices[receiptPerson.id].actualSpendings += price;
+        invoices[personIndex].actualSpendings += price;
 
         const consequent = splits.reduce(
           (sum, split) => sum + split.antecedent,
@@ -44,11 +49,15 @@ export const calculate = (data: AppType): CalculateResult => {
 
           const amount = (price / consequent) * antecedent;
 
-          invoices[splitPerson.id].totalSpendings += amount;
+          const splitPersonIndex = data.people.findIndex(
+            person => person.person?.id === splitPerson.id,
+          );
+
+          invoices[splitPersonIndex].totalSpendings += amount;
 
           if (splitPerson !== receiptPerson) {
-            invoices[splitPerson.id].oweings += amount;
-            invoices[receiptPerson.id].oweings -= amount;
+            invoices[personIndex ^ 1].oweings += amount;
+            invoices[personIndex].oweings -= amount;
           }
         });
       });
@@ -56,7 +65,7 @@ export const calculate = (data: AppType): CalculateResult => {
   });
 
   // NOTE this is only useful if there are two people (does not say who owes who)
-  Object.values(invoices).forEach(invoice => {
+  invoices.forEach(invoice => {
     invoice.oweings = invoice.oweings < 0 ? 0 : invoice.oweings;
   });
 

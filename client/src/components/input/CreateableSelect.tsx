@@ -1,4 +1,5 @@
-import ReactSelect, { ActionMeta } from 'react-select';
+import { ActionMeta } from 'react-select';
+import Creatable from 'react-select/creatable';
 import { getOptionValue } from './utils';
 import { Option } from './types';
 import styled from 'styled-components';
@@ -12,11 +13,7 @@ interface SelectProps<TOption> {
     option: TOption | null,
     actionMeta: ActionMeta<TOption>,
   ) => void;
-  isSearchable?: boolean;
-  // should be used together
-  menuIsOpen?: boolean;
-  onMenuClose?: () => void;
-  onMenuOpen?: () => void;
+  onCreateOption: (inputValue: string) => void;
 }
 
 const components = {
@@ -24,7 +21,7 @@ const components = {
   IndicatorSeparator: () => null,
 };
 
-const StyledSelect = styled(ReactSelect)<{ textAlign: string }>`
+const StyledCreatable = styled(Creatable)<{ textAlign: string }>`
   .react-select {
     &__value-container {
       padding: 0;
@@ -61,36 +58,24 @@ const StyledSelect = styled(ReactSelect)<{ textAlign: string }>`
       color: ${props => props.theme.colors.red};
     }
   }
-` as typeof ReactSelect;
+` as typeof Creatable;
 
-export const Select = <TOption extends Option<any>>(
+export const CreateableSelect = <TOption extends Option<any>>(
   props: SelectProps<TOption>,
 ) => {
-  const {
-    options,
-    value,
-    placeholder,
-    menuIsOpen,
-    isSearchable,
-    onChangeOption,
-    onMenuOpen,
-    onMenuClose,
-  } = props;
+  const { options, value, placeholder, onChangeOption, onCreateOption } = props;
 
   return (
-    <StyledSelect<TOption>
-      classNamePrefix="react-select"
+    <StyledCreatable<TOption>
+      classNamePrefix={'react-select'}
       placeholder={placeholder}
       options={options}
       value={value}
       getOptionValue={getOptionValue}
       onChange={onChangeOption}
-      menuIsOpen={menuIsOpen}
-      onMenuOpen={onMenuOpen}
-      onMenuClose={onMenuClose}
+      onCreateOption={onCreateOption}
       components={components}
-      isSearchable={isSearchable}
     />
   );
 };
-Select.displayName = 'Select';
+CreateableSelect.displayName = 'CreateableSelect';

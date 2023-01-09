@@ -1,5 +1,5 @@
 import { gql, useMutation } from 'urql';
-import { showError } from 'utils/showError';
+import { showApiError } from 'utils/showError';
 import { ReceiptResult } from './types';
 
 interface ReceiptLineSplitInput {
@@ -63,7 +63,7 @@ export const useCreateReceipt = () => {
     const { error } = await updateResult(variables);
 
     if (error) {
-      showError('Could not create receipt', error);
+      showApiError('Could not create receipt', error);
     }
   };
 

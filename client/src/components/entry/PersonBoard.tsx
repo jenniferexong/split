@@ -3,9 +3,10 @@ import { InvoiceData, PersonType } from 'calculator/types';
 import { Board, BoardLetters } from 'components/board';
 import { Person } from 'components/board/Person';
 import { Invoice, Receipt } from 'components/receipt';
-import { Dispatch } from 'react';
+import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import styled from 'styled-components';
-import { Action } from 'utils/reducer';
+import { hasSelectedAllPeople } from 'utils/hasSelectedAllPeople';
+import { showError } from 'utils/showError';
 
 const Container = styled.div`
   width: 100%;
@@ -23,11 +24,10 @@ const Container = styled.div`
 `;
 
 interface PersonBoardProps {
-  people: ApiPerson[];
+  people: (ApiPerson | undefined)[];
   personIndex: number;
   person: PersonType;
   invoice: InvoiceData;
-  dispatch: Dispatch<Action>;
 }
 
 export const PersonBoard = (props: PersonBoardProps) => {
@@ -36,10 +36,18 @@ export const PersonBoard = (props: PersonBoardProps) => {
     person: { person, image, receipts },
     personIndex,
     invoice: { totalSpendings, actualSpendings, oweings },
-    dispatch,
   } = props;
 
+  const { dispatch } = useEntryPageContext();
+
+  const hasSelectedPeople = hasSelectedAllPeople(people);
+
   const handleAddReceipt = () => {
+    if (!hasSelectedPeople) {
+      showError('Must select both people');
+      return;
+    }
+
     dispatch({
       type: 'addReceipt',
       personIndex,
@@ -49,25 +57,27 @@ export const PersonBoard = (props: PersonBoardProps) => {
   return (
     <Board>
       <Container>
-        <Person name={person.firstName} image={image} />
+        <Person personIndex={personIndex} person={person} image={image} />
         <Invoice
+          person={person}
           totalSpendings={totalSpendings}
           actualSpendings={actualSpendings}
           oweings={oweings}
         />
-        {receipts.map((receipt, index) => (
-          <Receipt
-            people={people}
-            key={`${personIndex}-${index}`}
-            personIndex={personIndex}
-            receiptIndex={index}
-            receipt={receipt}
-            dispatch={dispatch}
-          />
-        ))}
+        {receipts.map(
+          (receipt, index) =>
+            hasSelectedPeople && (
+              <Receipt
+                people={people}
+                key={`${personIndex}-${index}`}
+                personIndex={personIndex}
+                receiptIndex={index}
+                receipt={receipt}
+              />
+            ),
+        )}
         <BoardLetters onClick={handleAddReceipt}>+</BoardLetters>
       </Container>
     </Board>
   );
 };
-PersonBoard.displayName = 'PersonBoard';

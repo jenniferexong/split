@@ -2,6 +2,7 @@ import { Input } from './Input';
 import React, { useCallback, useState } from 'react';
 import { SplitType } from 'calculator/types';
 import { ItemProps } from 'components/item/Item';
+import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 
 interface AntecedentInputProps {
   itemProps: ItemProps;
@@ -10,17 +11,11 @@ interface AntecedentInputProps {
 
 export const AntecedentInput = (props: AntecedentInputProps) => {
   const {
-    itemProps: {
-      personIndex,
-      receiptIndex,
-      itemIndex,
-      product,
-      splits,
-      price,
-      dispatch,
-    },
+    itemProps: { personIndex, receiptIndex, itemIndex, product, splits, price },
     split,
   } = props;
+
+  const { dispatch } = useEntryPageContext();
 
   const [antecedentInput, setAntecedentInput] = useState<string>(
     split.antecedent.toString(),

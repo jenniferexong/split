@@ -1,7 +1,7 @@
 import { ReceiptType } from 'calculator/types';
 import { Button } from 'components/button';
 import { Entry as Item } from 'components/item';
-import { Dispatch, useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import {
   focusTableCell,
@@ -10,14 +10,13 @@ import {
   TableCell,
   TableRow,
 } from 'components/table';
-import { Action } from 'utils/reducer';
 import { Barcode } from './Barcode';
 import { Paper } from 'components/board';
 import { Container } from './Container';
 import { ApiPerson, useCreateStore } from 'api';
 import { ActionMeta } from 'react-select';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
-import { DatePicker, Select, StoreOption } from 'components/input';
+import { DatePicker, CreateableSelect, StoreOption } from 'components/input';
 
 const StyledReceipt = styled(Paper)`
   grid-column: span 2;
@@ -28,19 +27,17 @@ interface ReceiptProps {
   personIndex: number;
   receiptIndex: number;
   receipt: ReceiptType;
-  dispatch: Dispatch<Action>;
 }
 
 export const Receipt = (props: ReceiptProps) => {
   const {
     personIndex,
     receiptIndex,
-    dispatch,
     receipt: { items, subtotal, store, date },
     people,
   } = props;
 
-  const { storeOptions, addStoreOption } = useEntryPageContext();
+  const { storeOptions, addStoreOption, dispatch } = useEntryPageContext();
   const { createStore } = useCreateStore();
   const [storeOptionValue, setStoreOptionValue] = useState<StoreOption | null>(
     null,
@@ -128,7 +125,7 @@ export const Receipt = (props: ReceiptProps) => {
           <thead>
             <TableRow borderBottom>
               <TableCell colSpan={3} as="th" textAlign="center">
-                <Select
+                <CreateableSelect
                   placeholder="Untitled"
                   options={storeOptions}
                   value={storeOptionValue}
@@ -160,7 +157,6 @@ export const Receipt = (props: ReceiptProps) => {
                 personIndex={personIndex}
                 receiptIndex={receiptIndex}
                 itemIndex={index}
-                dispatch={dispatch}
                 {...item}
               />
             ))}

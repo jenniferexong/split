@@ -1,13 +1,16 @@
 import { ItemType, SplitType, Whose } from 'calculator/types';
 import styled from 'styled-components';
-import { Action } from 'utils/reducer';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Input, TableCell } from 'components/table';
 import { TableRow } from 'components/table/TableRow';
 import { ApiPerson, useCreateProduct } from 'api';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { ActionMeta } from 'react-select';
-import { AntecedentInput, ProductOption, Select } from 'components/input';
+import {
+  AntecedentInput,
+  ProductOption,
+  CreateableSelect,
+} from 'components/input';
 import { Icon } from 'components/icon';
 import { getSplitCost, mapWhoseToSplits } from 'utils/splits';
 
@@ -16,7 +19,6 @@ export interface ItemProps extends ItemType {
   personIndex: number;
   receiptIndex: number;
   itemIndex: number;
-  dispatch: React.Dispatch<Action>;
 }
 
 const IconsContainer = styled.div`
@@ -34,10 +36,9 @@ export const Item = (props: ItemProps) => {
     personIndex,
     receiptIndex,
     itemIndex,
-    dispatch,
   } = props;
 
-  const { productOptions, addProductOption } = useEntryPageContext();
+  const { productOptions, addProductOption, dispatch } = useEntryPageContext();
   const { createProduct } = useCreateProduct();
   const [productOptionValue, setProductOptionValue] =
     useState<ProductOption | null>(null);
@@ -153,7 +154,7 @@ export const Item = (props: ItemProps) => {
     <>
       <TableRow borderTop={itemIndex === 0}>
         <TableCell width="35%">
-          <Select
+          <CreateableSelect
             placeholder="Untitled"
             options={productOptions}
             value={productOptionValue}

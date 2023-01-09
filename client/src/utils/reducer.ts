@@ -5,6 +5,10 @@ import { Reducer } from 'react';
 import { unreachable } from './unreachable';
 import { ApiPerson } from 'api';
 import { createEqualSplits } from './splits';
+import { hasSelectedAllPeople } from './hasSelectedAllPeople';
+
+import nibbles from 'images/nibbles.jpg';
+import pandy from 'images/pandy.jpg';
 
 interface AddReceipt {
   type: 'addReceipt';
@@ -32,6 +36,12 @@ interface UpdateItem {
   item: ItemType;
 }
 
+interface UpdatePerson {
+  type: 'updatePerson';
+  personIndex: number;
+  newPerson: ApiPerson;
+}
+
 interface Clear {
   type: 'clear';
 }
@@ -40,7 +50,28 @@ export const clearAction: Clear = {
   type: 'clear',
 };
 
-export type Action = AddReceipt | UpdateReceipt | AddItem | UpdateItem | Clear;
+export type Action =
+  | AddReceipt
+  | UpdateReceipt
+  | AddItem
+  | UpdateItem
+  | Clear
+  | UpdatePerson;
+
+export const initialState: AppType = {
+  people: [
+    {
+      person: undefined,
+      image: nibbles,
+      receipts: [],
+    },
+    {
+      person: undefined,
+      image: pandy,
+      receipts: [],
+    },
+  ],
+};
 
 /**
  * Creates a item with no product, with an equal split between each given person.
@@ -65,6 +96,11 @@ const emptyReceipt: ReceiptType = {
 export const reducer: Reducer<AppType, Action> = (state, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case 'updatePerson': {
+        const { personIndex, newPerson } = action;
+        draft.people[personIndex].person = newPerson;
+        break;
+      }
       case 'clear': {
         draft.people.forEach(person => (person.receipts.length = 0));
         break;
@@ -82,9 +118,12 @@ export const reducer: Reducer<AppType, Action> = (state, action) =>
       case 'addItem': {
         const { personIndex, receiptIndex } = action;
 
-        const emptyItem = createEmptyItem(
-          draft.people.map(person => person.person),
-        );
+        const people = draft.people.map(person => person.person);
+        if (!hasSelectedAllPeople(people)) {
+          throw new Error('Cannot addItem, encountered undefined person');
+        }
+
+        const emptyItem = createEmptyItem(people);
 
         // only add a new item if the previous one has been updated
         const items = draft.people[personIndex].receipts[receiptIndex].items;

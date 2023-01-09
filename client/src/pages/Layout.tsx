@@ -49,7 +49,7 @@ export const Layout = (props: LayoutProps) => {
   return (
     <>
       <ToastContainer
-        autoClose={6000}
+        autoClose={2000}
         position="top-center"
         hideProgressBar
         theme="dark"

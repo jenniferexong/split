@@ -1,32 +1,14 @@
 import { calculate } from 'calculator';
 import { useMemo, useReducer } from 'react';
-import { clearAction, reducer } from 'utils/reducer';
+import { clearAction, initialState, reducer } from 'utils/reducer';
 import { useLoaderData } from 'react-router-dom';
-import nibbles from 'images/nibbles.jpg';
-import pandy from 'images/pandy.jpg';
 import { PersonBoard } from 'components/entry/PersonBoard';
 import { useBottomTabBarMenu } from 'pages/contexts/LayoutContext';
 import { ApiPerson } from 'api';
-import { AppType } from 'calculator/types';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { EntryPageData } from 'pages/types';
 import { EntryPageContextProvider } from 'pages/contexts/EntryPageContext';
-
-const getInitalState = (people: ApiPerson[]): AppType => ({
-  people: [
-    {
-      person: people[0],
-      image: nibbles,
-      receipts: [],
-    },
-    {
-      person: people[1],
-      image: pandy,
-      receipts: [],
-    },
-  ],
-});
 
 export const EntryPage = () => {
   const {
@@ -35,14 +17,11 @@ export const EntryPage = () => {
     people: loadedPeople,
   } = useLoaderData() as EntryPageData;
 
-  const [appState, dispatch] = useReducer(
-    reducer,
-    getInitalState(loadedPeople),
-  );
+  const [appState, dispatch] = useReducer(reducer, initialState);
 
   console.log('app state', appState);
 
-  const people: ApiPerson[] = useMemo(
+  const people: (ApiPerson | undefined)[] = useMemo(
     () => appState.people.map(person => person.person),
     [appState.people],
   );
@@ -61,9 +40,11 @@ export const EntryPage = () => {
 
   return (
     <EntryPageContextProvider
-      loadedPeople={people}
+      appState={appState}
+      loadedPeople={loadedPeople}
       loadedProducts={loadedProducts}
       loadedStores={loadedStores}
+      dispatch={dispatch}
     >
       {appState.people.map((person, index) => (
         <PersonBoard
@@ -71,8 +52,7 @@ export const EntryPage = () => {
           key={index}
           person={person}
           personIndex={index}
-          invoice={calculations.invoices[person.person.id]}
-          dispatch={dispatch}
+          invoice={calculations.invoices[index]}
         />
       ))}
     </EntryPageContextProvider>

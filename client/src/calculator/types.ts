@@ -21,7 +21,7 @@ export interface ReceiptType {
 }
 
 export interface PersonType {
-  person: ApiPerson;
+  person?: ApiPerson;
   receipts: ReceiptType[];
   image?: string;
 }
@@ -31,6 +31,7 @@ export interface AppType {
 }
 
 export interface InvoiceData {
+  person: ApiPerson | undefined;
   totalSpendings: number;
   actualSpendings: number;
   oweings: number;
