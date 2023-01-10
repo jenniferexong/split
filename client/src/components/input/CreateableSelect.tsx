@@ -1,9 +1,9 @@
 import { ActionMeta } from 'react-select';
 import Creatable from 'react-select/creatable';
-import { getOptionValue } from './utils';
 import { Option } from './types';
 import styled from 'styled-components';
 import { backgroundHover } from 'styles/mixins/backgroundHover';
+import { getOptionValue } from './utils/getOptionValue';
 
 interface SelectProps<TOption> {
   options: TOption[];

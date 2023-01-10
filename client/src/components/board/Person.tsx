@@ -1,5 +1,6 @@
 import { ApiPerson } from 'api';
 import { PersonOption, Select } from 'components/input';
+import { mapPersonToOption, useOptionValue } from 'components/input/utils/';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { useCallback, useMemo, useState } from 'react';
 import { ActionMeta } from 'react-select';
@@ -66,11 +67,14 @@ const Image = styled.img`
 
 // TODO handle creating a person
 export const Person = (props: PersonProps) => {
-  const { personIndex, image } = props;
+  const { person, personIndex, image } = props;
 
   const { personOptions, appState, dispatch } = useEntryPageContext();
-  const [personOptionValue, setPersonOptionValue] =
-    useState<PersonOption | null>(null);
+
+  const [personOptionValue, setPersonOptionValue] = useOptionValue(
+    person,
+    mapPersonToOption,
+  );
 
   const {
     components: { nameTag },
@@ -99,7 +103,7 @@ export const Person = (props: PersonProps) => {
         });
       }
     },
-    [dispatch, personIndex],
+    [dispatch, personIndex, setPersonOptionValue],
   );
 
   const [personMenuIsOpen, setPersonMenuIsOpen] = useState<boolean>(false);

@@ -17,6 +17,8 @@ import { ApiPerson, useCreateStore } from 'api';
 import { ActionMeta } from 'react-select';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { DatePicker, CreateableSelect, StoreOption } from 'components/input';
+import { useOptionValue } from 'components/input/utils/useOptionValue';
+import { mapStoreToOption } from 'components/input/utils/mapToOption';
 
 const StyledReceipt = styled(Paper)`
   grid-column: span 2;
@@ -39,8 +41,9 @@ export const Receipt = (props: ReceiptProps) => {
 
   const { storeOptions, addStoreOption, dispatch } = useEntryPageContext();
   const { createStore } = useCreateStore();
-  const [storeOptionValue, setStoreOptionValue] = useState<StoreOption | null>(
-    null,
+  const [storeOptionValue, setStoreOptionValue] = useOptionValue(
+    store,
+    mapStoreToOption,
   );
 
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -82,6 +85,7 @@ export const Receipt = (props: ReceiptProps) => {
       items,
       personIndex,
       receiptIndex,
+      setStoreOptionValue,
       subtotal,
     ],
   );
@@ -99,10 +103,18 @@ export const Receipt = (props: ReceiptProps) => {
         setStoreOptionValue(option);
       }
     },
-    [date, dispatch, items, personIndex, receiptIndex, subtotal],
+    [
+      date,
+      dispatch,
+      items,
+      personIndex,
+      receiptIndex,
+      setStoreOptionValue,
+      subtotal,
+    ],
   );
 
-  const [dateInput, setDateInput] = useState<Date | null>(null);
+  const [dateInput, setDateInput] = useState<Date | null>(date || null);
 
   const handleChangeDate = useCallback(
     (date: Date) => {

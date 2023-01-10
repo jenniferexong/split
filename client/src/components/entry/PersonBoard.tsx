@@ -1,4 +1,3 @@
-import { ApiPerson } from 'api';
 import { InvoiceData, PersonType } from 'calculator/types';
 import { Board, BoardLetters } from 'components/board';
 import { Person } from 'components/board/Person';
@@ -24,7 +23,6 @@ const Container = styled.div`
 `;
 
 interface PersonBoardProps {
-  people: (ApiPerson | undefined)[];
   personIndex: number;
   person: PersonType;
   invoice: InvoiceData;
@@ -32,15 +30,14 @@ interface PersonBoardProps {
 
 export const PersonBoard = (props: PersonBoardProps) => {
   const {
-    people,
     person: { person, image, receipts },
     personIndex,
     invoice: { totalSpendings, actualSpendings, oweings },
   } = props;
 
-  const { dispatch } = useEntryPageContext();
+  const { selectedPeople, dispatch } = useEntryPageContext();
 
-  const hasSelectedPeople = hasSelectedAllPeople(people);
+  const hasSelectedPeople = hasSelectedAllPeople(selectedPeople);
 
   const handleAddReceipt = () => {
     if (!hasSelectedPeople) {
@@ -68,7 +65,7 @@ export const PersonBoard = (props: PersonBoardProps) => {
           (receipt, index) =>
             hasSelectedPeople && (
               <Receipt
-                people={people}
+                people={selectedPeople}
                 key={`${personIndex}-${index}`}
                 personIndex={personIndex}
                 receiptIndex={index}

@@ -1,39 +1,34 @@
 import { ApiPerson, ApiProduct, ApiStore } from 'api';
 import { AppType } from 'calculator/types';
-import { PersonOption, ProductOption, StoreOption } from 'components/input';
+import {
+  mapPersonToOption,
+  mapProductToOption,
+  mapStoreToOption,
+  PersonOption,
+  ProductOption,
+  StoreOption,
+} from 'components/input';
 import {
   createContext,
   Dispatch,
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
+import { setStoredAppState } from 'storage/appState';
 import { insertIntoSortedArray } from 'utils/insertIntoSortedArray';
 import { noop } from 'utils/noop';
 import { Action, initialState } from 'utils/reducer';
-
-const convertStoreToOption = (store: ApiStore): StoreOption => ({
-  label: store.name,
-  data: store,
-});
-
-const convertProductToOption = (product: ApiProduct): ProductOption => ({
-  label: product.name,
-  data: product,
-});
-
-const convertPersonToOption = (person: ApiPerson): PersonOption => ({
-  label: person.firstName,
-  data: person,
-});
 
 interface EntryPageContextValue {
   storeOptions: StoreOption[];
   productOptions: ProductOption[];
   personOptions: PersonOption[];
   appState: AppType;
+  selectedPeople: (ApiPerson | undefined)[];
   dispatch: Dispatch<Action>;
   addStoreOption: (store: ApiStore) => StoreOption;
   addProductOption: (store: ApiProduct) => ProductOption;
@@ -45,6 +40,7 @@ const EntryPageContext = createContext<EntryPageContextValue>({
   productOptions: [],
   personOptions: [],
   appState: initialState,
+  selectedPeople: [],
   dispatch: noop,
   addStoreOption: () => null as unknown as StoreOption,
   addProductOption: () => null as unknown as ProductOption,
@@ -72,21 +68,26 @@ export const EntryPageContextProvider = (
     dispatch,
   } = props;
 
+  // Update local storage entry
+  useEffect(() => {
+    setStoredAppState(appState);
+  }, [appState]);
+
   const [storeOptions, setStoreOptions] = useState<StoreOption[]>(
-    loadedStores.map(convertStoreToOption),
+    loadedStores.map(mapStoreToOption),
   );
 
   const [productOptions, setProductOptions] = useState<ProductOption[]>(
-    loadedProducts.map(convertProductToOption),
+    loadedProducts.map(mapProductToOption),
   );
 
   const [personOptions, setPersonOptions] = useState<PersonOption[]>(
-    loadedPeople.map(convertPersonToOption),
+    loadedPeople.map(mapPersonToOption),
   );
 
   const addStoreOption = useCallback(
     (store: ApiStore): StoreOption => {
-      const newOption = convertStoreToOption(store);
+      const newOption = mapStoreToOption(store);
 
       setStoreOptions(
         insertIntoSortedArray(storeOptions, newOption, option => option.label),
@@ -99,7 +100,7 @@ export const EntryPageContextProvider = (
 
   const addProductOption = useCallback(
     (product: ApiProduct): ProductOption => {
-      const newOption = convertProductToOption(product);
+      const newOption = mapProductToOption(product);
 
       setProductOptions(
         insertIntoSortedArray(
@@ -116,7 +117,7 @@ export const EntryPageContextProvider = (
 
   const addPersonOption = useCallback(
     (person: ApiPerson): PersonOption => {
-      const newOption = convertPersonToOption(person);
+      const newOption = mapPersonToOption(person);
 
       setPersonOptions(
         insertIntoSortedArray(personOptions, newOption, option => option.label),
@@ -127,12 +128,18 @@ export const EntryPageContextProvider = (
     [personOptions],
   );
 
+  const selectedPeople = useMemo(
+    () => appState.people.map(person => person.person),
+    [appState.people],
+  );
+
   const value: EntryPageContextValue = useMemo(
     () => ({
       appState,
       storeOptions,
       productOptions,
       personOptions,
+      selectedPeople,
       dispatch,
       addStoreOption,
       addProductOption,
@@ -142,8 +149,9 @@ export const EntryPageContextProvider = (
       addPersonOption,
       addProductOption,
       addStoreOption,
-      appState,
       dispatch,
+      appState,
+      selectedPeople,
       personOptions,
       productOptions,
       storeOptions,

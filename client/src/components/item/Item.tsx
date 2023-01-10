@@ -13,6 +13,8 @@ import {
 } from 'components/input';
 import { Icon } from 'components/icon';
 import { getSplitCost, mapWhoseToSplits } from 'utils/splits';
+import { useOptionValue } from 'components/input/utils/useOptionValue';
+import { mapProductToOption } from 'components/input/utils/mapToOption';
 
 export interface ItemProps extends ItemType {
   people: ApiPerson[];
@@ -40,8 +42,10 @@ export const Item = (props: ItemProps) => {
 
   const { productOptions, addProductOption, dispatch } = useEntryPageContext();
   const { createProduct } = useCreateProduct();
-  const [productOptionValue, setProductOptionValue] =
-    useState<ProductOption | null>(null);
+  const [productOptionValue, setProductOptionValue] = useOptionValue(
+    product,
+    mapProductToOption,
+  );
 
   const [whose, setWhose] = useState<Whose>('split');
 
@@ -117,6 +121,7 @@ export const Item = (props: ItemProps) => {
       personIndex,
       price,
       receiptIndex,
+      setProductOptionValue,
       splits,
     ],
   );
@@ -135,7 +140,15 @@ export const Item = (props: ItemProps) => {
         setProductOptionValue(option);
       }
     },
-    [dispatch, personIndex, receiptIndex, itemIndex, splits, price],
+    [
+      dispatch,
+      personIndex,
+      receiptIndex,
+      itemIndex,
+      splits,
+      price,
+      setProductOptionValue,
+    ],
   );
 
   // Ensure the split of the person who paid for the receipt is first.
