@@ -26,10 +26,6 @@ export const calculate = (data: AppType): CalculateResult => {
     };
   }
 
-  if (invoices[0].person === invoices[1].person) {
-    throw new Error('Cannot calculate invoices for non unique people');
-  }
-
   data.people.forEach((person, personIndex) => {
     person.receipts.forEach(receipt => {
       receipt.items.forEach(item => {

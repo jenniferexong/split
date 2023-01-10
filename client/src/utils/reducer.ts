@@ -39,15 +39,15 @@ interface UpdateItem {
 interface UpdatePerson {
   type: 'updatePerson';
   personIndex: number;
-  newPerson: ApiPerson;
+  newPerson: ApiPerson | undefined;
 }
 
-interface Clear {
-  type: 'clear';
+interface ClearReceipts {
+  type: 'clearReceipts';
 }
 
-export const clearAction: Clear = {
-  type: 'clear',
+export const clearReceiptsAction: ClearReceipts = {
+  type: 'clearReceipts',
 };
 
 export type Action =
@@ -55,7 +55,7 @@ export type Action =
   | UpdateReceipt
   | AddItem
   | UpdateItem
-  | Clear
+  | ClearReceipts
   | UpdatePerson;
 
 export const initialState: AppType = {
@@ -101,7 +101,7 @@ export const reducer: Reducer<AppType, Action> = (state, action) =>
         draft.people[personIndex].person = newPerson;
         break;
       }
-      case 'clear': {
+      case 'clearReceipts': {
         draft.people.forEach(person => (person.receipts.length = 0));
         break;
       }

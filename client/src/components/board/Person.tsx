@@ -2,7 +2,7 @@ import { ApiPerson } from 'api';
 import { PersonOption, Select } from 'components/input';
 import { mapPersonToOption, useOptionValue } from 'components/input/utils/';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActionMeta } from 'react-select';
 import styled, { css, useTheme } from 'styled-components';
 import { fontMixin } from 'styles/mixins';
@@ -69,41 +69,61 @@ const Image = styled.img`
 export const Person = (props: PersonProps) => {
   const { person, personIndex, image } = props;
 
-  const { personOptions, appState, dispatch } = useEntryPageContext();
+  const { personOptions, appState, selectedPeople, dispatch } =
+    useEntryPageContext();
 
   const [personOptionValue, setPersonOptionValue] = useOptionValue(
     person,
     mapPersonToOption,
   );
 
+  useEffect(() => {
+    setPersonOptionValue(person ? mapPersonToOption(person) : null);
+  }, [person, setPersonOptionValue]);
+
   const {
     components: { nameTag },
   } = useTheme();
 
-  // Disallow selecting person that has already been selected
+  // All other options
   const options = useMemo(
     () =>
       personOptions.filter(
-        option =>
-          option.data.id !== appState.people[personIndex ^ 1].person?.id,
+        option => option.data.id !== personOptionValue?.data.id,
       ),
-    [appState.people, personIndex, personOptions],
+    [personOptionValue?.data.id, personOptions],
   );
 
   const handleChangeOption = useCallback(
     (option: PersonOption | null, actionMeta: ActionMeta<PersonOption>) => {
       if (actionMeta.action === 'select-option') {
-        setPersonOptionValue(option);
         if (!option?.data) return;
+
+        // if selecting already selected person, swap them.
+        if (option.data.id === selectedPeople[personIndex ^ 1]?.id) {
+          dispatch({
+            type: 'updatePerson',
+            personIndex: personIndex ^ 1,
+            newPerson: personOptionValue?.data,
+          });
+        }
 
         dispatch({
           type: 'updatePerson',
           personIndex,
           newPerson: option.data,
         });
+
+        setPersonOptionValue(option);
       }
     },
-    [dispatch, personIndex, setPersonOptionValue],
+    [
+      dispatch,
+      personIndex,
+      personOptionValue?.data,
+      selectedPeople,
+      setPersonOptionValue,
+    ],
   );
 
   const [personMenuIsOpen, setPersonMenuIsOpen] = useState<boolean>(false);

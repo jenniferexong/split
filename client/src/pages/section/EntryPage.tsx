@@ -1,6 +1,6 @@
 import { calculate } from 'calculator';
 import { useCallback, useMemo, useReducer } from 'react';
-import { clearAction, initialState, reducer } from 'utils/reducer';
+import { clearReceiptsAction, initialState, reducer } from 'utils/reducer';
 import { useLoaderData } from 'react-router-dom';
 import { PersonBoard } from 'components/entry/PersonBoard';
 import { useBottomTabBarMenu } from 'pages/contexts/LayoutContext';
@@ -32,7 +32,7 @@ export const EntryPage = () => {
       if (!accepted) return;
     }
 
-    dispatch(clearAction);
+    dispatch(clearReceiptsAction);
   };
 
   const uploadReceipts = useCallback(() => {
@@ -62,7 +62,7 @@ export const EntryPage = () => {
 
   useBottomTabBarMenu([
     {
-      label: 'Clear',
+      label: 'Clear receipts',
       onClick: () => clearReceipts(true),
     },
     {
