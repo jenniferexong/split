@@ -34,6 +34,11 @@ const StyledSelect = styled(ReactSelect)<{ textAlign: string }>`
       padding: 0;
       margin: 0;
       display: flex;
+      color: ${props => props.theme.colors.black};
+    }
+
+    &__single-value {
+      color: ${props => props.theme.colors.black};
     }
 
     &__input-container::after {

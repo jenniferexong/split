@@ -33,6 +33,10 @@ const StyledCreatable = styled(Creatable)<{ textAlign: string }>`
       display: flex;
     }
 
+    &__single-value {
+      color: ${props => props.theme.colors.black};
+    }
+
     &__input-container::after {
       content: none;
     }

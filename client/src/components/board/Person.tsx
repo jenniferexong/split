@@ -2,7 +2,7 @@ import { ApiPerson } from 'api';
 import { PersonOption, Select } from 'components/input';
 import { mapPersonToOption, useOptionValue } from 'components/input/utils/';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ActionMeta } from 'react-select';
 import styled, { css, useTheme } from 'styled-components';
 import { fontMixin } from 'styles/mixins';
@@ -76,10 +76,6 @@ export const Person = (props: PersonProps) => {
     person,
     mapPersonToOption,
   );
-
-  useEffect(() => {
-    setPersonOptionValue(person ? mapPersonToOption(person) : null);
-  }, [person, setPersonOptionValue]);
 
   const {
     components: { nameTag },
