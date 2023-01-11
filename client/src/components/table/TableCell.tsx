@@ -22,6 +22,7 @@ const StyledTableCell = styled.td<{
   bold?: boolean;
 }>`
   ${({ theme, as, textAlign, textSize, bold }) => css`
+    position: relative;
     ${fontMixin(theme.fonts.receipt)}
     white-space: nowrap;
 

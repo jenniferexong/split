@@ -12,7 +12,7 @@ export const handleCellKeyDown = (
   if (!nextCell) return;
 
   const button = nextCell.querySelector('button');
-  if (button) {
+  if (button && button.tabIndex >= 0) {
     current.blur();
     button.click();
   } else {

@@ -15,6 +15,7 @@ import { Icon } from 'components/icon';
 import { getSplitCost, mapWhoseToSplits } from 'utils/splits';
 import { useOptionValue } from 'components/input/utils/useOptionValue';
 import { mapProductToOption } from 'components/input/utils/mapToOption';
+import { DeleteButton } from 'components/button';
 
 export interface ItemProps extends ItemType {
   people: ApiPerson[];
@@ -27,6 +28,12 @@ const IconsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: right;
+`;
+
+const DeleteItemButton = styled(DeleteButton)`
+  position: absolute;
+  bottom: 4px;
+  right: -5px;
 `;
 
 export const Item = (props: ItemProps) => {
@@ -48,6 +55,7 @@ export const Item = (props: ItemProps) => {
   );
 
   const [whose, setWhose] = useState<Whose>('split');
+  const [showDeleteButton, setShowDeleteButton] = useState<boolean>(false);
 
   const updateWhose = useCallback(
     (newWhose: Whose) => {
@@ -151,6 +159,10 @@ export const Item = (props: ItemProps) => {
     ],
   );
 
+  const removeItem = useCallback(() => {
+    dispatch({ type: 'removeItem', personIndex, receiptIndex, itemIndex });
+  }, [dispatch, itemIndex, personIndex, receiptIndex]);
+
   // Ensure the split of the person who paid for the receipt is first.
   const sortedSplits: SplitType[] = useMemo(() => {
     const sorted = [...splits];
@@ -165,7 +177,11 @@ export const Item = (props: ItemProps) => {
 
   return (
     <>
-      <TableRow borderTop={itemIndex === 0}>
+      <TableRow
+        borderTop={itemIndex === 0}
+        onMouseEnter={() => setShowDeleteButton(true)}
+        onMouseLeave={() => setShowDeleteButton(false)}
+      >
         <TableCell width="35%">
           <CreateableSelect
             placeholder="Untitled"
@@ -190,10 +206,19 @@ export const Item = (props: ItemProps) => {
             onChange={handleChangePriceInput}
             onBlur={updatePrice}
           />
+          <DeleteItemButton
+            icon="trash"
+            onClick={removeItem}
+            isVisible={showDeleteButton}
+          />
         </TableCell>
       </TableRow>
       {sortedSplits.map(split => (
-        <TableRow key={split.person.email}>
+        <TableRow
+          key={split.person.email}
+          onMouseEnter={() => setShowDeleteButton(true)}
+          onMouseLeave={() => setShowDeleteButton(false)}
+        >
           <TableCell textSize="small">
             &emsp;&emsp;&emsp;{split.person.firstName}
           </TableCell>
