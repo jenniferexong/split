@@ -2,7 +2,7 @@ import ReactSelect, { ActionMeta } from 'react-select';
 import { getOptionValue } from './utils';
 import { Option } from './types';
 import styled from 'styled-components';
-import { backgroundHover } from 'styles/mixins/backgroundHover';
+import { backgroundHover } from 'styles/mixins';
 
 interface SelectProps<TOption> {
   options: TOption[];

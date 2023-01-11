@@ -1,8 +1,7 @@
 import { ButtonProps } from 'components/button';
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { fontMixin } from 'styles/mixins';
-import { transition } from 'styles/mixins/transition';
+import { fontMixin, transition } from 'styles/mixins';
 
 const StyledButton = styled.button`
   ${({ theme }) => css`

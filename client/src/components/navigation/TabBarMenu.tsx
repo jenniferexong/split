@@ -15,13 +15,13 @@ interface Props {
 const Container = styled.nav<Props>`
   display: flex;
   gap: 52px;
-  padding: 0 40px;
+  padding: 0 20px;
+  position: sticky;
+  z-index: 10;
 
-  ${props =>
-    props.position === 'bottom' &&
-    css`
-      justify-content: flex-end;
-    `}
+  ${({ theme }) => css`
+    background: ${theme.colors.beige};
+  `}
 `;
 
 export const TabBarMenu = (props: Props) => {

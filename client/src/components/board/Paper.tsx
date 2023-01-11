@@ -31,10 +31,6 @@ const Container = styled.div<{
       : theme.colors[theme.components.receipt.background]};
 
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   `}
 `;
 
@@ -48,6 +44,14 @@ const Pin = styled.div`
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 `;
 
+const InnerContainer = styled.div`
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export const Paper = (props: PaperProps) => {
   const { width, height, children, background, className } = props;
 
@@ -58,8 +62,10 @@ export const Paper = (props: PaperProps) => {
       background={background}
       className={className}
     >
-      <Pin />
-      {children}
+      <InnerContainer>
+        <Pin />
+        {children}
+      </InnerContainer>
     </Container>
   );
 };

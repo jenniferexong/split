@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { Theme } from 'styles/types';
 import { ButtonProps } from './types';
 import { NavLink } from 'react-router-dom';
-import { transition } from 'styles/mixins/transition';
+import { transition } from 'styles/mixins';
 
 interface Props extends ButtonProps {
   to?: string;

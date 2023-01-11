@@ -9,7 +9,7 @@ import {
 import styled, { css } from 'styled-components';
 import { Whose } from 'calculator/types';
 import { Theme } from 'styles/types';
-import { transition } from 'styles/mixins/transition';
+import { transition } from 'styles/mixins';
 import { useCallback } from 'react';
 
 const icons: Record<Whose, IconDefinition> = {

@@ -5,9 +5,12 @@ import './fonts.scss';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-datepicker/dist/react-datepicker.css';
+import { hideScrollbars } from './mixins';
 
 export const GlobalStyle = createGlobalStyle`
     ${normalize}
+
+    ${hideScrollbars}
 
     ${({ theme }) => css`
       body {

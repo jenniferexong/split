@@ -4,7 +4,7 @@ import {
   FocusEventHandler,
 } from 'react';
 import styled from 'styled-components';
-import { backgroundHover } from 'styles/mixins/backgroundHover';
+import { backgroundHover } from 'styles/mixins';
 import { onInputFocus } from './utils';
 
 const StyledInput = styled.input`
