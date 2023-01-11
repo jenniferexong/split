@@ -152,7 +152,7 @@ export const Receipt = (props: ReceiptProps) => {
         <Table>
           <thead>
             <TableRow borderBottom>
-              <TableCell colSpan={3} as="th" textAlign="center">
+              <TableCell colSpan={4} as="th" textAlign="center">
                 <CreateableSelect
                   placeholder="Untitled"
                   options={storeOptions}
@@ -169,16 +169,16 @@ export const Receipt = (props: ReceiptProps) => {
           </thead>
           <tbody>
             <TableRow borderTop>
-              <TableCell colSpan={1}>Date</TableCell>
+              <TableCell colSpan={2}>Date</TableCell>
               <TableCell colSpan={2} textAlign="right">
                 <DatePicker value={dateInput} onChangeDate={handleChangeDate} />
               </TableCell>
             </TableRow>
             <TableRow borderBottom>
-              <TableCell bold colSpan={2}>
+              <TableCell colSpan={2} bold>
                 Paid by
               </TableCell>
-              <TableCell bold colSpan={2} textAlign="right">
+              <TableCell colSpan={2} bold textAlign="right">
                 {people[personIndex].firstName}
               </TableCell>
             </TableRow>
@@ -193,7 +193,7 @@ export const Receipt = (props: ReceiptProps) => {
               />
             ))}
             <TableRow borderBottom borderTop={items.length === 0}>
-              <TableCell colSpan={3}>
+              <TableCell colSpan={4}>
                 <Button ref={buttonRef} onClick={handleAddItem}>
                   +
                 </Button>
@@ -201,13 +201,15 @@ export const Receipt = (props: ReceiptProps) => {
             </TableRow>
             <TableRow borderTop>
               <TableCell colSpan={2}>Item count:</TableCell>
-              <TableCell textAlign="right">{items.length}</TableCell>
+              <TableCell colSpan={2} textAlign="right">
+                {items.length}
+              </TableCell>
             </TableRow>
             <TableRow borderBottom>
               <TableCell colSpan={2}>
                 <b>Total:</b>
               </TableCell>
-              <TableCell textAlign="right">
+              <TableCell colSpan={2} textAlign="right">
                 <b>${subtotal.toFixed(2)}</b>
               </TableCell>
             </TableRow>

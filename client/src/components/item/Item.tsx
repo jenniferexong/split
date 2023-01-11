@@ -182,7 +182,7 @@ export const Item = (props: ItemProps) => {
         onMouseEnter={() => setShowRemoveButton(true)}
         onMouseLeave={() => setShowRemoveButton(false)}
       >
-        <TableCell width="35%">
+        <TableCell colSpan={2}>
           <CreateableSelect
             placeholder="Untitled"
             options={productOptions}
@@ -192,7 +192,7 @@ export const Item = (props: ItemProps) => {
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell colSpan={1}>
           <IconsContainer>
             <Icon whose="theirs" selected={whose} onClick={updateWhose} />
             <Icon whose="split" selected={whose} onClick={updateWhose} />
@@ -200,7 +200,7 @@ export const Item = (props: ItemProps) => {
           </IconsContainer>
         </TableCell>
 
-        <TableCell width="23%" textAlign="right">
+        <TableCell colSpan={1} textAlign="right">
           <Input
             value={priceInput}
             onChange={handleChangePriceInput}
@@ -215,15 +215,15 @@ export const Item = (props: ItemProps) => {
           onMouseEnter={() => setShowRemoveButton(true)}
           onMouseLeave={() => setShowRemoveButton(false)}
         >
-          <TableCell textSize="small">
+          <TableCell colSpan={2} textSize="small">
             &emsp;&emsp;&emsp;{split.person.firstName}
           </TableCell>
-          <TableCell textSize="small" textAlign="right">
+          <TableCell colSpan={1} textSize="small" textAlign="right">
             {splits.length > 1 && (
               <AntecedentInput split={split} itemProps={props} />
             )}
           </TableCell>
-          <TableCell textSize="small" textAlign="right">
+          <TableCell colSpan={1} textSize="small" textAlign="right">
             {getSplitCost(splits, split.antecedent, price).toFixed(2)}
           </TableCell>
         </TableRow>
