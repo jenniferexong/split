@@ -57,6 +57,12 @@ interface RemoveItem {
   itemIndex: number;
 }
 
+interface RemoveReceipt {
+  type: 'removeReceipt';
+  personIndex: number;
+  receiptIndex: number;
+}
+
 export type Action =
   | AddReceipt
   | UpdateReceipt
@@ -64,7 +70,8 @@ export type Action =
   | UpdateItem
   | ClearReceipts
   | UpdatePerson
-  | RemoveItem;
+  | RemoveItem
+  | RemoveReceipt;
 
 export const initialState: AppType = {
   people: [
@@ -121,6 +128,12 @@ export const reducer: Reducer<AppType, Action> = (state, action) =>
       case 'updateReceipt': {
         const { personIndex, receiptIndex, receipt } = action;
         draft.people[personIndex].receipts[receiptIndex] = receipt;
+        break;
+      }
+      case 'removeReceipt': {
+        const { personIndex, receiptIndex } = action;
+        const receipts = draft.people[personIndex].receipts;
+        receipts.splice(receiptIndex, 1);
         break;
       }
       case 'addItem': {

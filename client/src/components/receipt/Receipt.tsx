@@ -1,5 +1,5 @@
 import { ReceiptType } from 'calculator/types';
-import { Button } from 'components/button';
+import { Button, DeleteButton } from 'components/button';
 import { Entry as Item } from 'components/item';
 import { useCallback, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
@@ -31,6 +31,13 @@ interface ReceiptProps {
   receipt: ReceiptType;
 }
 
+const RemoveReceiptButton = styled(DeleteButton)`
+  font-size: 20px;
+  position: absolute;
+  top: -8px;
+  right: 0;
+`;
+
 export const Receipt = (props: ReceiptProps) => {
   const {
     personIndex,
@@ -45,6 +52,8 @@ export const Receipt = (props: ReceiptProps) => {
     store,
     mapStoreToOption,
   );
+
+  const [showRemoveButton, setShowRemoveButton] = useState<boolean>(true);
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const theme = useTheme();
@@ -130,9 +139,16 @@ export const Receipt = (props: ReceiptProps) => {
     [dispatch, items, personIndex, receiptIndex, store, subtotal],
   );
 
+  const removeReceipt = useCallback(() => {
+    dispatch({ type: 'removeReceipt', personIndex, receiptIndex });
+  }, [dispatch, personIndex, receiptIndex]);
+
   return (
     <StyledReceipt width={theme.components.receipt.width}>
-      <Container>
+      <Container
+        onMouseEnter={() => setShowRemoveButton(true)}
+        onMouseLeave={() => setShowRemoveButton(false)}
+      >
         <Table>
           <thead>
             <TableRow borderBottom>
@@ -143,6 +159,10 @@ export const Receipt = (props: ReceiptProps) => {
                   value={storeOptionValue}
                   onChangeOption={handleChangeOption}
                   onCreateOption={handleCreateOption}
+                />
+                <RemoveReceiptButton
+                  isVisible={showRemoveButton}
+                  onClick={removeReceipt}
                 />
               </TableCell>
             </TableRow>

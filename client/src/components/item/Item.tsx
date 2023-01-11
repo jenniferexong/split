@@ -30,7 +30,7 @@ const IconsContainer = styled.div`
   justify-content: right;
 `;
 
-const DeleteItemButton = styled(DeleteButton)`
+const RemoveItemButton = styled(DeleteButton)`
   position: absolute;
   bottom: 4px;
   right: -5px;
@@ -55,7 +55,7 @@ export const Item = (props: ItemProps) => {
   );
 
   const [whose, setWhose] = useState<Whose>('split');
-  const [showDeleteButton, setShowDeleteButton] = useState<boolean>(false);
+  const [showRemoveButton, setShowRemoveButton] = useState<boolean>(false);
 
   const updateWhose = useCallback(
     (newWhose: Whose) => {
@@ -179,8 +179,8 @@ export const Item = (props: ItemProps) => {
     <>
       <TableRow
         borderTop={itemIndex === 0}
-        onMouseEnter={() => setShowDeleteButton(true)}
-        onMouseLeave={() => setShowDeleteButton(false)}
+        onMouseEnter={() => setShowRemoveButton(true)}
+        onMouseLeave={() => setShowRemoveButton(false)}
       >
         <TableCell width="35%">
           <CreateableSelect
@@ -206,18 +206,14 @@ export const Item = (props: ItemProps) => {
             onChange={handleChangePriceInput}
             onBlur={updatePrice}
           />
-          <DeleteItemButton
-            icon="trash"
-            onClick={removeItem}
-            isVisible={showDeleteButton}
-          />
+          <RemoveItemButton onClick={removeItem} isVisible={showRemoveButton} />
         </TableCell>
       </TableRow>
       {sortedSplits.map(split => (
         <TableRow
           key={split.person.email}
-          onMouseEnter={() => setShowDeleteButton(true)}
-          onMouseLeave={() => setShowDeleteButton(false)}
+          onMouseEnter={() => setShowRemoveButton(true)}
+          onMouseLeave={() => setShowRemoveButton(false)}
         >
           <TableCell textSize="small">
             &emsp;&emsp;&emsp;{split.person.firstName}

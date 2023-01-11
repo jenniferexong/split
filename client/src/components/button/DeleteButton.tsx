@@ -7,7 +7,6 @@ import { ButtonProps } from './types';
 
 interface DeleteButtonProps extends Omit<ButtonProps, 'children'> {
   isVisible: boolean;
-  icon: 'trash' | 'x';
   className?: string;
 }
 
