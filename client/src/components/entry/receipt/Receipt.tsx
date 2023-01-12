@@ -1,6 +1,6 @@
 import { ReceiptType } from 'calculator/types';
 import { Button, DeleteButton } from 'components/button';
-import { Entry as Item } from 'components/item';
+import { Item } from '../item';
 import { useCallback, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import {
@@ -17,8 +17,7 @@ import { ApiPerson, useCreateStore } from 'api';
 import { ActionMeta } from 'react-select';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { DatePicker, CreateableSelect, StoreOption } from 'components/input';
-import { useOptionValue } from 'components/input/utils/useOptionValue';
-import { mapStoreToOption } from 'components/input/utils/mapToOption';
+import { useOptionValue, mapStoreToOption } from 'components/input/utils/';
 
 const StyledReceipt = styled(Paper)`
   grid-column: span 2;

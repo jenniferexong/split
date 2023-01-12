@@ -1,7 +1,7 @@
 import { Input } from './Input';
 import React, { useCallback, useState } from 'react';
 import { SplitType } from 'calculator/types';
-import { ItemProps } from 'components/item/Item';
+import { ItemProps } from 'components/entry/item';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 
 interface AntecedentInputProps {

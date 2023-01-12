@@ -7,7 +7,7 @@ import { ActionMeta } from 'react-select';
 import styled, { css, useTheme } from 'styled-components';
 import { fontMixin } from 'styles/mixins';
 import { showError } from 'utils/showToast';
-import { Paper } from './Paper';
+import { Paper } from '../board/Paper';
 
 interface PersonProps {
   personIndex: number;

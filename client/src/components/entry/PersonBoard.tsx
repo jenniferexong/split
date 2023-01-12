@@ -1,7 +1,7 @@
 import { InvoiceData, PersonType } from 'calculator/types';
 import { Board, BoardLetters } from 'components/board';
-import { Person } from 'components/board/Person';
-import { Invoice, Receipt } from 'components/receipt';
+import { Person } from 'components/entry/Person';
+import { Invoice, Receipt } from 'components/entry/receipt';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import styled from 'styled-components';
 import { hasSelectedAllPeople } from 'utils/hasSelectedAllPeople';
