@@ -41,17 +41,12 @@ const RemoveReceiptButton = styled(DeleteButton)`
 `;
 
 export const Receipt = (props: ReceiptProps) => {
-  const {
-    personIndex,
-    receiptIndex,
-    receipt: { items, subtotal, store, date },
-    people,
-  } = props;
+  const { personIndex, receiptIndex, receipt, people } = props;
 
   const { storeOptions, addStoreOption, dispatch } = useEntryPageContext();
   const { createStore } = useCreateStore();
   const [storeOptionValue, setStoreOptionValue] = useOptionValue(
-    store,
+    receipt.store,
     mapStoreToOption,
   );
 
@@ -82,7 +77,7 @@ export const Receipt = (props: ReceiptProps) => {
           type: 'updateReceipt',
           personIndex,
           receiptIndex,
-          receipt: { store, items, subtotal, date },
+          receipt: { ...receipt, store },
         });
 
         setStoreOptionValue(newOption);
@@ -91,13 +86,11 @@ export const Receipt = (props: ReceiptProps) => {
     [
       addStoreOption,
       createStore,
-      date,
       dispatch,
-      items,
       personIndex,
+      receipt,
       receiptIndex,
       setStoreOptionValue,
-      subtotal,
     ],
   );
 
@@ -108,24 +101,16 @@ export const Receipt = (props: ReceiptProps) => {
           type: 'updateReceipt',
           personIndex,
           receiptIndex,
-          receipt: { store: option?.data, items, subtotal, date },
+          receipt: { ...receipt, store: option?.data },
         });
 
         setStoreOptionValue(option);
       }
     },
-    [
-      date,
-      dispatch,
-      items,
-      personIndex,
-      receiptIndex,
-      setStoreOptionValue,
-      subtotal,
-    ],
+    [dispatch, personIndex, receipt, receiptIndex, setStoreOptionValue],
   );
 
-  const [dateInput, setDateInput] = useState<Date | null>(date || null);
+  const [dateInput, setDateInput] = useState<Date | null>(receipt.date || null);
 
   const handleChangeDate = useCallback(
     (date: Date) => {
@@ -135,10 +120,10 @@ export const Receipt = (props: ReceiptProps) => {
         type: 'updateReceipt',
         personIndex,
         receiptIndex,
-        receipt: { store, items, subtotal, date },
+        receipt: { ...receipt, date },
       });
     },
-    [dispatch, items, personIndex, receiptIndex, store, subtotal],
+    [dispatch, personIndex, receipt, receiptIndex],
   );
 
   const removeReceipt = useCallback(() => {
@@ -186,7 +171,7 @@ export const Receipt = (props: ReceiptProps) => {
                 {people[personIndex].firstName}
               </TableCell>
             </TableRow>
-            {items.map((item, index) => (
+            {receipt.items.map((item, index) => (
               <Item
                 people={people}
                 key={`${personIndex}-${receiptIndex}-${index}`}
@@ -196,7 +181,7 @@ export const Receipt = (props: ReceiptProps) => {
                 {...item}
               />
             ))}
-            <TableRow borderBottom borderTop={items.length === 0}>
+            <TableRow borderBottom borderTop={receipt.items.length === 0}>
               <TableCell colSpan={4}>
                 <Button ref={buttonRef} onClick={handleAddItem}>
                   +
@@ -206,7 +191,7 @@ export const Receipt = (props: ReceiptProps) => {
             <TableRow borderTop>
               <TableCell colSpan={2}>Item count:</TableCell>
               <TableCell colSpan={2} textAlign="right">
-                {items.length}
+                {receipt.items.length}
               </TableCell>
             </TableRow>
             <TableRow borderBottom>
@@ -214,7 +199,7 @@ export const Receipt = (props: ReceiptProps) => {
                 <b>Total:</b>
               </TableCell>
               <TableCell colSpan={2} textAlign="right">
-                <b>${subtotal.toFixed(2)}</b>
+                <b>${receipt.subtotal.toFixed(2)}</b>
               </TableCell>
             </TableRow>
           </tbody>

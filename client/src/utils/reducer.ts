@@ -101,12 +101,15 @@ const createEmptyItem = (people: ApiPerson[]): ItemType => {
   };
 };
 
-const emptyReceipt: ReceiptType = {
+let receiptSequence = 0;
+
+const getEmptyReceipt = (): ReceiptType => ({
   store: undefined,
   date: undefined,
   items: [],
   subtotal: 0,
-};
+  sequence: receiptSequence++,
+});
 
 export const reducer: Reducer<AppType, Action> = (state, action) =>
   produce(state, draft => {
@@ -122,7 +125,7 @@ export const reducer: Reducer<AppType, Action> = (state, action) =>
       }
       case 'addReceipt': {
         const { personIndex } = action;
-        draft.people[personIndex].receipts.push(emptyReceipt);
+        draft.people[personIndex].receipts.push(getEmptyReceipt());
         break;
       }
       case 'updateReceipt': {

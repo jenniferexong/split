@@ -65,8 +65,8 @@ export const PersonBoard = (props: PersonBoardProps) => {
           (receipt, index) =>
             hasSelectedPeople && (
               <Receipt
+                key={receipt.sequence}
                 people={selectedPeople}
-                key={`${personIndex}-${index}`}
                 personIndex={personIndex}
                 receiptIndex={index}
                 receipt={receipt}

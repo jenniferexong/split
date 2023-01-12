@@ -75,4 +75,5 @@ export const exampleReceipt = (
     },
   ],
   subtotal: 19.15,
+  sequence: 0,
 });

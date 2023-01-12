@@ -49,6 +49,7 @@ describe('calculate', () => {
             ],
             // we don't care about subtotal for this
             subtotal: 0,
+            sequence: 0,
           },
         ],
       },
@@ -95,6 +96,7 @@ describe('calculate', () => {
             ],
             // we don't care about subtotal for this
             subtotal: 0,
+            sequence: 1,
           },
         ],
       },

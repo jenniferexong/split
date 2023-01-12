@@ -18,6 +18,8 @@ export interface ReceiptType {
   date: Date | undefined;
   items: ItemType[];
   subtotal: number;
+  // n'th added receipt;
+  sequence: number;
 }
 
 export interface PersonType {
