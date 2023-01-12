@@ -1,5 +1,13 @@
-import { ReactNode } from 'react';
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import styled from 'styled-components';
+import { BoardContext } from './BoardContext';
 
 const Container = styled.div`
   overflow-y: auto;
@@ -22,6 +30,29 @@ interface BoardProps {
 export const Board = (props: BoardProps) => {
   const { children } = props;
 
-  return <Container>{children}</Container>;
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [boardWidth, setBoardWidth] = useState<number>(0);
+
+  const updateBoardWidth = useCallback(() => {
+    if (!ref.current) return;
+
+    setBoardWidth(ref.current.getBoundingClientRect().width);
+  }, [ref]);
+
+  useLayoutEffect(updateBoardWidth, [updateBoardWidth]);
+
+  useEffect(() => {
+    window.addEventListener('resize', updateBoardWidth);
+
+    return () => window.removeEventListener('resize', updateBoardWidth);
+  }, [updateBoardWidth]);
+
+  return (
+    <Container ref={ref}>
+      <BoardContext.Provider value={boardWidth}>
+        {children}
+      </BoardContext.Provider>
+    </Container>
+  );
 };
 Board.displayName = 'Board';

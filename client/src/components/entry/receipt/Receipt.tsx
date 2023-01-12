@@ -18,9 +18,12 @@ import { ActionMeta } from 'react-select';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { DatePicker, CreateableSelect, StoreOption } from 'components/input';
 import { useOptionValue, mapStoreToOption } from 'components/input/utils/';
+import { usePositionReceipt } from './utils/usePositionReceipt';
 
-const StyledReceipt = styled(Paper)`
+const StyledReceipt = styled(Paper)<{ xOffset: number }>`
+  position: relative;
   grid-column: span 2;
+  left: ${props => props.xOffset}px;
 `;
 
 interface ReceiptProps {
@@ -142,8 +145,10 @@ export const Receipt = (props: ReceiptProps) => {
     dispatch({ type: 'removeReceipt', personIndex, receiptIndex });
   }, [dispatch, personIndex, receiptIndex]);
 
+  const { xOffset } = usePositionReceipt();
+
   return (
-    <StyledReceipt width={theme.components.receipt.width}>
+    <StyledReceipt xOffset={xOffset} width={theme.components.receipt.width}>
       <Container
         onMouseEnter={() => setShowRemoveButton(true)}
         onMouseLeave={() => setShowRemoveButton(false)}
