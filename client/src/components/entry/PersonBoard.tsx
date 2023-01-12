@@ -2,6 +2,7 @@ import { InvoiceData, PersonType } from 'calculator/types';
 import { Board, BoardLetters } from 'components/board';
 import { Person } from 'components/entry/Person';
 import { Invoice, Receipt } from 'components/entry/receipt';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import styled from 'styled-components';
 import { hasSelectedAllPeople } from 'utils/hasSelectedAllPeople';
@@ -61,18 +62,29 @@ export const PersonBoard = (props: PersonBoardProps) => {
           actualSpendings={actualSpendings}
           oweings={oweings}
         />
-        {receipts.map(
-          (receipt, index) =>
-            hasSelectedPeople && (
-              <Receipt
-                key={receipt.sequence}
-                people={selectedPeople}
-                personIndex={personIndex}
-                receiptIndex={index}
-                receipt={receipt}
-              />
-            ),
-        )}
+        <AnimatePresence>
+          {receipts.map(
+            (receipt, index) =>
+              hasSelectedPeople && (
+                <motion.div
+                  style={{ gridColumn: 'span 2' }}
+                  key={receipt.sequence}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Receipt
+                    key={receipt.sequence}
+                    people={selectedPeople}
+                    personIndex={personIndex}
+                    receiptIndex={index}
+                    receipt={receipt}
+                  />
+                </motion.div>
+              ),
+          )}
+        </AnimatePresence>
         <BoardLetters onClick={handleAddReceipt}>+</BoardLetters>
       </Container>
     </Board>
