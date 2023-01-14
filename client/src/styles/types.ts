@@ -6,6 +6,7 @@ export type Color =
   | 'charcoal'
   | 'taupe'
   | 'caramel'
+  | 'primary'
   | 'beige'
   | 'green'
   | 'red'

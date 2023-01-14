@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { darken } from 'polished';
 import styled from 'styled-components';
 import { transition } from 'styles/mixins';
-import { ButtonProps } from './types';
+import { BaseButtonProps } from './types';
 
-interface DeleteButtonProps extends Omit<ButtonProps, 'children'> {
+interface DeleteButtonProps extends Omit<BaseButtonProps, 'children'> {
   isVisible: boolean;
   className?: string;
 }

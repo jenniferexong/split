@@ -7,6 +7,7 @@ export const theme: Theme = {
     black: '#000',
     charcoal: '#423F3D',
     caramel: '#C6A26E',
+    primary: '#9F7A44',
     taupe: '#8A8168',
     green: '#00FF94',
     blue: '#37a6d7',

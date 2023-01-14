@@ -1,5 +1,5 @@
 import { ReceiptType } from 'calculator/types';
-import { Button, DeleteButton } from 'components/button';
+import { ReceiptButton, DeleteButton } from 'components/button';
 import { Item } from '../item';
 import { useCallback, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
@@ -183,9 +183,9 @@ export const Receipt = (props: ReceiptProps) => {
             ))}
             <TableRow borderBottom borderTop={receipt.items.length === 0}>
               <TableCell colSpan={4}>
-                <Button ref={buttonRef} onClick={handleAddItem}>
+                <ReceiptButton ref={buttonRef} onClick={handleAddItem}>
                   +
-                </Button>
+                </ReceiptButton>
               </TableCell>
             </TableRow>
             <TableRow borderTop>

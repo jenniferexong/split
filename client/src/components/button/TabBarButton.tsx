@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { Theme } from 'styles/types';
-import { ButtonProps } from './types';
+import { BaseButtonProps } from './types';
 import { NavLink } from 'react-router-dom';
 import { transition } from 'styles/mixins';
 
-interface Props extends ButtonProps {
+interface Props extends BaseButtonProps {
   to?: string;
   position: 'top' | 'bottom';
 }

@@ -1,4 +1,4 @@
-import { ButtonProps } from 'components/button';
+import { BaseButtonProps } from 'components/button';
 import { forwardRef, Ref } from 'react';
 import styled, { css } from 'styled-components';
 import { fontMixin, transition } from 'styles/mixins';
@@ -23,7 +23,7 @@ const StyledButton = styled.button`
 `;
 
 export const BoardLetters = forwardRef(
-  (props: ButtonProps, ref?: Ref<HTMLButtonElement>) => {
+  (props: BaseButtonProps, ref?: Ref<HTMLButtonElement>) => {
     const { children, onClick } = props;
 
     return (
