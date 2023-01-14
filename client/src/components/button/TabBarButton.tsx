@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, SimpleInterpolation } from 'styled-components';
 import { Theme } from 'styles/types';
 import { BaseButtonProps } from './types';
 import { NavLink } from 'react-router-dom';
-import { transition } from 'styles/mixins';
+import { fontMixin, transition } from 'styles/mixins';
 
-interface Props extends BaseButtonProps {
+interface TabBarButtonProps extends BaseButtonProps {
   to?: string;
   position: 'top' | 'bottom';
 }
@@ -20,74 +20,59 @@ const getActiveBackground = (
 
 const activeClassName = 'active';
 
-const StyledNavLink = styled(NavLink).attrs({
-  activeclassname: activeClassName,
-})<Props>`
+const tabBarButton = (
+  theme: Theme,
+  position: 'top' | 'bottom',
+): SimpleInterpolation => css`
+  ${fontMixin(theme.fonts.tabBarButton)}
+
   text-decoration: none;
   border: none;
   display: flex;
   align-items: center;
 
   // TODO create shared mixin
-  ${({ theme, position }) => css`
-    color: ${theme.colors[theme.components.tabBarButton.text]};
+  color: ${theme.colors[theme.components.tabBarButton.text]};
 
-    background-color: ${getActiveBackground(false, theme)};
+  background-color: ${getActiveBackground(false, theme)};
+
+  ${transition('background-color')}
+  &:hover {
+    background-color: ${theme.colors[theme.components.tabBarButton.active]};
+  }
+
+  ${position === 'top' &&
+  css`
+    padding: 12px 28px 16px;
+    border-radius: 0 0 16px 16px;
+  `}
+
+  ${position === 'bottom' &&
+  css`
+    padding: 16px 28px 12px;
+    border-radius: 16px 16px 0 0;
+  `}
+`;
+
+const StyledNavLink = styled(NavLink).attrs({
+  activeclassname: activeClassName,
+})<TabBarButtonProps>`
+  ${({ theme, position }) => css`
+    ${tabBarButton(theme, position)}
+
     &.${activeClassName} {
       background-color: ${getActiveBackground(true, theme)};
     }
-
-    ${transition('background-color')}
-    &:hover {
-      background-color: ${theme.colors[theme.components.tabBarButton.active]};
-    }
-
-    ${position === 'top' &&
-    css`
-      padding: 12px 28px 16px;
-      border-radius: 0 0 16px 16px;
-    `}
-
-    ${position === 'bottom' &&
-    css`
-      padding: 16px 28px 12px;
-      border-radius: 16px 16px 0 0;
-    `}
   `}
 `;
 
-const StyledButton = styled.button<Props>`
-  text-decoration: none;
-  border: none;
-  display: flex;
-  align-items: center;
-
-  // TODO create shared mixin
+const StyledButton = styled.button<TabBarButtonProps>`
   ${({ theme, position }) => css`
-    color: ${theme.colors[theme.components.tabBarButton.text]};
-
-    background-color: ${getActiveBackground(false, theme)};
-
-    ${transition('background-color')}
-    &:hover {
-      background-color: ${theme.colors[theme.components.tabBarButton.active]};
-    }
-
-    ${position === 'top' &&
-    css`
-      padding: 12px 28px 16px;
-      border-radius: 0 0 16px 16px;
-    `}
-
-    ${position === 'bottom' &&
-    css`
-      padding: 16px 28px 12px;
-      border-radius: 16px 16px 0 0;
-    `}
+    ${tabBarButton(theme, position)}
   `}
 `;
 
-export const TabBarButton = (props: Props) => {
+export const TabBarButton = (props: TabBarButtonProps) => {
   const { children, onClick, position, to } = props;
 
   const handleClick = useCallback(() => {

@@ -38,6 +38,13 @@ export const theme: Theme = {
       baseWeight: '600',
       color: 'black',
     },
+    tabBarButton: {
+      family: 'Doppio One',
+      baseSize: '16px',
+      lineHeight: '1',
+      baseWeight: '400',
+      color: 'white',
+    },
   },
 
   components: {

@@ -30,6 +30,7 @@ export interface Theme {
     default: Font;
     nameTag: Font;
     boardLetter: Font;
+    tabBarButton: Font;
   };
 
   components: {
