@@ -8,14 +8,15 @@ const navigationButtons: TabBarMenuButton[] = [
     label: 'Entry',
     to: PageUrl.Entry,
   },
-  {
-    label: 'History',
-    to: PageUrl.History,
-  },
-  {
-    label: 'Analytics',
-    to: PageUrl.Analytics,
-  },
+  // TODO!
+  // {
+  //   label: 'History',
+  //   to: PageUrl.History,
+  // },
+  // {
+  //   label: 'Analytics',
+  //   to: PageUrl.Analytics,
+  // },
 ];
 
 const HeaderContainer = styled.header`
