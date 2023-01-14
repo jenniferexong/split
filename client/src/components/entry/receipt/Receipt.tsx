@@ -12,7 +12,7 @@ import {
 } from 'components/table';
 import { Barcode } from './Barcode';
 import { Paper } from 'components/board';
-import { Container } from './Container';
+import { ReceiptInnerContainer } from './Container';
 import { ApiPerson, useCreateStore } from 'api';
 import { ActionMeta } from 'react-select';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
@@ -134,7 +134,7 @@ export const Receipt = (props: ReceiptProps) => {
 
   return (
     <StyledReceipt xOffset={xOffset} width={theme.components.receipt.width}>
-      <Container
+      <ReceiptInnerContainer
         onMouseEnter={() => setShowRemoveButton(true)}
         onMouseLeave={() => setShowRemoveButton(false)}
       >
@@ -205,7 +205,7 @@ export const Receipt = (props: ReceiptProps) => {
           </tbody>
         </Table>
         <Barcode />
-      </Container>
+      </ReceiptInnerContainer>
     </StyledReceipt>
   );
 };

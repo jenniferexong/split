@@ -1,4 +1,4 @@
-import { ApiPerson, ApiProduct, ApiStore } from 'api';
+import { ApiPerson, ApiProduct, ApiReceipt, ApiStore } from 'api';
 
 export enum PageUrl {
   Entry = '/entry',
@@ -11,4 +11,8 @@ export interface EntryPageData {
   people: ApiPerson[];
   stores: ApiStore[];
   products: ApiProduct[];
+}
+
+export interface HistoryPageData {
+  receipts: ApiReceipt[];
 }
