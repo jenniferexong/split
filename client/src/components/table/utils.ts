@@ -1,24 +1,33 @@
-import React from 'react';
+import { KeyboardEvent } from 'react';
 
-export const handleCellKeyDown = (
-  e: React.KeyboardEvent<HTMLTableCellElement>,
-) => {
+export const handleCellKeyDown = (e: KeyboardEvent<HTMLTableCellElement>) => {
   if (e.key !== 'Enter') return;
 
   e.preventDefault();
 
   const current = e.target as HTMLElement;
-  const next = getNextCell(current);
-  if (!next) return;
+  const nextCell = getNextCell(current);
+  if (!nextCell) return;
 
-  const button = next.querySelector('button');
-  if (button) {
+  const button = nextCell.querySelector('button');
+  if (button && button.tabIndex >= 0) {
     current.blur();
     button.click();
   } else {
     current.blur();
-    next.focus();
+    focusTableCell(nextCell);
   }
+};
+
+/**
+ * Focuses a table cell, or it's child input element if it has one.
+ */
+export const focusTableCell = (cell: HTMLElement | null) => {
+  if (!cell) return;
+
+  // Focus input if it contains one
+  const elementToFocus = cell.querySelector('input') || cell;
+  elementToFocus.focus();
 };
 
 const getNextCell = (current: HTMLElement): HTMLElement | null => {
@@ -26,12 +35,18 @@ const getNextCell = (current: HTMLElement): HTMLElement | null => {
 
   if (!table) throw new Error('td has no parent table');
 
-  const all = [...table.querySelectorAll('td, th')].filter(
-    td => td.hasAttribute('contenteditable') || !!td.querySelector('button'),
-  );
+  const all = [...table.querySelectorAll('td, th')].filter(td => {
+    const nestedInput = td.querySelector('input');
+    return (
+      !!td.querySelector('button') ||
+      (nestedInput && !nestedInput.classList.contains('antecedent'))
+    );
+  });
 
   for (let i = 0; i < all.length; i++) {
-    if (all[i] === current) return all[i + 1] as HTMLElement;
+    if (all[i] === current || all[i].contains(current)) {
+      return all[i + 1] as HTMLElement;
+    }
   }
 
   return null;
@@ -49,25 +64,12 @@ export const getLastAddedCell = (
 
   if (!table) throw new Error('button has no parent table');
 
-  const all = [...table.querySelectorAll('td')].filter(td =>
-    td.hasAttribute('contenteditable'),
-  );
+  const all = [...table.querySelectorAll('td')].filter(td => {
+    const nestedInput = td.querySelector('input');
+    return nestedInput && !nestedInput.classList.contains('antecedent');
+  });
 
-  return all[all.length - 2];
-};
-
-export const selectElementText = (elem: HTMLElement) => {
-  setTimeout(() => {
-    const sel = window.getSelection();
-    const range = document.createRange();
-    if (sel && range) {
-      range.selectNodeContents(elem);
-      sel.removeAllRanges();
-      sel.addRange(range);
-    }
-  }, 0);
-};
-
-export const onCellFocus = (e: React.FocusEvent<HTMLTableCellElement>) => {
-  selectElementText(e.target);
+  const lastAddedCell = all[all.length - 2];
+  const nestedInput = lastAddedCell.querySelector('input');
+  return nestedInput || lastAddedCell;
 };

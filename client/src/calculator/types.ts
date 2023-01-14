@@ -1,20 +1,29 @@
-export type Whose = 'mine' | 'theirs' | 'split';
+import { ApiPerson, ApiProduct, ApiStore } from 'api';
+
+export type Whose = 'mine' | 'split' | 'theirs';
+
+export interface SplitType {
+  person: ApiPerson;
+  antecedent: number;
+}
 
 export interface ItemType {
-  title: string;
-  /** Should default to mine if not specified */
-  whose: Whose;
+  product: ApiProduct | undefined;
+  splits: SplitType[];
   price: number;
 }
 
 export interface ReceiptType {
-  title: string;
+  store: ApiStore | undefined;
+  date: Date | undefined;
   items: ItemType[];
   subtotal: number;
+  // n'th added receipt;
+  sequence: number;
 }
 
 export interface PersonType {
-  name: string;
+  person?: ApiPerson;
   receipts: ReceiptType[];
   image?: string;
 }
@@ -24,6 +33,7 @@ export interface AppType {
 }
 
 export interface InvoiceData {
+  person: ApiPerson | undefined;
   totalSpendings: number;
   actualSpendings: number;
   oweings: number;

@@ -1,2 +1,5 @@
+export { ReceiptButton } from './ReceiptButton';
 export { Button } from './Button';
-export type { ButtonProps } from './types';
+export { DeleteButton } from './DeleteButton';
+export { TabBarButton } from './TabBarButton';
+export type { BaseButtonProps } from './types';

@@ -7,20 +7,22 @@ export const theme: Theme = {
     black: '#000',
     charcoal: '#423F3D',
     caramel: '#C6A26E',
+    primary: '#9F7A44',
+    taupe: '#8A8168',
     green: '#00FF94',
+    blue: '#37a6d7',
     red: '#FF0000',
     yellow: '#FFD600',
     disabled: '#E7E7E7',
   },
 
   fonts: {
-    receipt: {
+    default: {
       family: 'Code New Roman',
       baseSize: '14px',
       lineHeight: '1',
       baseWeight: 'normal',
       color: 'black',
-      spacing: '0.02em',
     },
     nameTag: {
       family: 'Nanum Brush Script',
@@ -35,6 +37,13 @@ export const theme: Theme = {
       lineHeight: '1',
       baseWeight: '600',
       color: 'black',
+    },
+    tabBarButton: {
+      family: 'Doppio One',
+      baseSize: '16px',
+      lineHeight: '1',
+      baseWeight: '400',
+      color: 'white',
     },
   },
 
@@ -57,6 +66,11 @@ export const theme: Theme = {
       mine: 'green',
       theirs: 'red',
       split: 'yellow',
+    },
+    tabBarButton: {
+      active: 'charcoal',
+      inactive: 'taupe',
+      text: 'white',
     },
   },
 };

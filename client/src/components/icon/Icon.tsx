@@ -9,6 +9,8 @@ import {
 import styled, { css } from 'styled-components';
 import { Whose } from 'calculator/types';
 import { Theme } from 'styles/types';
+import { transition } from 'styles/mixins';
+import { useCallback } from 'react';
 
 const icons: Record<Whose, IconDefinition> = {
   mine: faCheck,
@@ -32,6 +34,7 @@ const IconContainer = styled.div<{ whose: Whose; selected: Whose }>`
         ? getIconColor(whose, theme)
         : theme.colors.disabled};
 
+      ${transition('color')}
       :hover {
         ${whose !== selected &&
         css`
@@ -50,12 +53,16 @@ interface IconProps {
 export const Icon = (props: IconProps) => {
   const { whose, selected, onClick } = props;
 
+  const handleClick = useCallback(() => {
+    if (whose === selected) {
+      return;
+    }
+
+    onClick(whose);
+  }, [onClick, selected, whose]);
+
   return (
-    <IconContainer
-      selected={selected}
-      whose={whose}
-      onClick={() => onClick(whose)}
-    >
+    <IconContainer selected={selected} whose={whose} onClick={handleClick}>
       <FontAwesomeIcon icon={icons[whose]} />
     </IconContainer>
   );

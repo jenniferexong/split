@@ -1,41 +1,102 @@
 import { calculate } from './calculate';
-import { exampleReceipt } from './exampleData';
+import {
+  adam,
+  apples,
+  bob,
+  carrots,
+  countdown,
+  exampleReceipt,
+  steak,
+} from './exampleData';
 import { AppType } from './types';
 
 describe('calculate', () => {
   const data: AppType = {
     people: [
       {
-        name: 'Person 1',
+        person: adam,
         receipts: [
           {
-            title: 'Countdown',
+            date: new Date('01-01-22'),
+            store: countdown,
             items: [
-              { title: '', whose: 'split', price: 550 },
-              { title: '', whose: 'split', price: 440 },
-              { title: '', whose: 'mine', price: 20.5 },
-              { title: '', whose: 'theirs', price: 21.8 },
+              {
+                product: apples,
+                splits: [
+                  { person: adam, antecedent: 1 },
+                  { person: bob, antecedent: 1 },
+                ],
+                price: 550,
+              },
+              {
+                product: apples,
+                splits: [
+                  { person: adam, antecedent: 1 },
+                  { person: bob, antecedent: 1 },
+                ],
+                price: 440,
+              },
+              {
+                product: apples,
+                splits: [{ person: adam, antecedent: 1 }],
+                price: 20.5,
+              },
+              {
+                product: carrots,
+                splits: [{ person: bob, antecedent: 1 }],
+                price: 21.8,
+              },
             ],
             // we don't care about subtotal for this
             subtotal: 0,
+            sequence: 0,
           },
         ],
       },
       {
-        name: 'Person 2',
+        person: bob,
         receipts: [
           {
-            title: 'New World',
+            date: new Date('01-01-22'),
+            store: countdown,
             items: [
-              { title: '', whose: 'mine', price: 4.56 },
-              { title: '', whose: 'theirs', price: 2.69 },
-              { title: '', whose: 'mine', price: 1.5 },
-              { title: '', whose: 'mine', price: 10.4 },
-              { title: '', whose: 'theirs', price: 1.4 },
-              { title: '', whose: 'split', price: 30.5 },
+              {
+                product: steak,
+                splits: [{ person: bob, antecedent: 1 }],
+                price: 4.56,
+              },
+              {
+                product: apples,
+                splits: [{ person: adam, antecedent: 1 }],
+                price: 2.69,
+              },
+              {
+                product: carrots,
+                splits: [{ person: bob, antecedent: 1 }],
+                price: 1.5,
+              },
+              {
+                product: apples,
+                splits: [{ person: bob, antecedent: 1 }],
+                price: 10.4,
+              },
+              {
+                product: carrots,
+                splits: [{ person: adam, antecedent: 1 }],
+                price: 1.4,
+              },
+              {
+                product: apples,
+                splits: [
+                  { person: adam, antecedent: 1 },
+                  { person: bob, antecedent: 1 },
+                ],
+                price: 30.5,
+              },
             ],
             // we don't care about subtotal for this
             subtotal: 0,
+            sequence: 1,
           },
         ],
       },
@@ -44,44 +105,46 @@ describe('calculate', () => {
 
   describe('calculates the correct information', () => {
     test('case 1', () => {
-      const result = calculate(data);
-      expect(result.globalTotal).toBeCloseTo(1083.35);
+      const { globalTotal, invoices } = calculate(data);
 
-      expect(result.invoices[0].totalSpendings).toBeCloseTo(534.84);
-      expect(result.invoices[0].actualSpendings).toBeCloseTo(1032.3);
-      expect(result.invoices[0].oweings).toBe(0);
+      expect(globalTotal).toBeCloseTo(1083.35);
 
-      expect(result.invoices[1].totalSpendings).toBeCloseTo(548.51);
-      expect(result.invoices[1].actualSpendings).toBeCloseTo(51.05);
-      expect(result.invoices[1].oweings).toBeCloseTo(497.46);
-      expect(result).toMatchSnapshot();
+      expect(invoices[0].totalSpendings).toBeCloseTo(534.84);
+      expect(invoices[0].actualSpendings).toBeCloseTo(1032.3);
+      expect(invoices[0].oweings).toBe(0);
+
+      expect(invoices[1].totalSpendings).toBeCloseTo(548.51);
+      expect(invoices[1].actualSpendings).toBeCloseTo(51.05);
+      expect(invoices[1].oweings).toBeCloseTo(497.46);
+      expect({ globalTotal, invoices }).toMatchSnapshot();
     });
 
     test('case 2', () => {
-      const exampleData = {
+      const exampleData: AppType = {
         people: [
           {
-            name: 'Person 1',
-            receipts: [exampleReceipt],
+            person: adam,
+            receipts: [exampleReceipt(adam, bob)],
           },
           {
-            name: 'Person 2',
-            receipts: [exampleReceipt],
+            person: bob,
+            receipts: [exampleReceipt(bob, adam)],
           },
         ],
       };
-      const result = calculate(exampleData);
 
-      expect(result.globalTotal).toBeCloseTo(38.3);
-      expect(result.invoices[0].totalSpendings).toBeCloseTo(19.15);
-      expect(result.invoices[0].actualSpendings).toBeCloseTo(19.15);
-      expect(result.invoices[0].oweings).toBe(0);
+      const { globalTotal, invoices } = calculate(exampleData);
 
-      expect(result.invoices[1].totalSpendings).toBeCloseTo(19.15);
-      expect(result.invoices[1].actualSpendings).toBeCloseTo(19.15);
-      expect(result.invoices[1].oweings).toBe(0);
+      expect(globalTotal).toBeCloseTo(38.3);
+      expect(invoices[0].totalSpendings).toBeCloseTo(19.15);
+      expect(invoices[0].actualSpendings).toBeCloseTo(19.15);
+      expect(invoices[0].oweings).toBe(0);
 
-      expect(result).toMatchSnapshot();
+      expect(invoices[1].totalSpendings).toBeCloseTo(19.15);
+      expect(invoices[1].actualSpendings).toBeCloseTo(19.15);
+      expect(invoices[1].oweings).toBe(0);
+
+      expect({ globalTotal, invoices }).toMatchSnapshot();
     });
   });
 });

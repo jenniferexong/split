@@ -7,11 +7,23 @@ Object {
     Object {
       "actualSpendings": 1032.3,
       "oweings": 0,
+      "person": Object {
+        "email": "adam.agar@email.com",
+        "firstName": "Adam",
+        "id": 1,
+        "lastName": "Agar",
+      },
       "totalSpendings": 534.84,
     },
     Object {
       "actualSpendings": 51.05,
       "oweings": 497.4599999999999,
+      "person": Object {
+        "email": "bob.luza@email.com",
+        "firstName": "Bob",
+        "id": 2,
+        "lastName": "luza",
+      },
       "totalSpendings": 548.5099999999999,
     },
   ],
@@ -25,11 +37,23 @@ Object {
     Object {
       "actualSpendings": 19.15,
       "oweings": 0,
+      "person": Object {
+        "email": "adam.agar@email.com",
+        "firstName": "Adam",
+        "id": 1,
+        "lastName": "Agar",
+      },
       "totalSpendings": 19.15,
     },
     Object {
       "actualSpendings": 19.15,
       "oweings": 0,
+      "person": Object {
+        "email": "bob.luza@email.com",
+        "firstName": "Bob",
+        "id": 2,
+        "lastName": "luza",
+      },
       "totalSpendings": 19.15,
     },
   ],

@@ -4,11 +4,14 @@ export type Color =
   | 'white'
   | 'black'
   | 'charcoal'
+  | 'taupe'
   | 'caramel'
+  | 'primary'
   | 'beige'
   | 'green'
   | 'red'
   | 'yellow'
+  | 'blue'
   | 'disabled';
 
 export interface Font {
@@ -24,9 +27,10 @@ export interface Theme {
   colors: Record<Color, string>;
 
   fonts: {
-    receipt: Font;
+    default: Font;
     nameTag: Font;
     boardLetter: Font;
+    tabBarButton: Font;
   };
 
   components: {
@@ -45,5 +49,10 @@ export interface Theme {
       frameWidth: string;
     };
     whose: Record<Whose, Color>;
+    tabBarButton: {
+      active: Color;
+      inactive: Color;
+      text: Color;
+    };
   };
 }

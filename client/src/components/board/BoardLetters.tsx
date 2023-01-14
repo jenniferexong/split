@@ -1,7 +1,7 @@
-import { ButtonProps } from 'components/button';
-import React from 'react';
+import { BaseButtonProps } from 'components/button';
+import { forwardRef, Ref } from 'react';
 import styled, { css } from 'styled-components';
-import { fontMixin } from 'styles/mixins';
+import { fontMixin, transition } from 'styles/mixins';
 
 const StyledButton = styled.button`
   ${({ theme }) => css`
@@ -15,20 +15,15 @@ const StyledButton = styled.button`
     border: none;
     grid-column: span 2;
 
-    // add hover effect
+    ${transition('transform')}
     &:hover {
-      // TODO add transition
-      transform: scale(1.1);
-    }
-
-    // add focus effect
-    &:focus {
+      transform: scale(1.3);
     }
   `}
 `;
 
-export const BoardLetters = React.forwardRef(
-  (props: ButtonProps, ref?: React.Ref<HTMLButtonElement>) => {
+export const BoardLetters = forwardRef(
+  (props: BaseButtonProps, ref?: Ref<HTMLButtonElement>) => {
     const { children, onClick } = props;
 
     return (

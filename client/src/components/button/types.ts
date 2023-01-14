@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
-export interface ButtonProps {
+export interface BaseButtonProps {
   /** Button text */
   children: ReactNode;
-  onClick(): void;
+  onClick?: () => void;
 }

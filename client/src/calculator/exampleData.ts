@@ -1,224 +1,79 @@
-import { AppType, ReceiptType } from './types';
+import { ApiPerson, ApiProduct, ApiStore } from 'api';
+import { ReceiptType } from './types';
 
-export const exampleReceipt: ReceiptType = {
-  title: 'Countdown',
+export const countdown: ApiStore = {
+  id: 1,
+  name: 'Countdown',
+};
+
+export const pork: ApiProduct = {
+  id: 1,
+  name: 'Pork',
+};
+
+export const carrots: ApiProduct = {
+  id: 2,
+  name: 'Carrots',
+};
+
+export const apples: ApiProduct = {
+  id: 3,
+  name: 'Apples',
+};
+
+export const steak: ApiProduct = {
+  id: 4,
+  name: 'Steak',
+};
+
+export const adam: ApiPerson = {
+  id: 1,
+  firstName: 'Adam',
+  lastName: 'Agar',
+  email: 'adam.agar@email.com',
+};
+
+export const bob: ApiPerson = {
+  id: 2,
+  firstName: 'Bob',
+  lastName: 'luza',
+  email: 'bob.luza@email.com',
+};
+
+export const exampleReceipt = (
+  person1: ApiPerson,
+  person2: ApiPerson,
+): ReceiptType => ({
+  store: countdown,
+  date: new Date('01-01-2023'),
   items: [
-    { title: 'Pork', whose: 'split', price: 4.56 },
     {
-      title: 'Carrots',
-      whose: 'split',
+      product: pork,
+      splits: [
+        { person: person1, antecedent: 1 },
+        { person: person2, antecedent: 1 },
+      ],
+      price: 4.56,
+    },
+    {
+      product: carrots,
+      splits: [
+        { person: person1, antecedent: 1 },
+        { person: person2, antecedent: 1 },
+      ],
       price: 2.69,
     },
     {
-      title: 'Apples',
-      whose: 'mine',
+      product: apples,
+      splits: [{ person: person1, antecedent: 1 }],
       price: 1.5,
     },
     {
-      title: '',
-      whose: 'theirs',
+      product: steak,
+      splits: [{ person: person2, antecedent: 1 }],
       price: 10.4,
     },
   ],
   subtotal: 19.15,
-};
-
-export const testData: AppType = {
-  people: [
-    {
-      name: 'Jennifer',
-      receipts: [
-        {
-          title: 'Seasons Market',
-          items: [
-            {
-              title: 'cucumbers',
-              whose: 'split',
-              price: 5,
-            },
-            {
-              title: 'spring onion',
-              whose: 'split',
-              price: 1.99,
-            },
-          ],
-          subtotal: 6.99,
-        },
-        {
-          title: 'Countdown',
-          items: [
-            {
-              title: 'berries',
-              whose: 'mine',
-              price: 18,
-            },
-            {
-              title: 'strawberies',
-              whose: 'theirs',
-              price: 7,
-            },
-            {
-              title: 'rubbish bags',
-              whose: 'split',
-              price: 5.49,
-            },
-            {
-              title: 'butter',
-              whose: 'mine',
-              price: 8.5,
-            },
-          ],
-          subtotal: 38.99,
-        },
-      ],
-    },
-    {
-      name: 'Andy',
-      receipts: [
-        {
-          title: 'Greens',
-          items: [
-            {
-              title: 'choy sum',
-              whose: 'split',
-              price: 11.96,
-            },
-          ],
-          subtotal: 11.96,
-        },
-        {
-          title: 'Countdown',
-          items: [
-            {
-              title: 'mushrooms',
-              whose: 'mine',
-              price: 4.24,
-            },
-            {
-              title: 'chicken',
-              whose: 'split',
-              price: 16,
-            },
-            {
-              title: 'bacon',
-              whose: 'split',
-              price: 5,
-            },
-            {
-              title: 'flour',
-              whose: 'split',
-              price: 2,
-            },
-            {
-              title: 'cheese',
-              whose: 'split',
-              price: 11,
-            },
-            {
-              title: 'pork loin',
-              whose: 'split',
-              price: 15,
-            },
-            {
-              title: 'chicken stock',
-              whose: 'split',
-              price: 2.5,
-            },
-            {
-              title: 'sponges',
-              whose: 'split',
-              price: 4,
-            },
-            {
-              title: 'capsicum',
-              whose: 'split',
-              price: 2.99,
-            },
-            {
-              title: 'all spice',
-              whose: 'split',
-              price: 2.1,
-            },
-            {
-              title: 'rice',
-              whose: 'split',
-              price: 7,
-            },
-            {
-              title: 'eggs',
-              whose: 'split',
-              price: 11.8,
-            },
-          ],
-          subtotal: 83.63,
-        },
-        {
-          title: 'Tai Ping',
-          items: [
-            {
-              title: 'buns',
-              whose: 'split',
-              price: 20.97,
-            },
-            {
-              title: 'cucumber',
-              whose: 'split',
-              price: 1.99,
-            },
-            {
-              title: 'mushrooms',
-              whose: 'split',
-              price: 12.99,
-            },
-            {
-              title: 'carrots',
-              whose: 'split',
-              price: 1.24,
-            },
-            {
-              title: 'lgm black bean',
-              whose: 'mine',
-              price: 10.99,
-            },
-            {
-              title: 'lgm pork',
-              whose: 'theirs',
-              price: 6.99,
-            },
-            {
-              title: 'hotpot seasoning',
-              whose: 'split',
-              price: 5.39,
-            },
-            {
-              title: 'lamb slices',
-              whose: 'split',
-              price: 27.98,
-            },
-            {
-              title: 'fish balls',
-              whose: 'split',
-              price: 3.99,
-            },
-            {
-              title: 'fish tofu',
-              whose: 'split',
-              price: 7,
-            },
-            {
-              title: 'tripe',
-              whose: 'mine',
-              price: 13.98,
-            },
-            {
-              title: 'spring onion',
-              whose: 'split',
-              price: 1.99,
-            },
-          ],
-          subtotal: 115.5,
-        },
-      ],
-    },
-  ],
-};
+  sequence: 0,
+});

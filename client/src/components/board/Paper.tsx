@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { MouseEventHandler, ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 import { Color } from 'styles/types';
 
@@ -8,6 +8,7 @@ interface PaperProps {
   height?: string;
   background?: Color;
   children: ReactNode | ReactNode[];
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
 const Container = styled.div<{
@@ -28,13 +29,9 @@ const Container = styled.div<{
 
     background: ${background
       ? theme.colors[background]
-      : theme.components.receipt.background};
+      : theme.colors[theme.components.receipt.background]};
 
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   `}
 `;
 
@@ -48,8 +45,16 @@ const Pin = styled.div`
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 `;
 
+const InnerContainer = styled.div`
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export const Paper = (props: PaperProps) => {
-  const { width, height, children, background, className } = props;
+  const { width, height, children, background, className, onClick } = props;
 
   return (
     <Container
@@ -57,9 +62,12 @@ export const Paper = (props: PaperProps) => {
       height={height}
       background={background}
       className={className}
+      onClick={onClick}
     >
-      <Pin />
-      {children}
+      <InnerContainer>
+        <Pin className="pin" />
+        {children}
+      </InnerContainer>
     </Container>
   );
 };

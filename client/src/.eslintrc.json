@@ -14,15 +14,18 @@
     "sourceType": "module"
   },
   "globals": { "JSX": "readonly" },
-  "plugins": ["react", "@typescript-eslint", "prettier", "jest"],
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier", "jest"],
   "rules": {
     "no-duplicate-imports": "error",
-    "no-unused-vars": "error",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
     "semi": "off",
     "no-extra-semi": "off",
     "quotes": ["error", "single"],
     "comma-dangle": ["error", "always-multiline"],
     "react/react-in-jsx-scope": "off",
-    "multiline-ternary": "off"
+    "multiline-ternary": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error"
   }
 }
