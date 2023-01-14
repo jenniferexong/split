@@ -9,6 +9,7 @@ import { hasSelectedAllPeople } from './hasSelectedAllPeople';
 
 import nibbles from 'images/nibbles.jpg';
 import pandy from 'images/pandy.jpg';
+import { getStoredAppState } from 'storage/appState';
 
 interface AddReceipt {
   type: 'addReceipt';
@@ -101,9 +102,12 @@ const createEmptyItem = (people: ApiPerson[]): ItemType => {
   };
 };
 
-let receiptSequence = 0;
+const appState = getStoredAppState();
+let receiptSequence = !appState
+  ? 0
+  : appState.people.reduce((count, person) => count + person.receipts.length, 0);
 
-const getEmptyReceipt = (): ReceiptType => ({
+const createEmptyReceipt = (): ReceiptType => ({
   store: undefined,
   date: undefined,
   items: [],
@@ -125,7 +129,7 @@ export const reducer: Reducer<AppType, Action> = (state, action) =>
       }
       case 'addReceipt': {
         const { personIndex } = action;
-        draft.people[personIndex].receipts.push(getEmptyReceipt());
+        draft.people[personIndex].receipts.push(createEmptyReceipt());
         break;
       }
       case 'updateReceipt': {

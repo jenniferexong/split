@@ -5,8 +5,9 @@ export const insertIntoSortedArray = <T extends Object>(
   item: T,
   iteratee: (item: T) => any,
 ): T[] => {
-  const insertIndex = sortedIndexBy(array, item, iteratee);
-  array.splice(insertIndex, 0, item);
+  const newArray = [...array];
+  const insertIndex = sortedIndexBy(newArray, item, iteratee);
+  newArray.splice(insertIndex, 0, item);
 
-  return array;
+  return newArray;
 };

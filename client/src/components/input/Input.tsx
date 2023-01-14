@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, HTMLInputTypeAttribute } from 'react';
 import styled from 'styled-components';
 import { backgroundHover } from 'styles/mixins';
 
@@ -36,11 +36,21 @@ interface InputProps {
   value: string;
   name: string;
   placeholder: string;
+  type?: HTMLInputTypeAttribute;
+  required?: boolean;
   onChange: ChangeEventHandler<HTMLInputElement>;
 }
 
 export const Input = (props: InputProps) => {
-  const { label, name, value, placeholder, onChange } = props;
+  const {
+    label,
+    name,
+    value,
+    placeholder,
+    required,
+    type = 'text',
+    onChange,
+  } = props;
 
   return (
     <Container>
@@ -48,8 +58,9 @@ export const Input = (props: InputProps) => {
       <StyledInput
         placeholder={placeholder}
         name={name}
-        type="text"
+        type={type}
         value={value}
+        required={required}
         onChange={onChange}
       />
     </Container>

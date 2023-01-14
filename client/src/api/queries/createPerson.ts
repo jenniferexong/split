@@ -34,8 +34,7 @@ export const useCreatePerson = () => {
     const { data, error } = await updateResult({ input });
 
     if (error || !data) {
-      // TODO
-      throw new Error(JSON.stringify(error));
+      throw error;
     }
 
     return data.person;

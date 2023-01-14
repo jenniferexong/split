@@ -90,7 +90,9 @@ export const EntryPageContextProvider = (
       const newOption = mapStoreToOption(store);
 
       setStoreOptions(
-        insertIntoSortedArray(storeOptions, newOption, option => option.label),
+        insertIntoSortedArray(storeOptions, newOption, option =>
+          option.label.toLowerCase(),
+        ),
       );
 
       return newOption;
@@ -103,10 +105,8 @@ export const EntryPageContextProvider = (
       const newOption = mapProductToOption(product);
 
       setProductOptions(
-        insertIntoSortedArray(
-          productOptions,
-          newOption,
-          option => option.label,
+        insertIntoSortedArray(productOptions, newOption, option =>
+          option.label.toLowerCase(),
         ),
       );
 
@@ -120,7 +120,9 @@ export const EntryPageContextProvider = (
       const newOption = mapPersonToOption(person);
 
       setPersonOptions(
-        insertIntoSortedArray(personOptions, newOption, option => option.label),
+        insertIntoSortedArray(personOptions, newOption, option =>
+          option.label.toLowerCase(),
+        ),
       );
 
       return newOption;
