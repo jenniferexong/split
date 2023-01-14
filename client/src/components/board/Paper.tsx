@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { MouseEventHandler, ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 import { Color } from 'styles/types';
 
@@ -8,6 +8,7 @@ interface PaperProps {
   height?: string;
   background?: Color;
   children: ReactNode | ReactNode[];
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
 const Container = styled.div<{
@@ -53,7 +54,7 @@ const InnerContainer = styled.div`
 `;
 
 export const Paper = (props: PaperProps) => {
-  const { width, height, children, background, className } = props;
+  const { width, height, children, background, className, onClick } = props;
 
   return (
     <Container
@@ -61,9 +62,10 @@ export const Paper = (props: PaperProps) => {
       height={height}
       background={background}
       className={className}
+      onClick={onClick}
     >
       <InnerContainer>
-        <Pin />
+        <Pin className="pin" />
         {children}
       </InnerContainer>
     </Container>

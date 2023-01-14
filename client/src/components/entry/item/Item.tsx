@@ -1,6 +1,6 @@
 import { ItemType, SplitType, Whose } from 'calculator/types';
 import styled from 'styled-components';
-import React, { useCallback, useMemo, useState } from 'react';
+import { ChangeEvent, FocusEvent, useCallback, useMemo, useState } from 'react';
 import { Input, TableCell } from 'components/table';
 import { TableRow } from 'components/table/TableRow';
 import { ApiPerson, useCreateProduct } from 'api';
@@ -75,14 +75,14 @@ export const Item = (props: ItemProps) => {
   );
 
   const [priceInput, setPriceInput] = useState<string>(price.toFixed(2));
-  const handleChangePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangePriceInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     setPriceInput(e.target.value);
   };
 
   const updatePrice = useCallback(
-    (e: React.FocusEvent<HTMLInputElement>) => {
+    (e: FocusEvent<HTMLInputElement>) => {
       const priceText = e.target.value;
       // If invalid number, reset value to previous price
       if (!priceText.match(/^-?\d*\.?\d*$/)) {

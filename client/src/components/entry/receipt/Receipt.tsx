@@ -50,7 +50,7 @@ export const Receipt = (props: ReceiptProps) => {
     mapStoreToOption,
   );
 
-  const [showRemoveButton, setShowRemoveButton] = useState<boolean>(true);
+  const [showRemoveButton, setShowRemoveButton] = useState<boolean>(false);
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const theme = useTheme();

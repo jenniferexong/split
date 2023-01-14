@@ -19,7 +19,6 @@ const navigationButtons: TabBarMenuButton[] = [
 ];
 
 const HeaderContainer = styled.header`
-  z-index: 10;
   height: ${MENU_BAR_HEIGHT};
   position: sticky;
   top: 0;

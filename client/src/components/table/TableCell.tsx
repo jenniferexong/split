@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { FocusEvent, FocusEventHandler, ReactNode } from 'react';
 import { handleCellKeyDown } from 'components/table';
 import styled, { css } from 'styled-components';
 import { fontMixin } from 'styles/mixins';
@@ -6,7 +6,7 @@ import { fontMixin } from 'styles/mixins';
 interface TableCellProps {
   children?: ReactNode;
   as?: 'td' | 'th';
-  onBlur?: React.FocusEventHandler<HTMLTableCellElement>;
+  onBlur?: FocusEventHandler<HTMLTableCellElement>;
 
   bold?: boolean;
   textSize?: 'normal' | 'small';
@@ -23,7 +23,7 @@ const StyledTableCell = styled.td<{
 }>`
   ${({ theme, as, textAlign, textSize, bold }) => css`
     position: relative;
-    ${fontMixin(theme.fonts.receipt)}
+    ${fontMixin(theme.fonts.default)}
     white-space: nowrap;
 
     ${bold &&
@@ -64,7 +64,7 @@ export const TableCell = ({
 }: TableCellProps) => {
   const { children, onBlur, ...rest } = props;
 
-  const setBlur = (e: React.FocusEvent<HTMLTableCellElement, Element>) => {
+  const setBlur = (e: FocusEvent<HTMLTableCellElement, Element>) => {
     onBlur?.(e);
   };
 

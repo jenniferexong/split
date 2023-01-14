@@ -17,7 +17,6 @@ const Container = styled.nav<Props>`
   gap: 52px;
   padding: 0 20px;
   position: sticky;
-  z-index: 10;
 
   ${({ theme }) => css`
     background: ${theme.colors.beige};

@@ -1,8 +1,6 @@
-import React from 'react';
+import { KeyboardEvent } from 'react';
 
-export const handleCellKeyDown = (
-  e: React.KeyboardEvent<HTMLTableCellElement>,
-) => {
+export const handleCellKeyDown = (e: KeyboardEvent<HTMLTableCellElement>) => {
   if (e.key !== 'Enter') return;
 
   e.preventDefault();

@@ -16,13 +16,12 @@ export const theme: Theme = {
   },
 
   fonts: {
-    receipt: {
+    default: {
       family: 'Code New Roman',
       baseSize: '14px',
       lineHeight: '1',
       baseWeight: 'normal',
       color: 'black',
-      spacing: '0.02em',
     },
     nameTag: {
       family: 'Nanum Brush Script',

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Routes } from './pages/Routes';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from 'styles/GlobalStyle';
@@ -7,7 +7,12 @@ import { theme } from 'styles';
 import { splitClient } from 'api/client';
 import { Provider } from 'urql';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+if (!container) throw new Error('No root');
+
+const root = createRoot(container);
+
+root.render(
   <React.StrictMode>
     <Provider value={splitClient}>
       <ThemeProvider theme={theme}>
@@ -16,5 +21,4 @@ ReactDOM.render(
       </ThemeProvider>
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root'),
 );

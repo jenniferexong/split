@@ -26,7 +26,7 @@ export interface Theme {
   colors: Record<Color, string>;
 
   fonts: {
-    receipt: Font;
+    default: Font;
     nameTag: Font;
     boardLetter: Font;
   };

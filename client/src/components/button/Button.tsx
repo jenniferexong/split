@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef, Ref } from 'react';
 import styled from 'styled-components';
 import { backgroundHover } from 'styles/mixins';
 import { ButtonProps } from './types';
@@ -17,8 +17,8 @@ const StyledButton = styled.button`
   }
 `;
 
-export const Button = React.forwardRef(
-  (props: ButtonProps, ref?: React.Ref<HTMLButtonElement>) => {
+export const Button = forwardRef(
+  (props: ButtonProps, ref?: Ref<HTMLButtonElement>) => {
     const { children, onClick } = props;
 
     return (

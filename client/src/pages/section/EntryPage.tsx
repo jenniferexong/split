@@ -1,5 +1,5 @@
 import { calculate } from 'calculator';
-import { useCallback, useMemo, useReducer } from 'react';
+import { useCallback, useMemo, useReducer, useState } from 'react';
 import { clearReceiptsAction, initialState, reducer } from 'utils/reducer';
 import { useLoaderData } from 'react-router-dom';
 import { PersonBoard } from 'components/entry/PersonBoard';
@@ -12,6 +12,7 @@ import { EntryPageContextProvider } from 'pages/contexts/EntryPageContext';
 import { mapAppStateToReceiptInputs } from 'api/utils';
 import { showError, showSuccess } from 'utils/showToast';
 import { getStoredAppState } from 'storage/appState';
+import { CreatePersonModal } from 'components/entry/CreatePersonModal';
 
 export const EntryPage = () => {
   const {
@@ -25,6 +26,9 @@ export const EntryPage = () => {
     getStoredAppState() || initialState,
   );
   const { createReceipt } = useCreateReceipt();
+
+  const [showCreatePersonModal, setShowCreatePersonModal] =
+    useState<boolean>(false);
 
   const clearReceipts = (guard: boolean) => {
     if (guard) {
@@ -62,6 +66,10 @@ export const EntryPage = () => {
 
   useBottomTabBarMenu([
     {
+      label: 'Create person',
+      onClick: () => setShowCreatePersonModal(true),
+    },
+    {
       label: 'Clear receipts',
       onClick: () => clearReceipts(true),
     },
@@ -72,6 +80,9 @@ export const EntryPage = () => {
   ]);
 
   const calculations = useMemo(() => calculate(appState), [appState]);
+  const closeModal = useCallback(() => {
+    setShowCreatePersonModal(false);
+  }, []);
 
   return (
     <EntryPageContextProvider
@@ -89,6 +100,10 @@ export const EntryPage = () => {
           invoice={calculations.invoices[index]}
         />
       ))}
+      <CreatePersonModal
+        show={showCreatePersonModal}
+        handleClose={closeModal}
+      />
     </EntryPageContextProvider>
   );
 };

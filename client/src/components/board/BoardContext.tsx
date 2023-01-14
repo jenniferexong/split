@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
+import { createContext, useContext } from 'react';
 
-export const BoardContext = React.createContext<number>(0);
+export const BoardContext = createContext<number>(0);
 
 export const useBoardWidth = (): number => useContext(BoardContext) ?? 0;

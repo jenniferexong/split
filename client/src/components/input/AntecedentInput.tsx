@@ -1,5 +1,5 @@
 import { Input } from './Input';
-import React, { useCallback, useState } from 'react';
+import { ChangeEvent, FocusEvent, useCallback, useState } from 'react';
 import { SplitType } from 'calculator/types';
 import { ItemProps } from 'components/entry/item';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
@@ -21,14 +21,14 @@ export const AntecedentInput = (props: AntecedentInputProps) => {
     split.antecedent.toString(),
   );
 
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     setAntecedentInput(e.target.value);
   };
 
   const updateAntecedent = useCallback(
-    (e: React.FocusEvent<HTMLInputElement>) => {
+    (e: FocusEvent<HTMLInputElement>) => {
       const antecedentText = e.target.value;
       // If invalid number, reset value to previous antecedent
       if (!antecedentText.match(/^0*[1-9]\d*$/)) {
