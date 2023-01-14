@@ -32,6 +32,10 @@ impl From<DbReceiptLine> for ApiReceiptLine {
 
 #[Object]
 impl ApiReceiptLine {
+    async fn id(&self) -> ReceiptLineId {
+        self.id
+    }
+
     async fn receipt(&self, ctx: &Context<'_>) -> Result<ApiReceipt> {
         let state = ctx.data_unchecked::<AppState>();
         state.db.get_receipt_by_id(self.receipt_id).await
