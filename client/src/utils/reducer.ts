@@ -10,6 +10,7 @@ import { hasSelectedAllPeople } from './hasSelectedAllPeople';
 import nibbles from 'images/nibbles.jpg';
 import pandy from 'images/pandy.jpg';
 import { getStoredAppState } from 'storage/appState';
+import { getTotalReceipts } from './getTotalReceipts';
 
 interface AddReceipt {
   type: 'addReceipt';
@@ -103,9 +104,7 @@ const createEmptyItem = (people: ApiPerson[]): ItemType => {
 };
 
 const appState = getStoredAppState();
-let receiptSequence = !appState
-  ? 0
-  : appState.people.reduce((count, person) => count + person.receipts.length, 0);
+let receiptSequence = !appState ? 0 : getTotalReceipts(appState);
 
 const createEmptyReceipt = (): ReceiptType => ({
   store: undefined,

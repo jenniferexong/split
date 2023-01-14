@@ -13,6 +13,7 @@ import { mapAppStateToReceiptInputs } from 'api/utils';
 import { showError, showSuccess } from 'utils/showToast';
 import { getStoredAppState } from 'storage/appState';
 import { CreatePersonModal } from 'components/entry/CreatePersonModal';
+import { getTotalReceipts } from 'utils/getTotalReceipts';
 
 export const EntryPage = () => {
   const {
@@ -40,6 +41,11 @@ export const EntryPage = () => {
   };
 
   const uploadReceipts = useCallback(() => {
+    if (getTotalReceipts(appState) <= 0) {
+      showError('No receipts to save');
+      return;
+    }
+
     const accepted = confirm('Upload receipts? This cannot be undone.');
     if (!accepted) return;
 
