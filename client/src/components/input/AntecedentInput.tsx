@@ -1,4 +1,4 @@
-import { Input } from './Input';
+import { ReceiptInput } from './ReceiptInput';
 import { ChangeEvent, FocusEvent, useCallback, useState } from 'react';
 import { SplitType } from 'calculator/types';
 import { ItemProps } from 'components/entry/item';
@@ -69,7 +69,7 @@ export const AntecedentInput = (props: AntecedentInputProps) => {
   );
 
   return (
-    <Input
+    <ReceiptInput
       className="antecedent"
       value={antecedentInput}
       onChange={handleChangeInput}

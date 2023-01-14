@@ -1,17 +1,17 @@
-import {
-  HTMLInputTypeAttribute,
-  ChangeEventHandler,
-  FocusEventHandler,
-} from 'react';
+import { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 import { backgroundHover } from 'styles/mixins';
-import { onInputFocus } from './utils';
 
 const StyledInput = styled.input`
   width: 100%;
   padding: 0;
   border: none;
+  border-bottom: 1.5px dashed ${props => props.theme.colors.black};
   outline: none;
+  height: 44px;
+  font-size: 16px;
+
+  margin-top: 8px;
 
   :focus {
     box-shadow: 0 0 0 1px ${props => props.theme.colors.blue};
@@ -20,26 +20,39 @@ const StyledInput = styled.input`
   ${backgroundHover()}
 `;
 
-export interface InputProps {
+const StyledLabel = styled.label`
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 20px;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+interface InputProps {
+  label: string;
   value: string;
+  name: string;
+  placeholder: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
-  onBlur: FocusEventHandler<HTMLInputElement>;
-  className?: string;
-  type?: HTMLInputTypeAttribute;
 }
 
 export const Input = (props: InputProps) => {
-  const { value, className, onChange, onBlur } = props;
+  const { label, name, value, placeholder, onChange } = props;
 
   return (
-    <StyledInput
-      className={className}
-      type="text"
-      value={value}
-      onChange={onChange}
-      onBlur={onBlur}
-      onFocus={onInputFocus}
-    />
+    <Container>
+      <StyledLabel htmlFor={name}>{label}</StyledLabel>
+      <StyledInput
+        placeholder={placeholder}
+        name={name}
+        type="text"
+        value={value}
+        onChange={onChange}
+      />
+    </Container>
   );
 };
 Input.displayName = 'Input';

@@ -1,7 +1,7 @@
 import { ItemType, SplitType, Whose } from 'calculator/types';
 import styled from 'styled-components';
 import { ChangeEvent, FocusEvent, useCallback, useMemo, useState } from 'react';
-import { Input, TableCell } from 'components/table';
+import { TableCell } from 'components/table';
 import { TableRow } from 'components/table/TableRow';
 import { ApiPerson, useCreateProduct } from 'api';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
@@ -10,6 +10,7 @@ import {
   AntecedentInput,
   ProductOption,
   CreateableSelect,
+  ReceiptInput,
 } from 'components/input';
 import { Icon } from 'components/icon';
 import { getSplitCost, mapWhoseToSplits } from 'utils/splits';
@@ -201,7 +202,7 @@ export const Item = (props: ItemProps) => {
         </TableCell>
 
         <TableCell colSpan={1} textAlign="right">
-          <Input
+          <ReceiptInput
             value={priceInput}
             onChange={handleChangePriceInput}
             onBlur={updatePrice}

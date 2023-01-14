@@ -23,12 +23,14 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 60px 40px 40px;
+  padding: 60px 44px 36px;
   min-width: 550px;
   min-height: 500px;
 `;
 
 const ModalFooter = styled.footer`
+  width: 100%;
+
   > * {
     margin: 0;
   }
