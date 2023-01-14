@@ -2,7 +2,7 @@ import ReactSelect, { ActionMeta } from 'react-select';
 import { getOptionValue } from './utils';
 import { Option } from './types';
 import styled from 'styled-components';
-import { backgroundHover } from 'styles/mixins';
+import { reactSelect } from 'styles/mixins';
 
 interface SelectProps<TOption> {
   options: TOption[];
@@ -25,47 +25,7 @@ const components = {
 };
 
 const StyledSelect = styled(ReactSelect)<{ textAlign: string }>`
-  .react-select {
-    &__value-container {
-      padding: 0;
-    }
-
-    &__input-container {
-      padding: 0;
-      margin: 0;
-      display: flex;
-      color: ${props => props.theme.colors.black};
-    }
-
-    &__single-value {
-      color: ${props => props.theme.colors.black};
-    }
-
-    &__input-container::after {
-      content: none;
-    }
-
-    &__control {
-      border: none;
-      border-radius: 0;
-      min-height: 0;
-
-      ${backgroundHover()}
-      &--is-focused {
-        box-shadow: 0 0 0 1px ${props => props.theme.colors.blue};
-      }
-    }
-
-    &__input {
-      text-transform: uppercase;
-      width: 100%;
-      grid-area: 1 / -1 / auto/auto;
-    }
-
-    &__placeholder {
-      color: ${props => props.theme.colors.red};
-    }
-  }
+  ${props => reactSelect(props.theme)}
 ` as typeof ReactSelect;
 
 export const Select = <TOption extends Option<any>>(
