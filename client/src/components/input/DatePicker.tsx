@@ -44,6 +44,7 @@ export const DatePicker = (props: DatePickerProps) => {
       placeholderText="Select a date"
       selected={value}
       onChange={handleChangeDate}
+      dateFormat="dd/MM/yyyy"
     />
   );
 };
