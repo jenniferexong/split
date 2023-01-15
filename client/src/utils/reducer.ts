@@ -61,8 +61,7 @@ interface RemoveItem {
 
 interface RemoveReceipt {
   type: 'removeReceipt';
-  personIndex: number;
-  receiptIndex: number;
+  sequence: number;
 }
 
 export type Action =
@@ -137,9 +136,18 @@ export const reducer: Reducer<EntryData, Action> = (state, action) =>
         break;
       }
       case 'removeReceipt': {
-        const { personIndex, receiptIndex } = action;
-        const receipts = draft.people[personIndex].receipts;
-        receipts.splice(receiptIndex, 1);
+        const { sequence } = action;
+
+        for (const person of draft.people) {
+          const index = person.receipts.findIndex(
+            receipt => receipt.sequence === sequence,
+          );
+          if (index !== -1) {
+            person.receipts.splice(index, 1);
+            break;
+          }
+        }
+
         break;
       }
       case 'addItem': {

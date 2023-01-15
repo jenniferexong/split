@@ -35,11 +35,10 @@ export const Layout = (props: LayoutProps) => {
   return (
     <>
       <ToastContainer
-        autoClose={2000}
+        autoClose={3000}
         position="top-center"
         hideProgressBar
         theme="dark"
-        limit={1}
       />
       <Container>
         <LayoutContextProvider setBottomTabBarButtons={setBottomTabBarButtons}>

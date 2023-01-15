@@ -10,10 +10,14 @@ export const showApiError = (title: string, error: CombinedError) => {
   toast.error(`${title}: ${error.graphQLErrors}`, toastOptions);
 };
 
-export const showError = (message: string) => {
-  toast.error(message, toastOptions);
+export const showError = (message: string, id: string) => {
+  toast.error(message, { ...toastOptions, toastId: id });
 };
 
-export const showSuccess = (message: string) => {
-  toast.success(message, toastOptions);
+export const showSuccess = (message: string, id: string) => {
+  toast.success(message, { ...toastOptions, toastId: id });
+};
+
+export const showInfo = (message: string, id: string) => {
+  toast.info(message, { ...toastOptions, toastId: id });
 };

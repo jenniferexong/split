@@ -1,328 +1,398 @@
 {
-  "info": {
-    "_postman_id": "0b6e1f37-3dea-4c9d-9c33-fff0c99f3bef",
-    "name": "Split",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "Product",
-      "item": [
-        {
-          "name": "Add product",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "mutation {\n  product(input: {name: $name}) {\n    id, name\n  }\n}",
-                "variables": "{\n    \"name\": \"Cucumber\"\n}"
-              },
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["query"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get products",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [""],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "query {\n  products {\n    id\n    name\n  }\n}",
-                "variables": ""
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["query"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get product by id",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "query ($id: Int!) {\n  product(id: $id) {\n    id\n    name\n  }\n}",
-                "variables": "{\n    \"id\": 1\n}"
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["products", ":id"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "34"
-                }
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Store",
-      "item": [
-        {
-          "name": "Add store",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "mutation($name: String!){\n  store(input: {name: $name}) {\n    id, name\n  }\n}",
-                "variables": "{\n    \"name\": \"Countdown\"\n}"
-              },
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["query"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get stores",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "query {\n  stores {\n    id\n    name\n  }\n}",
-                "variables": ""
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["query"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get store by id",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "query ($id: Int!) {\n  store(id: $id) {\n    id\n    name\n  }\n}",
-                "variables": "{\n    \"id\": 1\n}"
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["query"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Person",
-      "item": [
-        {
-          "name": "Add person",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "mutation($input: CreatePersonInput!){\n  person(input: $input) {\n    id, firstName, lastName, email\n  }\n}",
-                "variables": "{\n    \"input\": {\n        \"firstName\": \"Andy\",\n        \"lastName\": \"Yu\",\n        \"email\": \"andy@andy.com\"\n    }\n}"
-              },
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["query"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get people",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "query {\n  people {\n    id,\n    firstName,\n    lastName,\n    email\n  }\n}",
-                "variables": ""
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["query"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get person by id",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "query ($id: Int!) {\n  person(id: $id) {\n    id,\n    firstName,\n    lastName,\n    email\n  }\n}",
-                "variables": "{\n    \"id\": 1\n}"
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["query"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Receipt",
-      "item": [
-        {
-          "name": "Add receipt",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "mutation ($input: CreateReceiptInput!) {\n  receipt(input: $input) {\n        id\n        date\n        store {\n            id\n            name\n        }\n        paidBy {\n            id\n            firstName\n            lastName\n            email\n        }\n        receiptLines {\n            product {\n                id\n                name\n            }\n            price\n            splits {\n                person {\n                    id\n                    firstName\n                    lastName\n                    email\n                }\n                antecedent\n            }\n        }\n    }\n}",
-                "variables": "{\n    \"input\": {\n        \"storeId\": 1,\n        \"personId\": 1,\n        \"date\": \"2016-01-25 10:10:10.555555-05:00\",\n        \"receiptLines\": [\n            {\n                \"productId\": 1,\n                \"price\": 6.00,\n                \"receiptLineSplits\": [\n                    {\n                        \"personId\": 1, \n                        \"antecedent\": 1\n                    },\n                    {\n                        \"personId\": 2, \n                        \"antecedent\": 2\n                    }\n                ]\n            },\n            {\n                \"productId\": 5,\n                \"price\": 43.21,\n                \"receiptLineSplits\": [\n                    {\n                        \"personId\": 1, \n                        \"antecedent\": 1\n                    }\n                ]\n            }\n        ]\n    }\n}"
-              },
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["query"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get receipts",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "query {\n    receipts {\n        id\n        date\n        store {\n            id\n            name\n        }\n        paidBy {\n            id\n            firstName\n            lastName\n            email\n        }\n        receiptLines {\n            product {\n                id\n                name\n            }\n            price\n            splits {\n                person {\n                    id\n                    firstName\n                    lastName\n                    email\n                }\n                antecedent\n            }\n        }\n    }\n}\n",
-                "variables": ""
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["query"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get receipt by id",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "graphql",
-              "graphql": {
-                "query": "query ($id: Int!) {\n  receipt(id: $id) {\n    id\n    date\n    store {\n        id\n        name\n    }\n    paidBy {\n        id\n        firstName\n        lastName\n        email\n    }\n    receiptLines {\n        product {\n            id\n            name\n        }\n        price\n        splits {\n            person {\n                id\n                firstName\n                lastName\n                email\n            }\n            antecedent\n        }\n    }\n  }\n}",
-                "variables": "{\n    \"id\": 6\n}"
-              }
-            },
-            "url": {
-              "raw": "http://localhost:5133/query",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "5133",
-              "path": ["query"]
-            }
-          },
-          "response": []
-        }
-      ]
-    }
-  ]
+	"info": {
+		"_postman_id": "0b6e1f37-3dea-4c9d-9c33-fff0c99f3bef",
+		"name": "Split",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Add product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  product(input: {name: $name}) {\n    id, name\n  }\n}",
+								"variables": "{\n    \"name\": \"Cucumber\"\n}"
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  products {\n    id\n    name\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product by id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($id: Int!) {\n  product(id: $id) {\n    id\n    name\n  }\n}",
+								"variables": "{\n    \"id\": 1\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Store",
+			"item": [
+				{
+					"name": "Add store",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($name: String!){\n  store(input: {name: $name}) {\n    id, name\n  }\n}",
+								"variables": "{\n    \"name\": \"B\"\n}"
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get stores",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  stores {\n    id\n    name\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get store by id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($id: Int!) {\n  store(id: $id) {\n    id\n    name\n  }\n}",
+								"variables": "{\n    \"id\": 1\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Person",
+			"item": [
+				{
+					"name": "Add person",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($input: CreatePersonInput!){\n  person(input: $input) {\n    id, firstName, lastName, email\n  }\n}",
+								"variables": "{\n    \"input\": {\n        \"firstName\": \"Andy\",\n        \"lastName\": \"Yu\",\n        \"email\": \"andy@poo.com\"\n    }\n}"
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get people",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  people {\n    id,\n    firstName,\n    lastName,\n    email\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get person by id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($id: Int!) {\n  person(id: $id) {\n    id,\n    firstName,\n    lastName,\n    email\n  }\n}",
+								"variables": "{\n    \"id\": 1\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Receipt",
+			"item": [
+				{
+					"name": "Add receipt",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ($input: CreateReceiptInput!) {\n  receipt(input: $input) {\n        id\n        date\n        store {\n            id\n            name\n        }\n        paidBy {\n            id\n            firstName\n            lastName\n            email\n        }\n        receiptLines {\n            product {\n                id\n                name\n            }\n            price\n            splits {\n                person {\n                    id\n                    firstName\n                    lastName\n                    email\n                }\n                antecedent\n                amount\n            }\n        }\n    }\n}",
+								"variables": "{\n    \"input\": {\n        \"storeId\": 1,\n        \"personId\": 1,\n        \"date\": \"2022-03-03 10:10:10.555555-05:00\",\n        \"receiptLines\": [\n            {\n                \"productId\": 1,\n                \"price\": 6.00,\n                \"receiptLineSplits\": [\n                    {\n                        \"personId\": 1, \n                        \"antecedent\": 1\n                    },\n                    {\n                        \"personId\": 2, \n                        \"antecedent\": 2\n                    }\n                ]\n            },\n            {\n                \"productId\": 5,\n                \"price\": 43.21,\n                \"receiptLineSplits\": [\n                    {\n                        \"personId\": 1, \n                        \"antecedent\": 1\n                    }\n                ]\n            }\n        ]\n    }\n}"
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get receipts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n    receipts {\n        id\n        date\n        store {\n            id\n            name\n        }\n        paidBy {\n            id\n            firstName\n            lastName\n            email\n        }\n        receiptLines {\n            product {\n                id\n                name\n            }\n            price\n            splits {\n                person {\n                    id\n                    firstName\n                    lastName\n                    email\n                }\n                antecedent\n                amount\n            }\n        }\n    }\n}\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get receipt by id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($id: Int!) {\n  receipt(id: $id) {\n    id\n    date\n    store {\n        id\n        name\n    }\n    paidBy {\n        id\n        firstName\n        lastName\n        email\n    }\n    receiptLines {\n        product {\n            id\n            name\n        }\n        price\n        splits {\n            person {\n                id\n                firstName\n                lastName\n                email\n            }\n            antecedent\n        }\n    }\n  }\n}",
+								"variables": "{\n    \"id\": 6\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete receipt",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ($id: Int!) {\n  deleteReceipt(id: $id) {\n    id\n  }\n}",
+								"variables": "{\n    \"id\": 1\n}"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5133/query",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5133",
+							"path": [
+								"query"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
 }

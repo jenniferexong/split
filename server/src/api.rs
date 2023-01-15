@@ -210,4 +210,10 @@ impl Mutation {
         let state = ctx.data_unchecked::<AppState>();
         state.db.create_receipt(input).await
     }
+
+    /// Delete receipt
+    async fn delete_receipt(&self, ctx: &Context<'_>, id: ReceiptId) -> Result<ApiReceipt> {
+        let state = ctx.data_unchecked::<AppState>();
+        state.db.delete_receipt_by_id(id).await
+    }
 }

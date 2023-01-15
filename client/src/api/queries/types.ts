@@ -30,6 +30,10 @@ export interface ReceiptResult {
   receipt: ApiReceipt;
 }
 
+export interface DeleteReceiptResult {
+  deleteReceipt: ApiReceipt;
+}
+
 export interface ReceiptsResult {
   receipts: ApiReceipt[];
 }

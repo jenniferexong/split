@@ -36,14 +36,14 @@ CREATE TABLE receipt (
 
 CREATE TABLE receipt_line (
     id serial PRIMARY KEY,
-    receipt_id int REFERENCES receipt (id) NOT NULL,
+    receipt_id int REFERENCES receipt (id) ON DELETE CASCADE NOT NULL,
     product_id int REFERENCES product (id) NOT NULL,
     price float (8) NOT NULL
 );
 
 CREATE TABLE receipt_line_split (
     id serial PRIMARY KEY,
-    receipt_line_id int REFERENCES receipt_line (id) NOT NULL,
+    receipt_line_id int REFERENCES receipt_line (id) ON DELETE CASCADE NOT NULL,
     -- Paid by
     person_id int REFERENCES person (id) NOT NULL,
     -- numerator of ratio!

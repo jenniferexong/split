@@ -37,22 +37,31 @@ pub struct CreateReceiptReceiptLineInput {
 }
 
 impl Db {
-    pub async fn get_receipt_by_id(&self, receipt_id: ReceiptId) -> Result<ApiReceipt> {
-        let mut receipts = sqlx::query_as!(
-            DbReceipt,
+    pub async fn delete_receipt_by_id(&self, receipt_id: ReceiptId) -> Result<ApiReceipt> {
+        let receipt = sqlx::query_as!(
+            ApiReceipt,
             r#"
-                SELECT id AS "id: ReceiptId",
-                       store_id AS "store_id: StoreId",
-                       person_id AS "person_id: PersonId",
-                       date
-                FROM receipt WHERE id = $1
+            DELETE FROM receipt WHERE id = $1
+            RETURNING id AS "id: ReceiptId",
+                      store_id AS "store_id: StoreId",
+                      person_id AS "person_id: PersonId",
+                      date
             "#,
-            receipt_id.0
+            receipt_id.0,
         )
-        .fetch_all(&self.pool)
+        .fetch_optional(&self.pool)
         .await?;
 
-        match receipts.pop() {
+        match receipt {
+            Some(receipt) => Ok(receipt),
+            None => Err(Error::NotFound(ResourceIdentifier::ReceiptId(receipt_id))),
+        }
+    }
+
+    pub async fn get_receipt_by_id(&self, receipt_id: ReceiptId) -> Result<ApiReceipt> {
+        let receipt = self.receipt_loader.load_one(receipt_id).await?;
+
+        match receipt {
             Some(receipt) => Ok(receipt.into()),
             None => Err(Error::NotFound(ResourceIdentifier::ReceiptId(receipt_id))),
         }

@@ -6,10 +6,12 @@ import {
 import { ApiPerson } from 'api/types';
 import { EntryData, ItemType, ReceiptType, SplitType } from 'calculator/types';
 
+export type ReceiptInputs = Record<ReceiptType['sequence'], CreateReceiptInput>;
+
 export const mapEntryDataToReceiptInputs = (
   entryData: EntryData,
-): CreateReceiptInput[] => {
-  const receiptInputs: CreateReceiptInput[] = [];
+): ReceiptInputs => {
+  const receiptInputs: ReceiptInputs = {};
   for (const entryPerson of entryData.people) {
     const { person, receipts } = entryPerson;
 
@@ -18,7 +20,10 @@ export const mapEntryDataToReceiptInputs = (
     }
 
     receipts.forEach(receipt => {
-      receiptInputs.push(mapReceiptToReceiptInput(person, receipt));
+      receiptInputs[receipt.sequence] = mapReceiptToReceiptInput(
+        person,
+        receipt,
+      );
     });
   }
 
