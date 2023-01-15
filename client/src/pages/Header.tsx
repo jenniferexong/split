@@ -8,11 +8,11 @@ const navigationButtons: TabBarMenuButton[] = [
     label: 'Entry',
     to: PageUrl.Entry,
   },
+  {
+    label: 'History',
+    to: PageUrl.History,
+  },
   // TODO!
-  // {
-  //   label: 'History',
-  //   to: PageUrl.History,
-  // },
   // {
   //   label: 'Analytics',
   //   to: PageUrl.Analytics,

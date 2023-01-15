@@ -4,14 +4,14 @@ import {
   ReceiptLineSplitInput,
 } from 'api/queries';
 import { ApiPerson } from 'api/types';
-import { AppType, ItemType, ReceiptType, SplitType } from 'calculator/types';
+import { EntryData, ItemType, ReceiptType, SplitType } from 'calculator/types';
 
-export const mapAppStateToReceiptInputs = (
-  appState: AppType,
+export const mapEntryDataToReceiptInputs = (
+  entryData: EntryData,
 ): CreateReceiptInput[] => {
   const receiptInputs: CreateReceiptInput[] = [];
-  for (const appPerson of appState.people) {
-    const { person, receipts } = appPerson;
+  for (const entryPerson of entryData.people) {
+    const { person, receipts } = entryPerson;
 
     if (!person) {
       throw new Error('Cannot create receipt with undefined person');

@@ -28,7 +28,7 @@ export interface PersonType {
   image?: string;
 }
 
-export interface AppType {
+export interface EntryData {
   people: PersonType[];
 }
 

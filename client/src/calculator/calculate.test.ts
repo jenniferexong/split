@@ -8,10 +8,10 @@ import {
   exampleReceipt,
   steak,
 } from './exampleData';
-import { AppType } from './types';
+import { EntryData } from './types';
 
 describe('calculate', () => {
-  const data: AppType = {
+  const data: EntryData = {
     people: [
       {
         person: adam,
@@ -120,7 +120,7 @@ describe('calculate', () => {
     });
 
     test('case 2', () => {
-      const exampleData: AppType = {
+      const exampleData: EntryData = {
         people: [
           {
             person: adam,

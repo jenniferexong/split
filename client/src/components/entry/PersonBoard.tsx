@@ -1,12 +1,13 @@
 import { InvoiceData, PersonType } from 'calculator/types';
 import { Board, BoardLetters } from 'components/board';
 import { Person } from 'components/entry/Person';
-import { Invoice, Receipt } from 'components/entry/receipt';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import styled from 'styled-components';
 import { hasSelectedAllPeople } from 'utils/hasSelectedAllPeople';
 import { showError } from 'utils/showToast';
+import { Invoice } from './Invoice';
+import { Receipt } from './Receipt';
 
 const Container = styled.div`
   width: 100%;

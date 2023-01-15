@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-export const Container = styled.section`
+// TODO move to shared receipt folder
+export const ReceiptContainer = styled.section`
   display: flex;
   width: 100%;
   flex-direction: column;

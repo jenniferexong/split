@@ -1,1 +1,1 @@
-export * from './mapAppStateToReceiptInputs';
+export * from './mapEntryDataToReceiptInputs.ts';

@@ -1,4 +1,9 @@
-import { useGetPeople, useGetProducts, useGetStores } from 'api';
+import {
+  useGetPeople,
+  useGetProducts,
+  useGetReceipts,
+  useGetStores,
+} from 'api';
 import { Layout } from 'pages/Layout';
 import { AnalyticsPage, EntryPage, HistoryPage } from 'pages/section';
 import { NotFoundPage } from 'pages/NotFoundPage';
@@ -7,12 +12,13 @@ import {
   redirect,
   RouterProvider,
 } from 'react-router-dom';
-import { EntryPageData, PageUrl } from './types';
+import { EntryPageData, HistoryPageData, PageUrl } from './types';
 
 export const Routes = () => {
   const getProducts = useGetProducts();
   const getStores = useGetStores();
   const getPeople = useGetPeople();
+  const getReceipts = useGetReceipts();
 
   const router = createBrowserRouter([
     {
@@ -48,6 +54,11 @@ export const Routes = () => {
         {
           path: PageUrl.History,
           element: <HistoryPage />,
+          loader: async (): Promise<HistoryPageData> => {
+            const receipts = await getReceipts();
+
+            return { receipts };
+          },
         },
         {
           path: PageUrl.Analytics,

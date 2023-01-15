@@ -1,5 +1,5 @@
 import { ApiPerson, ApiProduct, ApiStore } from 'api';
-import { AppType } from 'calculator/types';
+import { EntryData } from 'calculator/types';
 import {
   mapPersonToOption,
   mapProductToOption,
@@ -18,7 +18,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { setStoredAppState } from 'storage/appState';
+import { setStoredEntryData } from 'storage/entryData';
 import { insertIntoSortedArray } from 'utils/insertIntoSortedArray';
 import { noop } from 'utils/noop';
 import { Action, initialState } from 'utils/reducer';
@@ -27,7 +27,7 @@ interface EntryPageContextValue {
   storeOptions: StoreOption[];
   productOptions: ProductOption[];
   personOptions: PersonOption[];
-  appState: AppType;
+  entryData: EntryData;
   selectedPeople: (ApiPerson | undefined)[];
   dispatch: Dispatch<Action>;
   addStoreOption: (store: ApiStore) => StoreOption;
@@ -39,7 +39,7 @@ const EntryPageContext = createContext<EntryPageContextValue>({
   storeOptions: [],
   productOptions: [],
   personOptions: [],
-  appState: initialState,
+  entryData: initialState,
   selectedPeople: [],
   dispatch: noop,
   addStoreOption: () => null as unknown as StoreOption,
@@ -49,7 +49,7 @@ const EntryPageContext = createContext<EntryPageContextValue>({
 
 interface EntryPageContextProviderProps {
   children: ReactNode | ReactNode[];
-  appState: AppType;
+  entryData: EntryData;
   loadedStores: ApiStore[];
   loadedProducts: ApiProduct[];
   loadedPeople: ApiPerson[];
@@ -60,7 +60,7 @@ export const EntryPageContextProvider = (
   props: EntryPageContextProviderProps,
 ) => {
   const {
-    appState,
+    entryData,
     loadedStores,
     loadedProducts,
     loadedPeople,
@@ -70,8 +70,8 @@ export const EntryPageContextProvider = (
 
   // Update local storage entry
   useEffect(() => {
-    setStoredAppState(appState);
-  }, [appState]);
+    setStoredEntryData(entryData);
+  }, [entryData]);
 
   const [storeOptions, setStoreOptions] = useState<StoreOption[]>(
     loadedStores.map(mapStoreToOption),
@@ -131,13 +131,13 @@ export const EntryPageContextProvider = (
   );
 
   const selectedPeople = useMemo(
-    () => appState.people.map(person => person.person),
-    [appState.people],
+    () => entryData.people.map(person => person.person),
+    [entryData.people],
   );
 
   const value: EntryPageContextValue = useMemo(
     () => ({
-      appState,
+      entryData,
       storeOptions,
       productOptions,
       personOptions,
@@ -152,7 +152,7 @@ export const EntryPageContextProvider = (
       addProductOption,
       addStoreOption,
       dispatch,
-      appState,
+      entryData,
       selectedPeople,
       personOptions,
       productOptions,

@@ -7,7 +7,6 @@ import { ApiPerson, useCreateProduct } from 'api';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { ActionMeta } from 'react-select';
 import {
-  AntecedentInput,
   ProductOption,
   CreateableSelect,
   ReceiptInput,
@@ -17,6 +16,7 @@ import { getSplitCost, mapWhoseToSplits } from 'utils/splits';
 import { useOptionValue } from 'components/input/utils/useOptionValue';
 import { mapProductToOption } from 'components/input/utils/mapToOption';
 import { DeleteButton } from 'components/button';
+import { AntecedentInput } from './AntecedentInput';
 
 export interface ItemProps extends ItemType {
   people: ApiPerson[];
