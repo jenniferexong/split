@@ -43,6 +43,9 @@ export const HistoryPage = () => {
   return (
     <Board>
       <Container>
+        {receipts.length === 0 && (
+          <BoardLetters>No receipts found</BoardLetters>
+        )}
         <AnimatePresence>
           {groupedReceipts.map((receiptGroup, index) => (
             <motion.div
