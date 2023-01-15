@@ -77,7 +77,7 @@ impl Db {
             r#"
                 SELECT id AS "id: ReceiptId"
                 FROM receipt
-                ORDER BY date
+                ORDER BY date DESC
             "#
         )
         .fetch_all(&self.pool)
