@@ -126,7 +126,10 @@ export const Person = (props: PersonProps) => {
 
   const handleOpen = useCallback(() => {
     if (entryData.people.some(person => person.receipts.length > 0)) {
-      showError('Clear receipts before switching person');
+      showError(
+        'Clear receipts before switching person',
+        'error-clear-receipts-before-switching-person',
+      );
       return;
     }
 

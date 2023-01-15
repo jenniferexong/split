@@ -43,7 +43,7 @@ export const PersonBoard = (props: PersonBoardProps) => {
 
   const handleAddReceipt = () => {
     if (!hasSelectedPeople) {
-      showError('Must select both people');
+      showError('Must select both people', 'error-must-select-all-people');
       return;
     }
 
