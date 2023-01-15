@@ -11,7 +11,8 @@ import {
   ReceiptSubtotalSection,
   ReceiptTitleRow,
 } from 'components/receipt';
-import { Table } from 'components/table';
+import { Table, TableCell, TableRow } from 'components/table';
+import { getPersonTotals } from './getPersonTotals';
 
 const StyledReceipt = styled(Paper)`
   position: relative;
@@ -31,6 +32,11 @@ export const Receipt = (props: ReceiptProps) => {
     () =>
       receiptLines.reduce((total, receiptLine) => total + receiptLine.price, 0),
     [receiptLines],
+  );
+
+  const personTotals = useMemo(
+    () => Object.values(getPersonTotals(props.receipt)),
+    [props.receipt],
   );
 
   const theme = useTheme();
@@ -57,6 +63,20 @@ export const Receipt = (props: ReceiptProps) => {
               itemCount={receiptLines.length}
               total={total}
             />
+            {personTotals.map((personTotal, index) => (
+              <TableRow
+                key={index}
+                borderTop={index === 0}
+                borderBottom={index === personTotals.length - 1}
+              >
+                <TableCell colSpan={2}>
+                  <h5>{personTotal.name}</h5>
+                </TableCell>
+                <TableCell colSpan={2} textAlign="right">
+                  <h5>${personTotal.total.toFixed(2)}</h5>
+                </TableCell>
+              </TableRow>
+            ))}
           </tbody>
         </Table>
         <Barcode />
