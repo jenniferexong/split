@@ -8,7 +8,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
   server: {
     strictPort: true,
-    port: 3000,
+    port: 8000,
   },
   plugins: [
     react(),

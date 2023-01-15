@@ -25,7 +25,7 @@ async fn main() -> Result<(), sqlx::Error> {
 
     let pool = PgPoolOptions::new()
         .max_connections(5)
-        .connect("postgres://postgres:password@localhost/dev")
+        .connect("postgres://postgres:password@localhost/split")
         .await?;
 
     let state = AppState::new(Db::new(pool));
@@ -36,7 +36,7 @@ async fn main() -> Result<(), sqlx::Error> {
     let cors = CorsLayer::new()
         .allow_methods([Method::POST, Method::OPTIONS])
         .allow_headers([CONTENT_TYPE])
-        .allow_origin("http://localhost:3000".parse::<HeaderValue>().unwrap());
+        .allow_origin("http://localhost:8000".parse::<HeaderValue>().unwrap());
 
     let app = Router::new()
         .route("/", get(graphiql))
