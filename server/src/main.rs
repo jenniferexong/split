@@ -25,7 +25,7 @@ async fn main() -> Result<(), sqlx::Error> {
 
     let pool = PgPoolOptions::new()
         .max_connections(5)
-        .connect("postgres://postgres:password@localhost/postgres")
+        .connect("postgres://postgres:password@localhost/dev")
         .await?;
 
     let state = AppState::new(Db::new(pool));
