@@ -69,7 +69,7 @@ const Image = styled.img`
 export const Person = (props: PersonProps) => {
   const { person, personIndex, image } = props;
 
-  const { personOptions, appState, selectedPeople, dispatch } =
+  const { personOptions, entryData, selectedPeople, dispatch } =
     useEntryPageContext();
 
   const [personOptionValue, setPersonOptionValue] = useOptionValue(
@@ -125,13 +125,13 @@ export const Person = (props: PersonProps) => {
   const [personMenuIsOpen, setPersonMenuIsOpen] = useState<boolean>(false);
 
   const handleOpen = useCallback(() => {
-    if (appState.people.some(person => person.receipts.length > 0)) {
+    if (entryData.people.some(person => person.receipts.length > 0)) {
       showError('Clear receipts before switching person');
       return;
     }
 
     setPersonMenuIsOpen(true);
-  }, [appState.people]);
+  }, [entryData.people]);
 
   const handleClose = () => setPersonMenuIsOpen(false);
 

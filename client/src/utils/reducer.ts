@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash';
-import { AppType, ItemType, ReceiptType } from 'calculator/types';
+import { EntryData, ItemType, ReceiptType } from 'calculator/types';
 import produce from 'immer';
 import { Reducer } from 'react';
 import { unreachable } from './unreachable';
@@ -9,7 +9,7 @@ import { hasSelectedAllPeople } from './hasSelectedAllPeople';
 
 import nibbles from 'images/nibbles.jpg';
 import pandy from 'images/pandy.jpg';
-import { getStoredAppState } from 'storage/appState';
+import { getStoredEntryData } from 'storage/entryData';
 import { getTotalReceipts } from './getTotalReceipts';
 
 interface AddReceipt {
@@ -75,7 +75,7 @@ export type Action =
   | RemoveItem
   | RemoveReceipt;
 
-export const initialState: AppType = {
+export const initialState: EntryData = {
   people: [
     {
       person: undefined,
@@ -103,8 +103,8 @@ const createEmptyItem = (people: ApiPerson[]): ItemType => {
   };
 };
 
-const appState = getStoredAppState();
-let receiptSequence = !appState ? 0 : getTotalReceipts(appState);
+const entryData = getStoredEntryData();
+let receiptSequence = !entryData ? 0 : getTotalReceipts(entryData);
 
 const createEmptyReceipt = (): ReceiptType => ({
   store: undefined,
@@ -114,7 +114,7 @@ const createEmptyReceipt = (): ReceiptType => ({
   sequence: receiptSequence++,
 });
 
-export const reducer: Reducer<AppType, Action> = (state, action) =>
+export const reducer: Reducer<EntryData, Action> = (state, action) =>
   produce(state, draft => {
     switch (action.type) {
       case 'updatePerson': {

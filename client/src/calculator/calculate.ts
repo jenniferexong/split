@@ -1,5 +1,5 @@
 import { hasSelectedAllPeople } from '../utils/hasSelectedAllPeople';
-import { AppType, InvoiceData } from './types';
+import { EntryData, InvoiceData } from './types';
 
 interface CalculateResult {
   globalTotal: number;
@@ -9,7 +9,7 @@ interface CalculateResult {
   invoices: InvoiceData[];
 }
 
-export const calculate = (data: AppType): CalculateResult => {
+export const calculate = (data: EntryData): CalculateResult => {
   let globalTotal = 0;
 
   const invoices: InvoiceData[] = data.people.map(person => ({

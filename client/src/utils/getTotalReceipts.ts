@@ -1,4 +1,4 @@
-import { AppType } from 'calculator/types';
+import { EntryData } from 'calculator/types';
 
-export const getTotalReceipts = (appState: AppType): number =>
-  appState.people.reduce((count, person) => count + person.receipts.length, 0);
+export const getTotalReceipts = (entryData: EntryData): number =>
+  entryData.people.reduce((count, person) => count + person.receipts.length, 0);

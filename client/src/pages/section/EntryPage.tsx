@@ -9,9 +9,9 @@ import { useCreateReceipt } from 'api';
 import pluralize from 'pluralize';
 import { EntryPageData } from 'pages/types';
 import { EntryPageContextProvider } from 'pages/contexts/EntryPageContext';
-import { mapAppStateToReceiptInputs } from 'api/utils';
+import { mapEntryDataToReceiptInputs } from 'api/utils';
 import { showError, showSuccess } from 'utils/showToast';
-import { getStoredAppState } from 'storage/appState';
+import { getStoredEntryData } from 'storage/entryData';
 import { CreatePersonModal } from 'components/entry/CreatePersonModal';
 import { getTotalReceipts } from 'utils/getTotalReceipts';
 
@@ -22,9 +22,9 @@ export const EntryPage = () => {
     people: loadedPeople,
   } = useLoaderData() as EntryPageData;
 
-  const [appState, dispatch] = useReducer(
+  const [entryData, dispatch] = useReducer(
     reducer,
-    getStoredAppState() || initialState,
+    getStoredEntryData() || initialState,
   );
   const { createReceipt } = useCreateReceipt();
 
@@ -41,7 +41,7 @@ export const EntryPage = () => {
   };
 
   const uploadReceipts = useCallback(() => {
-    if (getTotalReceipts(appState) <= 0) {
+    if (getTotalReceipts(entryData) <= 0) {
       showError('No receipts to save');
       return;
     }
@@ -50,7 +50,7 @@ export const EntryPage = () => {
     if (!accepted) return;
 
     try {
-      const receiptInputs = mapAppStateToReceiptInputs(appState);
+      const receiptInputs = mapEntryDataToReceiptInputs(entryData);
 
       // create receipts
       receiptInputs.forEach(input => {
@@ -68,7 +68,7 @@ export const EntryPage = () => {
     } catch (e: any) {
       showError(e.toString());
     }
-  }, [appState, createReceipt]);
+  }, [entryData, createReceipt]);
 
   useBottomTabBarMenu([
     {
@@ -85,20 +85,20 @@ export const EntryPage = () => {
     },
   ]);
 
-  const calculations = useMemo(() => calculate(appState), [appState]);
+  const calculations = useMemo(() => calculate(entryData), [entryData]);
   const closeModal = useCallback(() => {
     setShowCreatePersonModal(false);
   }, []);
 
   return (
     <EntryPageContextProvider
-      appState={appState}
+      entryData={entryData}
       loadedPeople={loadedPeople}
       loadedProducts={loadedProducts}
       loadedStores={loadedStores}
       dispatch={dispatch}
     >
-      {appState.people.map((person, index) => (
+      {entryData.people.map((person, index) => (
         <PersonBoard
           key={index}
           person={person}
