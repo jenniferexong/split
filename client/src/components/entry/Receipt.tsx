@@ -1,6 +1,5 @@
 import { ReceiptType } from 'calculator/types';
 import { ReceiptButton, DeleteButton } from 'components/button';
-import { Item } from '../item';
 import { useCallback, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import {
@@ -10,15 +9,21 @@ import {
   TableCell,
   TableRow,
 } from 'components/table';
-import { Barcode } from './Barcode';
-import { Paper } from 'components/board';
-import { ReceiptInnerContainer } from './Container';
 import { ApiPerson, useCreateStore } from 'api';
 import { ActionMeta } from 'react-select';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { DatePicker, CreateableSelect, StoreOption } from 'components/input';
 import { useOptionValue, mapStoreToOption } from 'components/input/utils/';
-import { usePositionReceipt } from './utils/usePositionReceipt';
+import { Paper } from 'components/board';
+import { usePositionReceipt } from 'components/receipt/utils';
+import {
+  Barcode,
+  ReceiptContainer,
+  ReceiptSubheaderSection,
+  ReceiptSubtotalSection,
+  ReceiptTitleRow,
+} from 'components/receipt';
+import { Item } from './Item';
 
 const StyledReceipt = styled(Paper)<{ xOffset: number }>`
   position: relative;
@@ -134,43 +139,31 @@ export const Receipt = (props: ReceiptProps) => {
 
   return (
     <StyledReceipt xOffset={xOffset} width={theme.components.receipt.width}>
-      <ReceiptInnerContainer
+      <ReceiptContainer
         onMouseEnter={() => setShowRemoveButton(true)}
         onMouseLeave={() => setShowRemoveButton(false)}
       >
         <Table>
-          <thead>
-            <TableRow borderBottom>
-              <TableCell colSpan={4} as="th" textAlign="center">
-                <CreateableSelect
-                  placeholder="Untitled"
-                  options={storeOptions}
-                  value={storeOptionValue}
-                  onChangeOption={handleChangeOption}
-                  onCreateOption={handleCreateOption}
-                />
-                <RemoveReceiptButton
-                  isVisible={showRemoveButton}
-                  onClick={removeReceipt}
-                />
-              </TableCell>
-            </TableRow>
-          </thead>
+          <ReceiptTitleRow>
+            <CreateableSelect
+              placeholder="Untitled"
+              options={storeOptions}
+              value={storeOptionValue}
+              onChangeOption={handleChangeOption}
+              onCreateOption={handleCreateOption}
+            />
+            <RemoveReceiptButton
+              isVisible={showRemoveButton}
+              onClick={removeReceipt}
+            />
+          </ReceiptTitleRow>
           <tbody>
-            <TableRow borderTop>
-              <TableCell colSpan={2}>Date</TableCell>
-              <TableCell colSpan={2} textAlign="right">
+            <ReceiptSubheaderSection
+              date={
                 <DatePicker value={dateInput} onChangeDate={handleChangeDate} />
-              </TableCell>
-            </TableRow>
-            <TableRow borderBottom>
-              <TableCell colSpan={2} bold>
-                Paid by
-              </TableCell>
-              <TableCell colSpan={2} bold textAlign="right">
-                {people[personIndex].firstName}
-              </TableCell>
-            </TableRow>
+              }
+              paidBy={people[personIndex].firstName}
+            />
             {receipt.items.map((item, index) => (
               <Item
                 people={people}
@@ -188,24 +181,14 @@ export const Receipt = (props: ReceiptProps) => {
                 </ReceiptButton>
               </TableCell>
             </TableRow>
-            <TableRow borderTop>
-              <TableCell colSpan={2}>Item count:</TableCell>
-              <TableCell colSpan={2} textAlign="right">
-                {receipt.items.length}
-              </TableCell>
-            </TableRow>
-            <TableRow borderBottom>
-              <TableCell colSpan={2}>
-                <b>Total:</b>
-              </TableCell>
-              <TableCell colSpan={2} textAlign="right">
-                <b>${receipt.subtotal.toFixed(2)}</b>
-              </TableCell>
-            </TableRow>
+            <ReceiptSubtotalSection
+              itemCount={receipt.items.length}
+              total={receipt.subtotal}
+            />
           </tbody>
         </Table>
         <Barcode />
-      </ReceiptInnerContainer>
+      </ReceiptContainer>
     </StyledReceipt>
   );
 };

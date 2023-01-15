@@ -1,8 +1,8 @@
-import { ReceiptInput } from './ReceiptInput';
+import { ReceiptInput } from '../input/ReceiptInput';
 import { ChangeEvent, FocusEvent, useCallback, useState } from 'react';
 import { SplitType } from 'calculator/types';
-import { ItemProps } from 'components/entry/item';
 import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
+import { ItemProps } from './Item';
 
 interface AntecedentInputProps {
   itemProps: ItemProps;

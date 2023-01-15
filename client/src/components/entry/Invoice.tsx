@@ -2,7 +2,7 @@ import { InvoiceData } from 'calculator/types';
 import { Paper } from 'components/board';
 import { Table, TableCell, TableRow } from 'components/table';
 import { useTheme } from 'styled-components';
-import { ReceiptInnerContainer } from './Container';
+import { ReceiptContainer } from '../receipt/ReceiptContainer';
 
 type InvoiceProps = InvoiceData;
 
@@ -13,7 +13,7 @@ export const Invoice = (props: InvoiceProps) => {
 
   return (
     <Paper width={theme.components.invoice.width}>
-      <ReceiptInnerContainer>
+      <ReceiptContainer>
         <Table>
           <thead>
             <TableRow borderBottom>
@@ -43,7 +43,7 @@ export const Invoice = (props: InvoiceProps) => {
             </TableRow>
           </tbody>
         </Table>
-      </ReceiptInnerContainer>
+      </ReceiptContainer>
     </Paper>
   );
 };
