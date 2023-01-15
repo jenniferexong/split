@@ -12,7 +12,7 @@ import {
   ReceiptTitleRow,
 } from 'components/receipt';
 import { Table, TableCell, TableRow } from 'components/table';
-import { getPersonTotals } from './getPersonTotals';
+import { getPersonTotalsForReceipt } from './utils';
 
 const StyledReceipt = styled(Paper)`
   position: relative;
@@ -35,7 +35,7 @@ export const Receipt = (props: ReceiptProps) => {
   );
 
   const personTotals = useMemo(
-    () => Object.values(getPersonTotals(props.receipt)),
+    () => Object.values(getPersonTotalsForReceipt(props.receipt)),
     [props.receipt],
   );
 
