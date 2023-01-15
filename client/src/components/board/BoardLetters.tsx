@@ -3,8 +3,8 @@ import { forwardRef, Ref } from 'react';
 import styled, { css } from 'styled-components';
 import { fontMixin, transition } from 'styles/mixins';
 
-const StyledButton = styled.button`
-  ${({ theme }) => css`
+const StyledButton = styled.button<BaseButtonProps>`
+  ${({ theme, onClick }) => css`
     ${fontMixin(theme.fonts.boardLetter)}
     padding: 20px 80px;
     text-transform: uppercase;
@@ -15,19 +15,22 @@ const StyledButton = styled.button`
     border: none;
     grid-column: span 2;
 
-    ${transition('transform')}
-    &:hover {
-      transform: scale(1.3);
-    }
+    ${onClick &&
+    css`
+      ${transition('transform')}
+      &:hover {
+        transform: scale(1.3);
+      }
+    `}
   `}
 `;
 
 export const BoardLetters = forwardRef(
   (props: BaseButtonProps, ref?: Ref<HTMLButtonElement>) => {
-    const { children, onClick } = props;
+    const { children, className, onClick } = props;
 
     return (
-      <StyledButton ref={ref} onClick={onClick}>
+      <StyledButton ref={ref} className={className} onClick={onClick}>
         {children}
       </StyledButton>
     );
