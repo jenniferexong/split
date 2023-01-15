@@ -24,6 +24,7 @@ import {
   ReceiptTitleRow,
 } from 'components/receipt';
 import { Item } from './Item';
+import { getReceiptSubtotal } from 'utils/getReceiptSubtotal';
 
 const StyledReceipt = styled(Paper)<{ xOffset: number }>`
   position: relative;
@@ -183,7 +184,7 @@ export const Receipt = (props: ReceiptProps) => {
             </TableRow>
             <ReceiptSubtotalSection
               itemCount={receipt.items.length}
-              total={receipt.subtotal}
+              total={getReceiptSubtotal(receipt)}
             />
           </tbody>
         </Table>

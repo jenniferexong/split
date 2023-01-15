@@ -17,7 +17,6 @@ export interface ReceiptType {
   store: ApiStore | undefined;
   date: Date | undefined;
   items: ItemType[];
-  subtotal: number;
   // n'th added receipt;
   sequence: number;
 }

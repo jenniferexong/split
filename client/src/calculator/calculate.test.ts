@@ -47,8 +47,6 @@ describe('calculate', () => {
                 price: 21.8,
               },
             ],
-            // we don't care about subtotal for this
-            subtotal: 0,
             sequence: 0,
           },
         ],
@@ -94,8 +92,6 @@ describe('calculate', () => {
                 price: 30.5,
               },
             ],
-            // we don't care about subtotal for this
-            subtotal: 0,
             sequence: 1,
           },
         ],

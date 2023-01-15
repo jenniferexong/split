@@ -109,7 +109,6 @@ const createEmptyReceipt = (): ReceiptType => ({
   store: undefined,
   date: undefined,
   items: [],
-  subtotal: 0,
   sequence: receiptSequence++,
 });
 
@@ -174,10 +173,7 @@ export const reducer: Reducer<EntryData, Action> = (state, action) =>
         const { personIndex, receiptIndex, itemIndex, item } = action;
         const receipt = draft.people[personIndex].receipts[receiptIndex];
 
-        // handle price change
-        receipt.subtotal -= receipt.items[itemIndex].price;
         receipt.items[itemIndex] = item;
-        receipt.subtotal += receipt.items[itemIndex].price;
         break;
       }
       case 'removeItem': {
