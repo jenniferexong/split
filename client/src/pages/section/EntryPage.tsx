@@ -4,12 +4,12 @@ import { clearReceiptsAction, initialState, reducer } from 'utils/reducer';
 import { useLoaderData } from 'react-router-dom';
 import { PersonBoard } from 'components/entry/PersonBoard';
 import { useBottomTabBarMenu } from 'pages/contexts/LayoutContext';
-import { useCreateReceipt } from 'api';
+import { useCreateReceipt, useDeleteReceipt } from 'api';
 
 import pluralize from 'pluralize';
 import { EntryPageData } from 'pages/types';
 import { EntryPageContextProvider } from 'pages/contexts/EntryPageContext';
-import { mapEntryDataToReceiptInputs } from 'api/utils';
+import { mapEntryDataToReceiptInputs, ReceiptInputs } from 'api/utils';
 import { showError, showSuccess } from 'utils/showToast';
 import { getStoredEntryData } from 'storage/entryData';
 import { CreatePersonModal } from 'components/entry/CreatePersonModal';
@@ -21,69 +21,106 @@ export const EntryPage = () => {
     products: loadedProducts,
     people: loadedPeople,
   } = useLoaderData() as EntryPageData;
-
   const [entryData, dispatch] = useReducer(
     reducer,
     getStoredEntryData() || initialState,
   );
   const { createReceipt } = useCreateReceipt();
+  const { deleteReceipt } = useDeleteReceipt();
 
   const [showCreatePersonModal, setShowCreatePersonModal] =
     useState<boolean>(false);
 
-  const clearReceipts = (guard: boolean) => {
+  const clearReceipts = useCallback((guard: boolean) => {
     if (guard) {
       const accepted = confirm('Clear receipts?');
       if (!accepted) return;
     }
 
     dispatch(clearReceiptsAction);
-  };
+  }, []);
 
-  const uploadReceipts = useCallback(() => {
+  const uploadReceipts = useCallback(async () => {
     if (getTotalReceipts(entryData) <= 0) {
-      showError('No receipts to save');
+      showError('No receipts to save', 'error-no-receipts-to-upload');
       return;
     }
 
-    const accepted = confirm('Upload receipts? This cannot be undone.');
+    const accepted = confirm(
+      'Are you sure? Receipts and invoices will be reset. This can not be undone.',
+    );
     if (!accepted) return;
 
+    let receiptInputs: ReceiptInputs;
     try {
-      const receiptInputs = mapEntryDataToReceiptInputs(entryData);
-
-      // create receipts
-      receiptInputs.forEach(input => {
-        createReceipt(input);
-      });
-
-      showSuccess(
-        `Successfully uploaded ${pluralize(
-          'receipt',
-          receiptInputs.length,
-          true,
-        )}!`,
+      receiptInputs = mapEntryDataToReceiptInputs(entryData);
+    } catch (error: any) {
+      showError(
+        `${(error as Error).message}`,
+        'error-map-entry-data-to-receipt-inputs',
       );
-      clearReceipts(false);
-    } catch (e: any) {
-      showError(e.toString());
+      return;
     }
-  }, [entryData, createReceipt]);
 
-  useBottomTabBarMenu([
-    {
-      label: 'Create person',
-      onClick: () => setShowCreatePersonModal(true),
-    },
-    {
-      label: 'Clear receipts',
-      onClick: () => clearReceipts(true),
-    },
-    {
-      label: 'Save',
-      onClick: uploadReceipts,
-    },
-  ]);
+    const uploadedReceipts: number[] = [];
+    let failures = 0;
+
+    // create receipts
+    await Promise.all(
+      Object.entries(receiptInputs).map(async ([sequence, input]) => {
+        try {
+          const createdReceipt = await createReceipt(input);
+          uploadedReceipts.push(createdReceipt.id);
+        } catch (error: any) {
+          showError(
+            `Failed to upload receipt: ${(error as Error).message}`,
+            `error-upload-receipt-${sequence}`,
+          );
+          failures++;
+        }
+      }),
+    );
+
+    if (failures) {
+      // remove the added receipts from db to avoid adding duplicates when resubmitting
+      uploadedReceipts.forEach(id => deleteReceipt(id));
+      showError(
+        `Failed to upload ${pluralize('receipt', failures, true)}`,
+        'error-upload-receipts',
+      );
+      return;
+    }
+
+    showSuccess(
+      `Successfully uploaded ${pluralize(
+        'receipt',
+        Object.keys(receiptInputs).length,
+        true,
+      )}`,
+      'success-upload-receipts',
+    );
+    clearReceipts(false);
+  }, [entryData, clearReceipts, createReceipt, deleteReceipt]);
+
+  const footerButtons = useMemo(
+    () => [
+      {
+        label: 'Create person',
+        onClick: async () => setShowCreatePersonModal(true),
+      },
+      {
+        label: 'Clear receipts',
+        onClick: async () => clearReceipts(true),
+      },
+      {
+        label: 'Save',
+        onClick: uploadReceipts,
+      },
+    ],
+    [clearReceipts, uploadReceipts],
+  );
+
+  useBottomTabBarMenu(footerButtons);
 
   const calculations = useMemo(() => calculate(entryData), [entryData]);
   const closeModal = useCallback(() => {

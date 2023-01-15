@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 export interface TabBarMenuButton {
   label: string;
   to?: string;
-  onClick?: () => void;
+  onClick?: () => Promise<void>;
 }
 
 interface Props {

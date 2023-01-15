@@ -65,7 +65,10 @@ export const CreatePersonModal = (props: ModalProps) => {
     createPerson({ firstName, lastName, email })
       .then(person => {
         addPersonOption(person);
-        showSuccess(`Created person "${person.firstName}" successfully!`);
+        showSuccess(
+          `Created person "${person.firstName}" successfully!`,
+          'success-create-person',
+        );
 
         setFirstName('');
         setLastName('');
@@ -73,7 +76,10 @@ export const CreatePersonModal = (props: ModalProps) => {
         handleClose();
       })
       .catch(error => {
-        showError(`Failed to create person: ${(error as Error).message}`);
+        showError(
+          `Failed to create person: ${(error as Error).message}`,
+          'error-create-person',
+        );
       });
   }, [addPersonOption, createPerson, email, firstName, handleClose, lastName]);
 

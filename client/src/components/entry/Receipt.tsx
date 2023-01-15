@@ -132,8 +132,8 @@ export const Receipt = (props: ReceiptProps) => {
   );
 
   const removeReceipt = useCallback(() => {
-    dispatch({ type: 'removeReceipt', personIndex, receiptIndex });
-  }, [dispatch, personIndex, receiptIndex]);
+    dispatch({ type: 'removeReceipt', sequence: receipt.sequence });
+  }, [dispatch, receipt.sequence]);
 
   const { xOffset } = usePositionReceipt();
 

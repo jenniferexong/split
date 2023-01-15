@@ -75,8 +75,8 @@ const StyledButton = styled.button<TabBarButtonProps>`
 export const TabBarButton = (props: TabBarButtonProps) => {
   const { children, onClick, position, to } = props;
 
-  const handleClick = useCallback(() => {
-    onClick?.();
+  const handleClick = useCallback(async () => {
+    await onClick?.();
   }, [onClick]);
 
   if (to) {

@@ -1,4 +1,5 @@
 import { ApiReceipt } from 'api/types';
+import { useCallback } from 'react';
 import { gql, useMutation } from 'urql';
 import { ReceiptResult } from './types';
 
@@ -29,7 +30,6 @@ interface CreateReceiptVariables {
   };
 }
 
-// TODO
 const query = gql<ReceiptResult, CreateReceiptVariables>`
   mutation ($input: CreateReceiptInput!) {
     receipt(input: $input) {
@@ -57,19 +57,20 @@ export const useCreateReceipt = () => {
 
   const { fetching } = result;
 
-  const createReceipt = async (
-    input: CreateReceiptInput,
-  ): Promise<ApiReceipt> => {
-    const variables = mapReceiptInputToReceiptVariables(input);
+  const createReceipt = useCallback(
+    async (input: CreateReceiptInput): Promise<ApiReceipt> => {
+      const variables = mapReceiptInputToReceiptVariables(input);
 
-    const { data, error } = await updateResult(variables);
+      const { data, error } = await updateResult(variables);
 
-    if (error || !data) {
-      throw new Error(JSON.stringify(error));
-    }
+      if (error || !data) {
+        throw error;
+      }
 
-    return data.receipt;
-  };
+      return data.receipt;
+    },
+    [updateResult],
+  );
 
   return { createReceipt, fetching };
 };

@@ -11,8 +11,34 @@ const query = gql<DeleteReceiptResult, DeleteReceiptVariables>`
     deleteReceipt(id: $id) {
       id
       date
-      personId
-      storeId
+      store {
+        id
+        name
+      }
+      paidBy {
+        id
+        firstName
+        lastName
+        email
+      }
+      receiptLines {
+        id
+        product {
+          id
+          name
+        }
+        price
+        splits {
+          id
+          person {
+            id
+            firstName
+            lastName
+            email
+          }
+          amount
+        }
+      }
     }
   }
 `;
