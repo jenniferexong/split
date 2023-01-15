@@ -31,10 +31,10 @@ export const Invoice = (props: InvoiceProps) => {
             </TableRow>
             <TableRow borderBottom>
               <TableCell>
-                <h4>Actual</h4>
+                <h5>Actual</h5>
               </TableCell>
               <TableCell textAlign="right">
-                <h4>${actualSpendings.toFixed(2)}</h4>
+                <h5>${actualSpendings.toFixed(2)}</h5>
               </TableCell>
             </TableRow>
             <TableRow borderTop>
