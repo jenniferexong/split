@@ -6,7 +6,6 @@ import { BaseButtonProps } from './types';
 
 interface ButtonProps extends BaseButtonProps {
   mode?: 'primary' | 'secondary';
-  className?: string;
 }
 
 const StyledButton = styled.button<{ mode: 'primary' | 'secondary' }>`
