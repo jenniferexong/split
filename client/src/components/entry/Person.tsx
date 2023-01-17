@@ -65,7 +65,6 @@ const Image = styled.img`
   `}
 `;
 
-// TODO handle creating a person
 export const Person = (props: PersonProps) => {
   const { person, personIndex, image } = props;
 

@@ -31,7 +31,6 @@ const tabBarButton = (
   display: flex;
   align-items: center;
 
-  // TODO create shared mixin
   color: ${theme.colors[theme.components.tabBarButton.text]};
 
   background-color: ${getActiveBackground(false, theme)};

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-// TODO move to shared receipt folder
 export const ReceiptContainer = styled.section`
   display: flex;
   width: 100%;

@@ -7,6 +7,7 @@ import { ApiPerson } from 'api';
 import { createEqualSplits } from './splits';
 import { hasSelectedAllPeople } from './hasSelectedAllPeople';
 
+// TODO - get images from db instead!
 import nibbles from 'images/nibbles.jpg';
 import pandy from 'images/pandy.jpg';
 import { getStoredEntryData } from 'storage/entryData';

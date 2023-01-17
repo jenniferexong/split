@@ -204,7 +204,7 @@
 							"mode": "graphql",
 							"graphql": {
 								"query": "mutation($input: CreatePersonInput!){\n  person(input: $input) {\n    id, firstName, lastName, email\n  }\n}",
-								"variables": "{\n    \"input\": {\n        \"firstName\": \"Andy\",\n        \"lastName\": \"Yu\",\n        \"email\": \"andy@poo.com\"\n    }\n}"
+								"variables": "{\n    \"input\": {\n        \"firstName\": \"Bob\",\n        \"lastName\": \"Junior\",\n        \"email\": \"bob.junior@email.com\"\n    }\n}"
 							},
 							"options": {
 								"raw": {
