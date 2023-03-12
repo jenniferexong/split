@@ -34,7 +34,7 @@ export const PersonBoard = (props: PersonBoardProps) => {
   const {
     person: { person, image, receipts },
     personIndex,
-    invoice: { totalSpendings, actualSpendings, oweings },
+    invoice: { totalSpendings, actualSpendings, owings },
   } = props;
 
   const { selectedPeople, dispatch } = useEntryPageContext();
@@ -61,7 +61,7 @@ export const PersonBoard = (props: PersonBoardProps) => {
           person={person}
           totalSpendings={totalSpendings}
           actualSpendings={actualSpendings}
-          oweings={oweings}
+          owings={owings}
         />
         <AnimatePresence>
           {receipts.map(

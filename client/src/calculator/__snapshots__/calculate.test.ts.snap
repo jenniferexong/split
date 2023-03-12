@@ -6,7 +6,7 @@ Object {
   "invoices": Array [
     Object {
       "actualSpendings": 1032.3,
-      "oweings": 0,
+      "owings": 0,
       "person": Object {
         "email": "adam.agar@email.com",
         "firstName": "Adam",
@@ -17,7 +17,7 @@ Object {
     },
     Object {
       "actualSpendings": 51.05,
-      "oweings": 497.4599999999999,
+      "owings": 497.45999999999987,
       "person": Object {
         "email": "bob.luza@email.com",
         "firstName": "Bob",
@@ -36,7 +36,7 @@ Object {
   "invoices": Array [
     Object {
       "actualSpendings": 19.15,
-      "oweings": 0,
+      "owings": 0,
       "person": Object {
         "email": "adam.agar@email.com",
         "firstName": "Adam",
@@ -47,7 +47,7 @@ Object {
     },
     Object {
       "actualSpendings": 19.15,
-      "oweings": 0,
+      "owings": 0,
       "person": Object {
         "email": "bob.luza@email.com",
         "firstName": "Bob",

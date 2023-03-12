@@ -35,5 +35,5 @@ export interface InvoiceData {
   person: ApiPerson | undefined;
   totalSpendings: number;
   actualSpendings: number;
-  oweings: number;
+  owings: number;
 }

@@ -8,7 +8,7 @@ import { ReceiptContainer } from '../receipt/ReceiptContainer';
 type InvoiceProps = InvoiceData;
 
 export const Invoice = (props: InvoiceProps) => {
-  const { totalSpendings, actualSpendings, oweings } = props;
+  const { totalSpendings, actualSpendings, owings } = props;
 
   const theme = useTheme();
 
@@ -33,9 +33,9 @@ export const Invoice = (props: InvoiceProps) => {
               </TableCell>
             </TableRow>
             <TableRow borderTop>
-              <TableCell colSpan={2}>Oweings</TableCell>
+              <TableCell colSpan={2}>owings</TableCell>
               <TableCell colSpan={2} textAlign="right">
-                ${oweings.toFixed(2)}
+                ${owings.toFixed(2)}
               </TableCell>
             </TableRow>
           </tbody>

@@ -16,7 +16,7 @@ export const calculate = (data: EntryData): CalculateResult => {
     person: person.person,
     totalSpendings: 0,
     actualSpendings: 0,
-    oweings: 0,
+    owings: 0,
   }));
 
   if (!hasSelectedAllPeople(data.people.map(person => person.person))) {
@@ -29,7 +29,6 @@ export const calculate = (data: EntryData): CalculateResult => {
   data.people.forEach((person, personIndex) => {
     person.receipts.forEach(receipt => {
       receipt.items.forEach(item => {
-        const receiptPerson = person.person;
         const { price, splits } = item;
 
         globalTotal += price;
@@ -50,11 +49,6 @@ export const calculate = (data: EntryData): CalculateResult => {
           );
 
           invoices[splitPersonIndex].totalSpendings += amount;
-
-          if (splitPerson !== receiptPerson) {
-            invoices[personIndex ^ 1].oweings += amount;
-            invoices[personIndex].oweings -= amount;
-          }
         });
       });
     });
@@ -62,7 +56,9 @@ export const calculate = (data: EntryData): CalculateResult => {
 
   // NOTE this is only useful if there are two people (does not say who owes who)
   invoices.forEach(invoice => {
-    invoice.oweings = invoice.oweings < 0 ? 0 : invoice.oweings;
+    const { actualSpendings, totalSpendings } = invoice;
+    invoice.owings =
+      actualSpendings > totalSpendings ? 0 : totalSpendings - actualSpendings;
   });
 
   return { globalTotal, invoices };

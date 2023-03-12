@@ -1,5 +1,5 @@
 # Split
-A simple web application designed to manage grocery expenses and oweings between two people
+A simple web application designed to manage grocery expenses and owings between two people
 
 **Receipt entry page**
 

@@ -107,11 +107,11 @@ describe('calculate', () => {
 
       expect(invoices[0].totalSpendings).toBeCloseTo(534.84);
       expect(invoices[0].actualSpendings).toBeCloseTo(1032.3);
-      expect(invoices[0].oweings).toBe(0);
+      expect(invoices[0].owings).toBe(0);
 
       expect(invoices[1].totalSpendings).toBeCloseTo(548.51);
       expect(invoices[1].actualSpendings).toBeCloseTo(51.05);
-      expect(invoices[1].oweings).toBeCloseTo(497.46);
+      expect(invoices[1].owings).toBeCloseTo(497.46);
       expect({ globalTotal, invoices }).toMatchSnapshot();
     });
 
@@ -134,11 +134,11 @@ describe('calculate', () => {
       expect(globalTotal).toBeCloseTo(38.3);
       expect(invoices[0].totalSpendings).toBeCloseTo(19.15);
       expect(invoices[0].actualSpendings).toBeCloseTo(19.15);
-      expect(invoices[0].oweings).toBe(0);
+      expect(invoices[0].owings).toBe(0);
 
       expect(invoices[1].totalSpendings).toBeCloseTo(19.15);
       expect(invoices[1].actualSpendings).toBeCloseTo(19.15);
-      expect(invoices[1].oweings).toBe(0);
+      expect(invoices[1].owings).toBe(0);
 
       expect({ globalTotal, invoices }).toMatchSnapshot();
     });
