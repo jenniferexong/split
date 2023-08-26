@@ -1,6 +1,6 @@
 import { MouseEventHandler, ReactNode } from 'react';
 import styled, { css } from 'styled-components';
-import { Color } from 'styles/types';
+import { Color } from '../../styles';
 
 interface PaperProps {
   width: string;

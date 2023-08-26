@@ -1,11 +1,11 @@
-import { useCreatePerson } from 'api';
-import { Button } from 'components/button';
-import { Input } from 'components/input';
-import { ModalBase, ModalProps } from 'components/modal';
-import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { ChangeEvent, useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { showError, showSuccess } from 'utils/showToast';
+import { ModalBase, ModalProps } from '../modal';
+import { useCreatePerson } from '../../api';
+import { useEntryPageContext } from '../../pages/contexts';
+import { showError, showSuccess } from '../../utils/notification';
+import { Button } from '../button';
+import { Input } from '../input';
 
 const ContentContainer = styled.div`
   width: 556px;

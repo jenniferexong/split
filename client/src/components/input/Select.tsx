@@ -1,8 +1,8 @@
 import ReactSelect, { ActionMeta } from 'react-select';
+import styled from 'styled-components';
 import { getOptionValue } from './utils';
 import { Option } from './types';
-import styled from 'styled-components';
-import { reactSelect } from 'styles/mixins';
+import { reactSelect } from '../../styles';
 
 interface SelectProps<TOption> {
   options: TOption[];

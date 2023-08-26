@@ -1,4 +1,4 @@
-import { EntryData } from 'calculator/types';
+import { EntryData } from '../calculator';
 
 const entryDataStorageKey = 'Split::EntryData';
 

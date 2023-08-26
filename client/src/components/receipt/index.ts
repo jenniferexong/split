@@ -1,5 +1,5 @@
-export * from './Barcode';
-export * from './ReceiptContainer';
-export * from './ReceiptSubtotalSection';
-export * from './ReceiptSubheaderSection';
-export * from './ReceiptTitleRow';
+export { Barcode } from './Barcode';
+export { ReceiptContainer } from './ReceiptContainer';
+export { ReceiptSubtotalSection } from './ReceiptSubtotalSection';
+export { ReceiptSubheaderSection } from './ReceiptSubheaderSection';
+export { ReceiptTitleRow } from './ReceiptTitleRow';

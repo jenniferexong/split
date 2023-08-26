@@ -1,6 +1,6 @@
-import { TabBarMenu, TabBarMenuButton } from 'components/navigation/TabBarMenu';
 import styled from 'styled-components';
-import { MENU_BAR_HEIGHT } from 'styles/constants';
+import { MENU_BAR_HEIGHT } from '../styles/constants';
+import { TabBarMenu, TabBarMenuButton } from '../components/navigation';
 
 const FooterContainer = styled.footer`
   height: ${MENU_BAR_HEIGHT};
@@ -26,3 +26,4 @@ export const Footer = (props: FooterProps) => {
     </FooterContainer>
   );
 };
+Footer.displayName = 'Footer';

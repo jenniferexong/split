@@ -1,4 +1,4 @@
-import { ApiPerson, ApiProduct, ApiStore } from 'api';
+import { ApiPerson, ApiProduct, ApiStore } from '../api';
 
 export type Whose = 'mine' | 'split' | 'theirs';
 

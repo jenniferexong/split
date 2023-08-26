@@ -1,5 +1,5 @@
-import { TableCell, TableRow } from 'components/table';
 import { ReactNode } from 'react';
+import { TableCell, TableRow } from '../table';
 
 interface ReceiptSubheaderSectionProps {
   date: ReactNode;

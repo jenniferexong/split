@@ -1,5 +1,5 @@
 import { css, FlattenSimpleInterpolation } from 'styled-components';
-import { Font } from 'styles/types';
+import { Font } from '../types';
 
 export const fontMixin = (font: Font): FlattenSimpleInterpolation => {
   const { family, baseSize, baseWeight, color, lineHeight, spacing } = font;

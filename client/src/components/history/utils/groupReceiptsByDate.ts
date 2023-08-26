@@ -1,5 +1,5 @@
-import { ApiReceipt } from 'api';
 import moment from 'moment';
+import { ApiReceipt } from '../../../api';
 
 /**
  * Assumes @param receipts is already sorted by date.

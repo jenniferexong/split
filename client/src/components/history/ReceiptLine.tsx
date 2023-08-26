@@ -1,6 +1,5 @@
-import { ApiReceiptLine } from 'api';
-import { TableCell } from 'components/table';
-import { TableRow } from 'components/table/TableRow';
+import { ApiReceiptLine } from '../../api';
+import { TableCell, TableRow } from '../table';
 
 export interface ReceiptLineProps {
   receiptLine: ApiReceiptLine;
@@ -19,7 +18,6 @@ export const ReceiptLine = (props: ReceiptLineProps) => {
     <>
       <TableRow borderTop={isFirstItem}>
         <TableCell colSpan={3}>{product.name}</TableCell>
-
         <TableCell colSpan={1} textAlign="right">
           {price.toFixed(2)}
         </TableCell>

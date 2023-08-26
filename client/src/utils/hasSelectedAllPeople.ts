@@ -1,4 +1,4 @@
-import { ApiPerson } from 'api';
+import { ApiPerson } from '../api';
 
 export const hasSelectedAllPeople = (
   people: (ApiPerson | undefined)[],

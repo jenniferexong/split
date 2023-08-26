@@ -4,8 +4,8 @@ import {
   FocusEventHandler,
 } from 'react';
 import styled from 'styled-components';
-import { backgroundHover } from 'styles/mixins';
 import { onInputFocus } from './utils';
+import { backgroundHover } from '../../styles';
 
 const StyledInput = styled.input`
   width: 100%;

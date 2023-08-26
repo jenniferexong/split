@@ -1,18 +1,18 @@
 import {
-  useGetPeople,
-  useGetProducts,
-  useGetReceipts,
-  useGetStores,
-} from 'api';
-import { Layout } from 'pages/Layout';
-import { AnalyticsPage, EntryPage, HistoryPage } from 'pages/section';
-import { NotFoundPage } from 'pages/NotFoundPage';
-import {
   createBrowserRouter,
   redirect,
   RouterProvider,
 } from 'react-router-dom';
+import {
+  useGetPeople,
+  useGetProducts,
+  useGetReceipts,
+  useGetStores,
+} from '../api';
+import { Layout } from './Layout';
+import { NotFoundPage } from './NotFoundPage';
 import { EntryPageData, HistoryPageData, PageUrl } from './types';
+import { AnalyticsPage, EntryPage, HistoryPage } from './section';
 
 export const Routes = () => {
   const getProducts = useGetProducts();
@@ -70,3 +70,4 @@ export const Routes = () => {
 
   return <RouterProvider router={router}></RouterProvider>;
 };
+Routes.displayName = 'Routes';

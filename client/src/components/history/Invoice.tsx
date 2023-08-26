@@ -1,11 +1,10 @@
-import { ApiReceipt } from 'api';
-import { Paper } from 'components/board';
-import { ReceiptTitleRow } from 'components/receipt';
-import { Table, TableCell, TableRow } from 'components/table';
 import { useMemo } from 'react';
 import { useTheme } from 'styled-components';
-import { ReceiptContainer } from '../receipt/ReceiptContainer';
+import { ReceiptContainer, ReceiptTitleRow } from '../receipt';
 import { getPersonTotalsForReceipts } from './utils';
+import { ApiReceipt } from '../../api';
+import { Paper } from '../board';
+import { Table, TableCell, TableRow } from '../table';
 
 interface InvoiceProps {
   receipts: ApiReceipt[];
@@ -42,4 +41,4 @@ export const Invoice = (props: InvoiceProps) => {
     </Paper>
   );
 };
-Invoice.displayName = 'Invoice';
+Invoice.displayName = 'HistoryInvoice';

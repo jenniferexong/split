@@ -1,6 +1,6 @@
-import { ApiReceipt } from 'api/types';
 import { gql, useMutation } from 'urql';
 import { DeleteReceiptResult } from './types';
+import { ApiReceipt } from '../types';
 
 interface DeleteReceiptVariables {
   id: number;
@@ -58,7 +58,7 @@ export const useDeleteReceipt = () => {
       throw error;
     }
 
-    return data.deleteReceipt;
+    return data.deletedReceipt;
   };
 
   return { deleteReceipt, fetching };

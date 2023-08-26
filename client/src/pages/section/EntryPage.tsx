@@ -1,19 +1,20 @@
-import { calculate } from 'calculator';
-import { useCallback, useMemo, useReducer, useState } from 'react';
-import { clearReceiptsAction, initialState, reducer } from 'utils/reducer';
 import { useLoaderData } from 'react-router-dom';
-import { PersonBoard } from 'components/entry/PersonBoard';
-import { useBottomTabBarMenu } from 'pages/contexts/LayoutContext';
-import { useCreateReceipt, useDeleteReceipt } from 'api';
-
+import { useCallback, useMemo, useReducer, useState } from 'react';
 import pluralize from 'pluralize';
-import { EntryPageData } from 'pages/types';
-import { EntryPageContextProvider } from 'pages/contexts/EntryPageContext';
-import { mapEntryDataToReceiptInputs, ReceiptInputs } from 'api/utils';
-import { showError, showSuccess } from 'utils/showToast';
-import { getStoredEntryData } from 'storage/entryData';
-import { CreatePersonModal } from 'components/entry/CreatePersonModal';
-import { getTotalReceipts } from 'utils/getTotalReceipts';
+import {
+  clearReceiptsAction,
+  initialState,
+  reducer,
+} from '../../utils/reducer';
+import { getStoredEntryData } from '../../storage';
+import { ReceiptInputs, useCreateReceipt, useDeleteReceipt } from '../../api';
+import { getTotalReceipts } from '../../utils/getTotalReceipts';
+import { showError, showSuccess } from '../../utils/notification';
+import { mapEntryDataToReceiptInputs } from '../../api/utils';
+import { EntryPageContextProvider, useBottomTabBarMenu } from '../contexts';
+import { calculate } from '../../calculator';
+import { CreatePersonModal, PersonBoard } from '../../components/entry';
+import { EntryPageData } from '../types';
 
 export const EntryPage = () => {
   const {

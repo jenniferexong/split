@@ -1,4 +1,4 @@
-import { CreateReceiptInput } from 'api';
+import { CreateReceiptInput } from '../queries';
 
 export const createReceiptInput: CreateReceiptInput = {
   storeId: 1,

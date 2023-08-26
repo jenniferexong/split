@@ -1,3 +1,3 @@
-export * from './EntryPage';
-export * from './HistoryPage';
-export * from './AnalyticsPage';
+export { EntryPage } from './EntryPage';
+export { HistoryPage } from './HistoryPage';
+export { AnalyticsPage } from './AnalyticsPage';

@@ -1,7 +1,7 @@
-import { ApiStore } from 'api/types';
 import { gql, useMutation } from 'urql';
-import { toTitleCase } from 'utils/toTitleCase';
 import { StoreResult } from './types';
+import { ApiStore } from '../types';
+import { toTitleCase } from '../../utils/toTitleCase';
 
 interface CreateStoreVariables {
   name: string;

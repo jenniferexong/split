@@ -1,4 +1,4 @@
-import { Whose } from 'calculator/types';
+import { Whose } from '../calculator';
 
 export type Color =
   | 'white'

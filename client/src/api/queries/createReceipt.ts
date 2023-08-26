@@ -1,7 +1,7 @@
-import { ApiReceipt } from 'api/types';
 import { useCallback } from 'react';
 import { gql, useMutation } from 'urql';
 import { ReceiptResult } from './types';
+import { ApiReceipt } from '../types';
 
 export interface ReceiptLineSplitInput {
   personId: number;

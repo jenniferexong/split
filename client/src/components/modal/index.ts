@@ -1,2 +1,2 @@
-export * from './ModalBase';
+export { ModalBase } from './ModalBase';
 export * from './types';

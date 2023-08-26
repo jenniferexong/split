@@ -1,13 +1,13 @@
-import { InvoiceData, PersonType } from 'calculator/types';
-import { Board, BoardLetters } from 'components/board';
-import { Person } from 'components/entry/Person';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import styled from 'styled-components';
-import { hasSelectedAllPeople } from 'utils/hasSelectedAllPeople';
-import { showError } from 'utils/showToast';
 import { Invoice } from './Invoice';
 import { Receipt } from './Receipt';
+import { InvoiceData, PersonType } from '../../calculator';
+import { useEntryPageContext } from '../../pages/contexts';
+import { Person } from './Person';
+import { Board, BoardLetters } from '../board';
+import { hasSelectedAllPeople } from '../../utils/hasSelectedAllPeople';
+import { showError } from '../../utils/notification';
 
 const Container = styled.div`
   width: 100%;
@@ -91,3 +91,4 @@ export const PersonBoard = (props: PersonBoardProps) => {
     </Board>
   );
 };
+PersonBoard.displayName = 'PersonBoard';

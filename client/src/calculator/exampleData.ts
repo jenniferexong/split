@@ -1,4 +1,4 @@
-import { ApiPerson, ApiProduct, ApiStore } from 'api';
+import { ApiPerson, ApiProduct, ApiStore } from '../api';
 import { ReceiptType } from './types';
 
 export const countdown: ApiStore = {

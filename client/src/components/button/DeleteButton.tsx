@@ -2,8 +2,8 @@ import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { darken } from 'polished';
 import styled from 'styled-components';
-import { transition } from 'styles/mixins';
 import { BaseButtonProps } from './types';
+import { transition } from '../../styles';
 
 interface DeleteButtonProps extends Omit<BaseButtonProps, 'children'> {
   isVisible: boolean;

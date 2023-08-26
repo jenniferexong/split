@@ -1,13 +1,17 @@
-import { ApiPerson } from 'api';
-import { PersonOption, Select } from 'components/input';
-import { mapPersonToOption, useOptionValue } from 'components/input/utils/';
-import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { useCallback, useMemo, useState } from 'react';
 import { ActionMeta } from 'react-select';
 import styled, { css, useTheme } from 'styled-components';
-import { fontMixin } from 'styles/mixins';
-import { showError } from 'utils/showToast';
-import { Paper } from '../board/Paper';
+import { ApiPerson } from '../../api';
+import { fontMixin } from '../../styles';
+import { useEntryPageContext } from '../../pages/contexts';
+import {
+  PersonOption,
+  Select,
+  mapPersonToOption,
+  useOptionValue,
+} from '../input';
+import { showError } from '../../utils/notification';
+import { Paper } from '../board';
 
 interface PersonProps {
   personIndex: number;
@@ -157,3 +161,4 @@ export const Person = (props: PersonProps) => {
     </Paper>
   );
 };
+Person.displayName = 'Person';

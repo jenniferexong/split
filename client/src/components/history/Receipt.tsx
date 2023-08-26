@@ -1,18 +1,18 @@
 import styled, { useTheme } from 'styled-components';
-import { Paper } from 'components/board';
-import { Barcode } from 'components/receipt/Barcode';
-import { ApiReceipt } from 'api';
 import { useMemo } from 'react';
 import moment from 'moment';
 import { ReceiptLine } from './ReceiptLine';
+import { getPersonTotalsForReceipt } from './utils';
+import { Paper } from '../board';
+import { ApiReceipt } from '../../api';
 import {
+  Barcode,
   ReceiptContainer,
   ReceiptSubheaderSection,
   ReceiptSubtotalSection,
   ReceiptTitleRow,
-} from 'components/receipt';
-import { Table, TableCell, TableRow } from 'components/table';
-import { getPersonTotalsForReceipt } from './utils';
+} from '../receipt';
+import { Table, TableCell, TableRow } from '../table';
 
 const StyledReceipt = styled(Paper)`
   position: relative;
@@ -84,4 +84,4 @@ export const Receipt = (props: ReceiptProps) => {
     </StyledReceipt>
   );
 };
-Receipt.displayText = 'Receipt';
+Receipt.displayText = 'HistoryReceipt';

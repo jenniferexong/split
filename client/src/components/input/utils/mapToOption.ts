@@ -1,4 +1,4 @@
-import { ApiPerson, ApiProduct, ApiStore } from 'api';
+import { ApiPerson, ApiProduct, ApiStore } from '../../../api';
 import { PersonOption, ProductOption, StoreOption } from '../types';
 
 export const mapStoreToOption = (store: ApiStore): StoreOption => ({

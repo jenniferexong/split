@@ -1,22 +1,21 @@
-import { ItemType, SplitType, Whose } from 'calculator/types';
 import styled from 'styled-components';
 import { ChangeEvent, FocusEvent, useCallback, useMemo, useState } from 'react';
-import { TableCell } from 'components/table';
-import { TableRow } from 'components/table/TableRow';
-import { ApiPerson, useCreateProduct } from 'api';
-import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
 import { ActionMeta } from 'react-select';
-import {
-  ProductOption,
-  CreateableSelect,
-  ReceiptInput,
-} from 'components/input';
-import { Icon } from 'components/icon';
-import { getSplitCost, mapWhoseToSplits } from 'utils/splits';
-import { useOptionValue } from 'components/input/utils/useOptionValue';
-import { mapProductToOption } from 'components/input/utils/mapToOption';
-import { DeleteButton } from 'components/button';
 import { AntecedentInput } from './AntecedentInput';
+import { ItemType, SplitType, Whose } from '../../calculator';
+import { ApiPerson, useCreateProduct } from '../../api';
+import { DeleteButton } from '../button';
+import { useEntryPageContext } from '../../pages/contexts';
+import {
+  CreateableSelect,
+  ProductOption,
+  ReceiptInput,
+  mapProductToOption,
+  useOptionValue,
+} from '../input';
+import { getSplitCost, mapWhoseToSplits } from '../../utils/splits';
+import { TableCell, TableRow } from '../table';
+import { Icon } from '../icon';
 
 export interface ItemProps extends ItemType {
   people: ApiPerson[];

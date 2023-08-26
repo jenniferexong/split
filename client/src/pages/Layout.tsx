@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 import { Outlet } from 'react-router-dom';
-import { TabBarMenuButton } from 'components/navigation/TabBarMenu';
 import { ReactNode, useState } from 'react';
-import { LayoutContextProvider } from './contexts/LayoutContext';
+import { LayoutContextProvider } from './contexts';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { MENU_BAR_HEIGHT } from 'styles/constants';
+import { MENU_BAR_HEIGHT } from '../styles/constants';
+import { TabBarMenuButton } from '../components/navigation';
 
 const BoardsContainer = styled.section`
   height: calc(100vh - 2 * ${MENU_BAR_HEIGHT});

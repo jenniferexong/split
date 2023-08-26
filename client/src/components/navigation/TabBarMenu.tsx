@@ -1,11 +1,6 @@
-import { TabBarButton } from 'components/button';
 import styled, { css } from 'styled-components';
-
-export interface TabBarMenuButton {
-  label: string;
-  to?: string;
-  onClick?: () => Promise<void>;
-}
+import { TabBarButton } from '../button';
+import { TabBarMenuButton } from './types';
 
 interface Props {
   position: 'top' | 'bottom';

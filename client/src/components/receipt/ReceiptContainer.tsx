@@ -10,3 +10,4 @@ export const ReceiptContainer = styled.section`
   padding: 20px 10px 20px;
   gap: 20px;
 `;
+ReceiptContainer.displayName = 'ReceiptContainer';

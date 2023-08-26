@@ -1,7 +1,7 @@
-import { useBoardWidth } from 'components/board/BoardContext';
 import { stripUnit } from 'polished';
 import { useLayoutEffect, useState } from 'react';
 import { useTheme } from 'styled-components';
+import { useBoardWidth } from '../../board';
 
 const pxToNumber = (px: string): number => {
   return stripUnit(px) as number;

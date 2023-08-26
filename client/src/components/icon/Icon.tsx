@@ -6,11 +6,10 @@ import {
   faGripLinesVertical,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import styled, { css } from 'styled-components';
-import { Whose } from 'calculator/types';
-import { Theme } from 'styles/types';
-import { transition } from 'styles/mixins';
 import { useCallback } from 'react';
+import styled, { css } from 'styled-components';
+import { Theme, transition } from '../../styles';
+import { Whose } from '../../calculator';
 
 const icons: Record<Whose, IconDefinition> = {
   mine: faCheck,

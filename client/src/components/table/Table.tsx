@@ -6,3 +6,4 @@ export const Table = styled.table`
   table-layout: fixed;
   width: 100%;
 `;
+Table.displayName = 'Table';
