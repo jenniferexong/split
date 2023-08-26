@@ -1,6 +1,6 @@
 import { gql, useMutation } from 'urql';
-import { toTitleCase } from 'utils/toTitleCase';
 import { ProductResult } from './types';
+import { toTitleCase } from '../../utils/toTitleCase';
 
 interface CreateProductVariables {
   name: string;

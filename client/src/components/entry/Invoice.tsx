@@ -1,9 +1,8 @@
-import { InvoiceData } from 'calculator/types';
-import { Paper } from 'components/board';
-import { ReceiptTitleRow } from 'components/receipt';
-import { Table, TableCell, TableRow } from 'components/table';
 import { useTheme } from 'styled-components';
-import { ReceiptContainer } from '../receipt/ReceiptContainer';
+import { InvoiceData } from '../../calculator';
+import { Paper } from '../board';
+import { Table, TableCell, TableRow } from '../table';
+import { ReceiptContainer, ReceiptTitleRow } from '../receipt';
 
 type InvoiceProps = InvoiceData;
 

@@ -1,5 +1,5 @@
-import { TableCell, TableRow } from 'components/table';
 import { PropsWithChildren } from 'react';
+import { TableCell, TableRow } from '../table';
 
 type ReceiptTitleRowProps = PropsWithChildren<{}>;
 

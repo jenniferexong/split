@@ -1,7 +1,7 @@
 import { FocusEvent, FocusEventHandler, ReactNode } from 'react';
-import { handleCellKeyDown } from 'components/table';
 import styled, { css } from 'styled-components';
-import { fontMixin } from 'styles/mixins';
+import { fontMixin } from '../../styles';
+import { handleCellKeyDown } from './utils';
 
 interface TableCellProps {
   children?: ReactNode;

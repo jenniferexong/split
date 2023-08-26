@@ -1,4 +1,4 @@
-import { ApiPerson, ApiProduct, ApiStore } from 'api';
+import { ApiPerson, ApiProduct, ApiStore } from '../../api';
 
 export interface Option<T> {
   label: string;

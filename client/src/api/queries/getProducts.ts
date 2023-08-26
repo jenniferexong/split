@@ -1,6 +1,6 @@
-import { ApiProduct } from 'api/types';
 import { gql, useClient } from 'urql';
 import { ProductsResult, QueryResult } from './types';
+import { ApiProduct } from '../types';
 
 const query = gql`
   query {

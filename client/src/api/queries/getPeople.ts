@@ -1,6 +1,6 @@
-import { ApiPerson } from 'api/types';
 import { gql, useClient } from 'urql';
 import { PeopleResult, QueryResult } from './types';
+import { ApiPerson } from '../types';
 
 const query = gql`
   query {

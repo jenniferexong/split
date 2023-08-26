@@ -1,7 +1,7 @@
-import { TabBarMenu, TabBarMenuButton } from 'components/navigation/TabBarMenu';
 import styled from 'styled-components';
-import { MENU_BAR_HEIGHT } from 'styles/constants';
 import { PageUrl } from './types';
+import { TabBarMenu, TabBarMenuButton } from '../components/navigation';
+import { MENU_BAR_HEIGHT } from '../styles/constants';
 
 const navigationButtons: TabBarMenuButton[] = [
   {
@@ -12,11 +12,6 @@ const navigationButtons: TabBarMenuButton[] = [
     label: 'History',
     to: PageUrl.History,
   },
-  // TODO!
-  // {
-  //   label: 'Analytics',
-  //   to: PageUrl.Analytics,
-  // },
 ];
 
 const HeaderContainer = styled.header`

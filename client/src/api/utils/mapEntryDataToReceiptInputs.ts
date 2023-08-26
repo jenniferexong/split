@@ -1,12 +1,10 @@
+import { EntryData, ItemType, ReceiptType, SplitType } from '../../calculator';
 import {
   CreateReceiptInput,
   ReceiptLineInput,
   ReceiptLineSplitInput,
-} from 'api/queries';
-import { ApiPerson } from 'api/types';
-import { EntryData, ItemType, ReceiptType, SplitType } from 'calculator/types';
-
-export type ReceiptInputs = Record<ReceiptType['sequence'], CreateReceiptInput>;
+} from '../queries';
+import { ApiPerson, ReceiptInputs } from '../types';
 
 export const mapEntryDataToReceiptInputs = (
   entryData: EntryData,

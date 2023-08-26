@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
 import styled, { css, SimpleInterpolation } from 'styled-components';
-import { Theme } from 'styles/types';
-import { BaseButtonProps } from './types';
 import { NavLink } from 'react-router-dom';
-import { fontMixin, transition } from 'styles/mixins';
+import { Theme, fontMixin, transition } from '../../styles';
+import { BaseButtonProps } from './types';
 
 interface TabBarButtonProps extends BaseButtonProps {
   to?: string;

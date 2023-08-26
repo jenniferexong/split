@@ -1,27 +1,27 @@
-import { ApiPerson, ApiProduct, ApiStore } from 'api';
-import { EntryData } from 'calculator/types';
 import {
-  mapPersonToOption,
-  mapProductToOption,
-  mapStoreToOption,
-  PersonOption,
-  ProductOption,
-  StoreOption,
-} from 'components/input';
-import {
-  createContext,
   Dispatch,
   ReactNode,
+  createContext,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from 'react';
-import { setStoredEntryData } from 'storage/entryData';
-import { insertIntoSortedArray } from 'utils/insertIntoSortedArray';
-import { noop } from 'utils/noop';
-import { Action, initialState } from 'utils/reducer';
+import { ApiPerson, ApiProduct, ApiStore } from '../../api';
+import { EntryData } from '../../calculator';
+import {
+  PersonOption,
+  ProductOption,
+  StoreOption,
+  mapPersonToOption,
+  mapProductToOption,
+  mapStoreToOption,
+} from '../../components/input';
+import { Action, initialState } from '../../utils/reducer';
+import { noop } from '../../utils/noop';
+import { setStoredEntryData } from '../../storage';
+import { insertIntoSortedArray } from '../../utils/insertIntoSortedArray';
 
 interface EntryPageContextValue {
   storeOptions: StoreOption[];

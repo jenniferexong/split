@@ -1,8 +1,8 @@
 import { darken } from 'polished';
 import { forwardRef, Ref } from 'react';
 import styled, { css } from 'styled-components';
-import { backgroundHover, transition } from 'styles/mixins';
 import { BaseButtonProps } from './types';
+import { backgroundHover, transition } from '../../styles';
 
 interface ButtonProps extends BaseButtonProps {
   mode?: 'primary' | 'secondary';

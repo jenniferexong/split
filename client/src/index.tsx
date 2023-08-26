@@ -1,11 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { Routes } from './pages/Routes';
 import { ThemeProvider } from 'styled-components';
-import { GlobalStyle } from 'styles/GlobalStyle';
-import { theme } from 'styles';
-import { splitClient } from 'api/client';
 import { Provider } from 'urql';
+import { splitClient } from './api';
+import { theme, GlobalStyle } from './styles';
+import { Routes } from './pages/Routes';
 
 const container = document.getElementById('root');
 if (!container) throw new Error('No root');

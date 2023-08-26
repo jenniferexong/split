@@ -1,6 +1,6 @@
-import { ApiReceipt } from 'api';
 import { gql, useClient } from 'urql';
 import { QueryResult, ReceiptsResult } from './types';
+import { ApiReceipt } from '../types';
 
 const query = gql`
   query {

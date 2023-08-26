@@ -1,1 +1,2 @@
-export * from './PersonBoard';
+export { PersonBoard } from './PersonBoard';
+export { CreatePersonModal } from './CreatePersonModal';

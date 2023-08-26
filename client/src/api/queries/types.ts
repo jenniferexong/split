@@ -1,4 +1,4 @@
-import { ApiProduct, ApiReceipt, ApiPerson, ApiStore } from 'api';
+import { ApiPerson, ApiProduct, ApiReceipt, ApiStore } from '../types';
 
 export type QueryResult<T> = () => Promise<T>;
 
@@ -31,7 +31,7 @@ export interface ReceiptResult {
 }
 
 export interface DeleteReceiptResult {
-  deleteReceipt: ApiReceipt;
+  deletedReceipt: ApiReceipt;
 }
 
 export interface ReceiptsResult {

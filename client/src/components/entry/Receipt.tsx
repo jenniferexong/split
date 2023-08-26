@@ -1,30 +1,35 @@
-import { ReceiptType } from 'calculator/types';
-import { ReceiptButton, DeleteButton } from 'components/button';
 import { useCallback, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
+import { ActionMeta } from 'react-select';
+import { Paper } from '../board';
+import { ApiPerson, useCreateStore } from '../../api';
+import { ReceiptType } from '../../calculator';
+import { DeleteButton, ReceiptButton } from '../button';
+import { useEntryPageContext } from '../../pages/contexts';
 import {
-  focusTableCell,
-  getLastAddedCell,
+  CreateableSelect,
+  DatePicker,
+  StoreOption,
+  mapStoreToOption,
+  useOptionValue,
+} from '../input';
+import {
   Table,
   TableCell,
   TableRow,
-} from 'components/table';
-import { ApiPerson, useCreateStore } from 'api';
-import { ActionMeta } from 'react-select';
-import { useEntryPageContext } from 'pages/contexts/EntryPageContext';
-import { DatePicker, CreateableSelect, StoreOption } from 'components/input';
-import { useOptionValue, mapStoreToOption } from 'components/input/utils/';
-import { Paper } from 'components/board';
-import { usePositionReceipt } from 'components/receipt/utils';
+  focusTableCell,
+  getLastAddedCell,
+} from '../table';
+import { usePositionReceipt } from '../receipt/utils';
 import {
   Barcode,
   ReceiptContainer,
   ReceiptSubheaderSection,
   ReceiptSubtotalSection,
   ReceiptTitleRow,
-} from 'components/receipt';
+} from '../receipt';
 import { Item } from './Item';
-import { getReceiptSubtotal } from 'utils/getReceiptSubtotal';
+import { getReceiptSubtotal } from '../../utils/getReceiptSubtotal';
 
 const StyledReceipt = styled(Paper)<{ xOffset: number }>`
   position: relative;

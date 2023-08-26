@@ -1,4 +1,4 @@
-import { TableCell, TableRow } from 'components/table';
+import { TableCell, TableRow } from '../table';
 
 interface ReceiptSubtotalSectionProps {
   itemCount: number;

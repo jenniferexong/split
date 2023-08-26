@@ -1,7 +1,7 @@
-import { BaseButtonProps } from 'components/button';
 import { forwardRef, Ref } from 'react';
 import styled, { css } from 'styled-components';
-import { fontMixin, transition } from 'styles/mixins';
+import { BaseButtonProps } from '../button';
+import { fontMixin, transition } from '../../styles';
 
 const StyledButton = styled.button<BaseButtonProps>`
   ${({ theme, onClick }) => css`

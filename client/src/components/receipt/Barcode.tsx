@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ReactComponent as BarcodeImage } from 'images/barcode.svg';
+import { ReactComponent as BarcodeImage } from '../../images/barcode.svg';
 
 const Image = styled(BarcodeImage)`
   width: 170px;

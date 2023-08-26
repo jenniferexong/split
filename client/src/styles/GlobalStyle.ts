@@ -1,11 +1,11 @@
 import { createGlobalStyle, css } from 'styled-components';
 import normalize from 'styled-normalize';
 import { fontMixin } from './mixins/fontMixin';
-import './fonts.scss';
+import { hideScrollbars } from './mixins';
 
+import './fonts.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import { hideScrollbars } from './mixins';
 
 export const GlobalStyle = createGlobalStyle`
     ${normalize}

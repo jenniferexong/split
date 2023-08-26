@@ -1,14 +1,12 @@
-import { BoardLetters } from 'components/board';
-import { Board } from 'components/board/Board';
-import { Receipt } from 'components/history';
-import { Invoice } from 'components/history/Invoice';
-import { groupReceiptsByDate } from 'components/history/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import moment from 'moment';
-import { HistoryPageData } from 'pages/types';
 import { useMemo } from 'react';
 import { useLoaderData } from 'react-router';
 import styled from 'styled-components';
+import { HistoryPageData } from '../types';
+import { groupReceiptsByDate } from '../../components/history/utils';
+import { Board, BoardLetters } from '../../components/board';
+import { Invoice, Receipt } from '../../components/history';
 
 const Container = styled.div`
   & > :not(:last-child) {

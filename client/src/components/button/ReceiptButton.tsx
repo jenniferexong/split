@@ -1,7 +1,7 @@
 import { forwardRef, Ref } from 'react';
 import styled from 'styled-components';
-import { backgroundHover } from 'styles/mixins';
 import { BaseButtonProps } from './types';
+import { backgroundHover } from '../../styles';
 
 const StyledButton = styled.button`
   width: 100%;

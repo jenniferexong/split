@@ -1,5 +1,5 @@
-import { ApiPerson } from 'api';
-import { SplitType, Whose } from 'calculator/types';
+import { ApiPerson } from '../api';
+import { SplitType, Whose } from '../calculator';
 import { unreachable } from './unreachable';
 
 export const createEqualSplits = (people: ApiPerson[]): SplitType[] =>

@@ -1,6 +1,6 @@
 import { css, FlattenSimpleInterpolation } from 'styled-components';
-import { Theme } from 'styles/types';
 import { backgroundHover } from './backgroundHover';
+import { Theme } from '../types';
 
 export const reactSelect = (theme: Theme): FlattenSimpleInterpolation => css`
   .react-select {

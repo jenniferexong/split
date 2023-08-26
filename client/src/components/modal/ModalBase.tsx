@@ -1,8 +1,8 @@
-import { Paper } from 'components/board';
 import { AnimatePresence, motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { BaseModalProps } from './types';
+import { Paper } from '../board';
 
 const Backdrop = styled.div`
   position: fixed;

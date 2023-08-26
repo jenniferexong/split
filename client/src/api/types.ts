@@ -1,3 +1,6 @@
+import { ReceiptType } from '../calculator';
+import { CreateReceiptInput } from './queries';
+
 export interface ApiProduct {
   id: number;
   name: string;
@@ -35,3 +38,5 @@ export interface ApiReceipt {
   paidBy: ApiPerson;
   receiptLines: ApiReceiptLine[];
 }
+
+export type ReceiptInputs = Record<ReceiptType['sequence'], CreateReceiptInput>;

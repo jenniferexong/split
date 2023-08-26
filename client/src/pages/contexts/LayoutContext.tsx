@@ -1,4 +1,3 @@
-import { TabBarMenuButton } from 'components/navigation/TabBarMenu';
 import {
   createContext,
   ReactNode,
@@ -6,6 +5,7 @@ import {
   useEffect,
   useMemo,
 } from 'react';
+import { TabBarMenuButton } from '../../components/navigation';
 
 interface LayoutContextValue {
   setBottomTabBarButtons: (buttons: TabBarMenuButton[]) => void;

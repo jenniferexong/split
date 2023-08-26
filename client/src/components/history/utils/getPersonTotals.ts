@@ -1,4 +1,4 @@
-import { ApiReceipt } from 'api';
+import { ApiReceipt } from '../../../api';
 import { PersonTotal, PersonTotals } from './types';
 
 export const getPersonTotalsForReceipt = (

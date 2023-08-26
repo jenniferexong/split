@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import ReactDatePicker from 'react-datepicker';
 import { useCallback } from 'react';
-import { backgroundHover } from 'styles/mixins';
+import { backgroundHover } from '../../styles';
 
 const StyledDatePicker = styled(ReactDatePicker)`
   border: none;

@@ -1,17 +1,17 @@
 import { isEqual } from 'lodash';
-import { EntryData, ItemType, ReceiptType } from 'calculator/types';
 import produce from 'immer';
 import { Reducer } from 'react';
 import { unreachable } from './unreachable';
-import { ApiPerson } from 'api';
 import { createEqualSplits } from './splits';
 import { hasSelectedAllPeople } from './hasSelectedAllPeople';
+import { getTotalReceipts } from './getTotalReceipts';
+import { EntryData, ItemType, ReceiptType } from '../calculator';
+import { ApiPerson } from '../api';
+import { getStoredEntryData } from '../storage';
 
 // TODO - get images from db instead!
-import nibbles from 'images/nibbles.jpg';
-import pandy from 'images/pandy.jpg';
-import { getStoredEntryData } from 'storage/entryData';
-import { getTotalReceipts } from './getTotalReceipts';
+import nibbles from '../images/nibbles.jpg';
+import pandy from '../images/pandy.jpg';
 
 interface AddReceipt {
   type: 'addReceipt';
