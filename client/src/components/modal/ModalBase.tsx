@@ -96,3 +96,4 @@ export const ModalBase = ({
     document.body,
   );
 };
+ModalBase.displayName = 'ModalBase';

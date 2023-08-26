@@ -84,4 +84,4 @@ export const Receipt = (props: ReceiptProps) => {
     </StyledReceipt>
   );
 };
-Receipt.displayText = 'Receipt';
+Receipt.displayText = 'HistoryReceipt';

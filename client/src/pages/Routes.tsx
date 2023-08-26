@@ -70,3 +70,4 @@ export const Routes = () => {
 
   return <RouterProvider router={router}></RouterProvider>;
 };
+Routes.displayName = 'Routes';

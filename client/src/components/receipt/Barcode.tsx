@@ -9,3 +9,4 @@ const Image = styled(BarcodeImage)`
 export const Barcode = () => {
   return <Image />;
 };
+Barcode.displayName = 'Barcode';

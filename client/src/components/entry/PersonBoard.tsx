@@ -91,3 +91,4 @@ export const PersonBoard = (props: PersonBoardProps) => {
     </Board>
   );
 };
+PersonBoard.displayName = 'PersonBoard';

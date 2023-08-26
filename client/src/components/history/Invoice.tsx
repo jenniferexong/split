@@ -41,4 +41,4 @@ export const Invoice = (props: InvoiceProps) => {
     </Paper>
   );
 };
-Invoice.displayName = 'Invoice';
+Invoice.displayName = 'HistoryInvoice';

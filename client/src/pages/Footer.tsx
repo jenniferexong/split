@@ -26,3 +26,4 @@ export const Footer = (props: FooterProps) => {
     </FooterContainer>
   );
 };
+Footer.displayName = 'Footer';

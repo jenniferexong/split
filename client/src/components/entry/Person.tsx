@@ -161,3 +161,4 @@ export const Person = (props: PersonProps) => {
     </Paper>
   );
 };
+Person.displayName = 'Person';

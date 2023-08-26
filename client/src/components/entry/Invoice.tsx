@@ -43,3 +43,4 @@ export const Invoice = (props: InvoiceProps) => {
     </Paper>
   );
 };
+Invoice.displayName = 'EntryInvoice';
