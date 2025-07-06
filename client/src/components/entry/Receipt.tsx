@@ -173,7 +173,7 @@ export const Receipt = (props: ReceiptProps) => {
             {receipt.items.map((item, index) => (
               <Item
                 people={people}
-                key={`${personIndex}-${receiptIndex}-${index}`}
+                key={`${personIndex}-${receiptIndex}-${index}-${item.price}-${item.product?.id}`}
                 personIndex={personIndex}
                 receiptIndex={receiptIndex}
                 itemIndex={index}
